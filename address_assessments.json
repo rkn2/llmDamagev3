@@ -1,0 +1,62 @@
+[
+  {
+    "damage_level": 2,
+    "confidence": "high",
+    "estimated_water_depth_ft": 3.5,
+    "assessable": true,
+    "reasoning": "The after photos clearly show floodwater reaching approximately mid-door height on the Three Penny Taproom storefront \u2014 roughly 3 to 4 feet above the sidewalk grade \u2014 submerging the entire first-floor commercial space interior including bar equipment, lower cabinetry, electrical outlets, and flooring; the aerial shots confirm the entire street block is inundated with the waterline sitting just below the second-floor windowsills on the front facade.",
+    "limitations": "Interior access photos would confirm actual inundation depth against wall markings; post-recession photos showing tide lines on interior walls, condition of HVAC, water heater, and electrical panels would sharpen the damage tier boundary between level 2 and level 3; survey-grade flood gauge data for this location would pin the precise depth.",
+    "address": "100 Main St, Montpelier, VT 05602",
+    "model": "claude-sonnet-4-6",
+    "before_photo_count": 5,
+    "after_photo_count": 5
+  },
+  {
+    "damage_level": 2,
+    "confidence": "medium",
+    "estimated_water_depth_ft": 4.0,
+    "assessable": true,
+    "reasoning": "The aerial flood photo shows floodwater surrounding the building at street level, with water visibly reaching into the arcade/ground-floor archway zone; comparing before and after exteriors, the brick facade and upper floors appear structurally intact, but the ground-floor commercial interior (bank signage area, arcade glazing) and any below-grade or slab-on-grade mechanical systems would have been inundated to several feet, consistent with moderate damage to first-floor finishes, lower drywall, electrical, and ground-floor contents.",
+    "limitations": "No interior post-flood photos are available; water-line staining on the brick is not clearly visible at this resolution; exact flood stage relative to finished floor elevation is unknown without survey data; interior inspection is required to confirm drywall, electrical panel, HVAC, and elevator pit damage.",
+    "address": "112 State St, Montpelier, VT 05602",
+    "model": "claude-sonnet-4-6",
+    "before_photo_count": 4,
+    "after_photo_count": 5
+  },
+  {
+    "damage_level": 2,
+    "confidence": "medium",
+    "estimated_water_depth_ft": 3.5,
+    "assessable": true,
+    "reasoning": "The after photos show floodwater reaching approximately mid-way up the first-floor storefront columns/facade \u2014 roughly 3-4 feet above grade at peak \u2014 consistent with water entering the ground-floor commercial spaces and damaging lower drywall, electrical outlets, HVAC equipment, and first-floor contents; the aerial photos confirm the entire block was inundated to this depth. The interior shot shows submerged lower cabinetry and equipment consistent with moderate (Level 2) damage.",
+    "limitations": "No post-recession interior photos are available to confirm exact waterline height on interior walls, condition of drywall, electrical panels, or mechanical equipment; a physical interior inspection with moisture readings and a survey of the high-water mark stain line would significantly improve accuracy.",
+    "address": "27 Langdon St, Montpelier, VT 05602",
+    "model": "claude-sonnet-4-6",
+    "before_photo_count": 4,
+    "after_photo_count": 5
+  },
+  {
+    "damage_level": 2,
+    "confidence": "high",
+    "estimated_water_depth_ft": 2.5,
+    "assessable": true,
+    "reasoning": "The after photos show floodwater reaching approximately mid-shin to knee height on a standing adult in the street (roughly 2\u20133 ft exterior), and the interior shot of Aubuchon Hardware confirms water covering the entire floor slab with merchandise floating/scattered at roughly 6\u201312 inches of standing water inside the first-floor commercial space; the aerial views show the entire back alley and street submerged well above grade, indicating full first-floor inundation of the ground-level retail. Water appears to have reached partway up interior walls, damaging flooring, lower shelving, electrical outlets, and all ground-level inventory, consistent with a Moderate (2) rating.",
+    "limitations": "Interior photos only show the hardware store entry area during active flooding; post-flood interior inspections of all tenant spaces (Capitol Copy, Sherpa Dinner House, upper-floor units) are needed to confirm wall-height waterline, drywall damage extent, HVAC/electrical panel submersion, and mold initiation. A surveyed flood-stage elevation relative to finished floor would sharpen the depth estimate.",
+    "address": "40 Main St, Montpelier, VT 05602",
+    "model": "claude-sonnet-4-6",
+    "before_photo_count": 4,
+    "after_photo_count": 5
+  },
+  {
+    "damage_level": 2,
+    "confidence": "low",
+    "estimated_water_depth_ft": 3.0,
+    "assessable": true,
+    "reasoning": "The after photos show the laundromat on the ground floor appears closed/vacant with debris visible in the storefront window, and there is visible staining and deterioration at the base of the brick facade compared to the before photos; Montpelier VT experienced significant flooding in 2023 that inundated first floors of downtown commercial buildings to several feet. The exterior brick structure appears intact but ground-floor commercial spaces show signs consistent with moderate flood inundation.",
+    "limitations": "No interior photos are available to confirm wall damage height, mold, or mechanical equipment loss; the after photos are exterior street-view imagery only and do not clearly show a flood tideline on the brick; interior inspection and documentation of water staining on walls, damaged finishes, and mechanical systems would be needed for a definitive assessment.",
+    "address": "54 Elm St, Montpelier, VT 05602",
+    "model": "claude-sonnet-4-6",
+    "before_photo_count": 7,
+    "after_photo_count": 4
+  }
+]
