@@ -290,7 +290,8 @@ For future attribute collection, these Vermont sources are most useful:
 | USGS NHD REST service | hydro.nationalmap.gov/arcgis/rest/services/nhd/MapServer | River centerlines (used here) |
 | USGS 3DEP LiDAR | prd-tnm.s3.amazonaws.com / The National Map | Elevation / first floor elevation |
 | FEMA MSC | msc.fema.gov/portal/home | Flood zone (Zone AE confirmed for all 5) |
-| Vermont Parcel Viewer | maps.vcgi.vermont.gov/parcelviewer | Building footprints, parcel boundaries |
+| Vermont Parcel Viewer | maps.vcgi.vermont.gov/parcelviewer | Building footprints, parcel boundaries (manual viewer) |
+| VTrans ROW Parcels REST service | maps.vtrans.vermont.gov/arcgis/rest/services/ROW/Parcels/MapServer | Queryable: E911 address points (layer 1), parcel boundaries (layer 8) — used to resolve the 100 Main St / 27 Langdon St disambiguation programmatically |
 
 ---
 
@@ -326,6 +327,14 @@ Runs three API queries per building and writes results to JSON:
 | `approx_wall_length_b_m` | E-W bounding-box extent of footprint | |
 | `osm_building_type`, `osm_name`, `osm_levels`, `osm_height` | OSM tags (present only when OSM has them) | Height/levels not populated for these buildings |
 
-**Caveat:** 100 Main St and 27 Langdon St returned the same OSM polygon — they may share a building footprint in OSM and need manual disambiguation.
+**Resolved caveat:** 100 Main St and 27 Langdon St originally returned the same OSM polygon (their
+geocoded points are only ~25 m apart, so Overpass picked the same nearest building way for both).
+Cross-checked against Vermont's statewide E911 address points and tax parcel boundaries
+(VTrans `ROW/Parcels` ArcGIS REST service — see Section 8 sources) and found they are in fact
+two separate buildings/parcels: 100 Main St is its own parcel (095.100000, owner City Line Realty
+LLC); 27 Langdon St is a unit address inside the building whose primary E911 address and parcel is
+90 Main St (095.090000, owner Malone 210 College Street Properties LLC). `building_attributes_auto.json`
+now uses the 90 Main St parcel boundary (811.2 m², ~43.0 × 38.5 m bounding box) for 27 Langdon St
+instead of the shared OSM figure.
 
 See Section 7 for the full list of attributes still requiring visual/manual entry.

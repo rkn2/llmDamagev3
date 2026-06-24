@@ -25,10 +25,11 @@
     "latitude": 44.26051,
     "longitude": -72.5755308,
     "ground_elevation_m": 159.458,
-    "building_area_m2": 569.5,
-    "approx_wall_length_a_m": 33.2,
-    "approx_wall_length_b_m": 32.9,
-    "osm_building_type": "commercial"
+    "building_area_m2": 811.2,
+    "approx_wall_length_a_m": 43.0,
+    "approx_wall_length_b_m": 38.5,
+    "footprint_source": "VT statewide parcel boundary (VTrans ROW Parcels MapServer, parcel 095.090000 / E911 address 90 MAIN ST)",
+    "note": "27 Langdon St is a unit address within the building whose primary E911 address and tax parcel is 90 Main St (owner: Malone 210 College Street Properties LLC) \u2014 a separate building/parcel from 100 Main St (owner: City Line Realty LLC). OSM Overpass had returned the same shared building polygon for both addresses because their geocoded points are only ~25m apart; verified via VT E911 address points + parcel boundaries instead."
   },
   "40 Main St, Montpelier, VT 05602": {
     "address": "40 Main St, Montpelier, VT 05602",
