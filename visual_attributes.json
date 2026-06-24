@@ -64,14 +64,15 @@
     "buidling_height_m": 14.0,
     "wall_cladding_u": "brick",
     "wall_fenesteration_front_per": 15,
-    "roof_shape_u": null,
+    "roof_shape_u": "flat",
     "soffit_present_u": true,
     "parapet_present": true,
     "parapet_height_m": 0.6,
     "front_elevation_orientation": "W",
     "construction_type_u": "URM",
     "confidence": "medium",
-    "notes": "The building is clearly a multi-story red brick structure with stone lintels and likely unreinforced masonry construction typical of late 19th/early 20th century Montpelier commercial stock; roof shape, parapet height, and reinforcement status cannot be confirmed from this street-level angle.",
-    "screenshot": "/tmp/sv_54_Elm_St.png"
+    "notes": "The building is clearly a multi-story red brick structure with stone lintels and likely unreinforced masonry construction typical of late 19th/early 20th century Montpelier commercial stock; roof shape, parapet height, and reinforcement status cannot be confirmed from this street-level angle. [Aerial pass for roof: The building nearest center appears to have a flat roof with what looks like a raised parapet edge visible around the perimeter, though the satellite angle and image resolution make precise determination somewhat uncertain.]",
+    "screenshot": "/tmp/sv_54_Elm_St.png",
+    "aerial_screenshot": "/tmp/sat_54_Elm_St.png"
   }
 }
