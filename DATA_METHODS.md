@@ -307,3 +307,25 @@ any attribute values. The script:
 To add a new computed value: update the relevant building's dict in `BUILDINGS` and rerun.
 To add a new attribute not in the 177 columns: add it to `BUILDINGS` and to `SECTIONS`
 in the appropriate section.
+
+---
+
+## 10. Auto-Collected Building Attributes
+
+**Script:** `collect_building_attributes.py`
+**Output:** `building_attributes_auto.json`
+
+Runs three API queries per building and writes results to JSON:
+
+| Attribute | Source | Notes |
+|---|---|---|
+| `latitude`, `longitude` | OSM Nominatim geocoding | 1 req/s rate limit |
+| `ground_elevation_m` | USGS 3DEP EPQS (bare-earth LiDAR, NAVD88) | Not the same as `first_floor_elevation_m` — add step height |
+| `building_area_m2` | OSM Overpass building polygon (Shoelace formula, UTM-local projection) | |
+| `approx_wall_length_a_m` | N-S bounding-box extent of footprint | Assign to front or side based on street orientation |
+| `approx_wall_length_b_m` | E-W bounding-box extent of footprint | |
+| `osm_building_type`, `osm_name`, `osm_levels`, `osm_height` | OSM tags (present only when OSM has them) | Height/levels not populated for these buildings |
+
+**Caveat:** 100 Main St and 27 Langdon St returned the same OSM polygon — they may share a building footprint in OSM and need manual disambiguation.
+
+See Section 7 for the full list of attributes still requiring visual/manual entry.

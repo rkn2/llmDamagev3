@@ -1,0 +1,53 @@
+{
+  "100 Main St, Montpelier, VT 05602": {
+    "address": "100 Main St, Montpelier, VT 05602",
+    "latitude": 44.2605489,
+    "longitude": -72.5752484,
+    "ground_elevation_m": 159.323,
+    "building_area_m2": 569.5,
+    "approx_wall_length_a_m": 33.2,
+    "approx_wall_length_b_m": 32.9,
+    "osm_building_type": "commercial"
+  },
+  "112 State St, Montpelier, VT 05602": {
+    "address": "112 State St, Montpelier, VT 05602",
+    "latitude": 44.2608121,
+    "longitude": -72.579971,
+    "ground_elevation_m": 159.624,
+    "building_area_m2": 753.6,
+    "approx_wall_length_a_m": 37.5,
+    "approx_wall_length_b_m": 32.5,
+    "osm_building_type": "commercial",
+    "osm_name": "M&T Bank"
+  },
+  "27 Langdon St, Montpelier, VT 05602": {
+    "address": "27 Langdon St, Montpelier, VT 05602",
+    "latitude": 44.26051,
+    "longitude": -72.5755308,
+    "ground_elevation_m": 159.458,
+    "building_area_m2": 569.5,
+    "approx_wall_length_a_m": 33.2,
+    "approx_wall_length_b_m": 32.9,
+    "osm_building_type": "commercial"
+  },
+  "40 Main St, Montpelier, VT 05602": {
+    "address": "40 Main St, Montpelier, VT 05602",
+    "latitude": 44.2593998,
+    "longitude": -72.5764979,
+    "ground_elevation_m": 159.315,
+    "building_area_m2": 812.4,
+    "approx_wall_length_a_m": 36.9,
+    "approx_wall_length_b_m": 51.6,
+    "osm_building_type": "retail"
+  },
+  "54 Elm St, Montpelier, VT 05602": {
+    "address": "54 Elm St, Montpelier, VT 05602",
+    "latitude": 44.2616257,
+    "longitude": -72.5757163,
+    "ground_elevation_m": 160.139,
+    "building_area_m2": 137.7,
+    "approx_wall_length_a_m": 15.4,
+    "approx_wall_length_b_m": 19.9,
+    "osm_building_type": "yes"
+  }
+}
