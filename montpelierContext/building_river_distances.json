@@ -1,0 +1,22 @@
+{
+  "100 Main St, Montpelier, VT 05602": {
+    "distance_from_river_centerline": "34.5 m (113.2 ft)",
+    "distance_from_river_edge": "29.5 m (96.8 ft) \u2014 centerline minus estimated 5m half-width of N. Branch Winooski"
+  },
+  "112 State St, Montpelier, VT 05602": {
+    "distance_from_river_centerline": "66.7 m (218.8 ft)",
+    "distance_from_river_edge": "61.7 m (202.4 ft) \u2014 centerline minus estimated 5m half-width of N. Branch Winooski"
+  },
+  "27 Langdon St, Montpelier, VT 05602": {
+    "distance_from_river_centerline": "20.8 m (68.2 ft)",
+    "distance_from_river_edge": "15.8 m (51.8 ft) \u2014 centerline minus estimated 5m half-width of N. Branch Winooski"
+  },
+  "40 Main St, Montpelier, VT 05602": {
+    "distance_from_river_centerline": "57.7 m (189.3 ft)",
+    "distance_from_river_edge": "52.7 m (172.9 ft) \u2014 centerline minus estimated 5m half-width of N. Branch Winooski"
+  },
+  "54 Elm St, Montpelier, VT 05602": {
+    "distance_from_river_centerline": "52.6 m (172.6 ft)",
+    "distance_from_river_edge": "47.6 m (156.2 ft) \u2014 centerline minus estimated 5m half-width of N. Branch Winooski"
+  }
+}
