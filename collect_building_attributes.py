@@ -176,9 +176,17 @@ out skel qt;
 # ---------------------------------------------------------------------------
 
 def main() -> None:
-    results: dict[str, dict] = {}
+    # Preserve any address that's been manually corrected (flagged by a "footprint_source"
+    # key — see LESSONS_LEARNED.md §2) rather than blindly re-overwriting it. This script
+    # used to start from an empty dict every run, which would have silently wiped the
+    # 27 Langdon St / 90 Main St parcel-boundary correction on the next re-run.
+    results: dict[str, dict] = json.loads(OUTPUT.read_text()) if OUTPUT.exists() else {}
 
     for addr in ADDRESSES:
+        existing = results.get(addr)
+        if existing and existing.get("footprint_source"):
+            print(f"\n{addr}\n  SKIP — manually corrected (footprint_source present), preserving as-is")
+            continue
         print(f"\n{addr}")
         rec: dict = {"address": addr}
 

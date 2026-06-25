@@ -168,8 +168,16 @@ def main() -> None:
     from vision_client import get_client
     client = get_client()
 
-    results: dict[str, dict] = {}
+    # Preserve any address supplemented by analyze_roof_satellite.py (flagged by an
+    # "aerial_screenshot" key) rather than blindly re-overwriting it. This script used to
+    # start from an empty dict every run, which would have silently wiped the 54 Elm St
+    # satellite roof-shape correction on the next re-run.
+    results: dict[str, dict] = json.loads(OUTPUT.read_text()) if OUTPUT.exists() else {}
     for addr, cfg in BUILDINGS.items():
+        existing = results.get(addr)
+        if existing and existing.get("aerial_screenshot"):
+            print(f"  SKIP {addr} — has a satellite-supplemented entry (aerial_screenshot present), preserving as-is")
+            continue
         path = cfg["screenshot"]
         if not Path(path).exists():
             print(f"  SKIP {addr} — screenshot not found at {path}")
