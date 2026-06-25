@@ -3,6 +3,26 @@
 import json, openpyxl
 from pathlib import Path
 
+from damage_scale import DAMAGE_SCALE
+
+ROOT_DIR = Path(__file__).parent
+_DAMAGE_LABELS = {d.level: d.label for d in DAMAGE_SCALE}
+
+# Live read of run_pipeline.py's output — the _llm_* fields below are computed from
+# this at render time (see build_page()), not hand-copied, so re-running the
+# assessment pipeline automatically flows through here instead of going stale.
+ASSESSMENTS = {
+    row["address"]: row
+    for row in json.loads((ROOT_DIR / "address_assessments.json").read_text())
+}
+
+# Live reads of collect_building_attributes.py's and analyze_visual_attributes.py's
+# output, for the same reason — these went stale once already (hardcoded placeholder
+# lat/lon, wrong orientation) because the original version of this script was written
+# before those two scripts existed and was never wired up to their output.
+BUILDING_ATTRS = json.loads((ROOT_DIR / "building_attributes_auto.json").read_text())
+VISUAL_ATTRS = json.loads((ROOT_DIR / "visual_attributes.json").read_text())
+
 # River distances computed from USGS NHD flowlines via
 # hydro.nationalmap.gov/arcgis/rest/services/nhd/MapServer/6
 # Projected to UTM 19N (EPSG:32619) for metric accuracy.
@@ -259,29 +279,20 @@ BUILDINGS = {
         "building_name_current":     "Three Penny Taproom (ground floor bar/restaurant)",
         "building_name_listing":     "un — within Montpelier Historic District",
         "flood_height_building":     "~3.5 ft above first floor (LLM estimate, high confidence)",
-        "latitude":                  "44.2605489",
-        "longitude":                 "-72.5752484",
+        # latitude/longitude/number_stories/front_elevation_orientation/buidling_height_m/
+        # building_area_m2/wall_length_front+side/wall_fenesteration_front_per/
+        # parapet_height_m/soffit_present_u/wall_fenestration_per_n,s,e,w are all injected
+        # live in build_page() from building_attributes_auto.json + visual_attributes.json.
         "archetype":                 "7",  # F7: Small multi-unit commercial building (closest match; guide F7 is typically 1-story but no multi-story masonry option exists)
         "occupany_u":                "assembly",
-        "number_stories":            "3",
         "year_built_u":              "c.1870–1890 (Italianate commercial era, downtown Montpelier)",
-        "front_elevation_orientation":"w",
-        # Verified via collect_building_attributes.py + analyze_visual_attributes.py (Street View vision pass)
-        "buidling_height_m":         "10.5",
-        "building_area_m2":          "569.5",
-        "wall_length_front":         "33.2",
-        "wall_length_side":          "32.9",
-        "wall_fenesteration_front_per": "25",
         "wall_fenesteration_front_lowerlevel_per": "30",  # storefront-level estimate from Street View (restaurant entry: glass door + display windows flanked by clapboard)
-        "wall_fenestration_per_w":    "25",  # = front (orientation w)
-        "wall_fenestration_per_e":    "un",  # = back, no rear imagery
-        "wall_fenestration_per_n":    "0",   # = left/right party wall
-        "wall_fenestration_per_s":    "0",   # = left/right party wall
-        "parapet_height_m":          "0.6",
-        "soffit_present_u":          "yes",
+        # The following are judgment calls (enum classification), not pure value passthroughs,
+        # so they stay manual rather than live-read - re-verify by hand if visual_attributes.json
+        # is regenerated. Confirmed wood frame/clapboard via Street View, not masonry like COMMON assumes.
         "soffit_type_u":             "un",
-        "wall_cladding_u":           "weatherboard",  # wood clapboard siding, confirmed via Street View — overrides COMMON's brick default
-        "construction_type_u":       "wood_frame",    # confirmed wood frame, not masonry — overrides COMMON
+        "wall_cladding_u":           "weatherboard",  # wood clapboard siding — overrides COMMON's brick default
+        "construction_type_u":       "wood_frame",    # overrides COMMON's masonry_un default
         "structural_wall_system_u":  "wood_frame",
         "mwfrs_u_wall":              "wall_diaphragm_wood",
         "wall_thickness":            "0.15",  # ~6-in wood stud wall, typical for light wood-frame commercial construction; overrides COMMON's brick default
@@ -293,11 +304,6 @@ BUILDINGS = {
         "sub_national_heritage _list": "yes",
         "property_of_local_significance": "yes",
         # LLM assessment
-        "_llm_damage_level":        "2 (Moderate)",
-        "_llm_confidence":          "high",
-        "_llm_water_depth_ft":      "3.5",
-        "_llm_reasoning":           "After photos clearly show floodwater reaching approximately mid-door height on the Three Penny Taproom storefront — roughly 3 to 4 ft above sidewalk grade — submerging the entire first-floor commercial space interior including bar equipment, lower cabinetry, electrical outlets, and flooring. Aerial shots confirm the entire street block is inundated with the waterline sitting just below the second-floor windowsills on the front facade.",
-        "_llm_limitations":         "Interior access photos would confirm actual inundation depth against wall markings; post-recession photos showing tide lines, HVAC, water heater, and electrical panel condition would sharpen the damage tier boundary between Level 2 and 3; survey-grade flood gauge data for this location would pin the precise depth.",
     },
     "112 State St, Montpelier, VT 05602": {
         **COMMON,
@@ -305,24 +311,10 @@ BUILDINGS = {
         "building_name_current":     "112 State St — commercial/office with arcade ground floor",
         "building_name_listing":     "un — within Montpelier Historic District",
         "flood_height_building":     "~4.0 ft above first floor (LLM estimate, medium confidence)",
-        "latitude":                  "44.2608121",
-        "longitude":                 "-72.579971",
         "archetype":                 "14", # F14: Office building (best match for bank/commercial office use; no multi-story masonry commercial archetype in Nofal 2020)
         "occupany_u":                "business",
-        "number_stories":            "4",
         "year_built_u":              "un — requires further research; commercial block likely late 19th–early 20th c.",
-        "front_elevation_orientation":"w",
-        # Verified via collect_building_attributes.py + analyze_visual_attributes.py (Street View vision pass)
-        "buidling_height_m":         "14.0",
-        "building_area_m2":          "753.6",
-        "wall_length_front":         "37.5",
-        "wall_length_side":          "32.5",
-        "wall_fenesteration_front_per": "45",
         "wall_fenesteration_front_lowerlevel_per": "55",  # Romanesque arched ground-floor glazing — heavily glazed arcade bays between brick piers
-        "wall_fenestration_per_w":    "45",  # = front (orientation w)
-        "wall_fenestration_per_e":    "un",  # = back, no rear imagery
-        "wall_fenestration_per_n":    "0",   # = left/right party wall
-        "wall_fenestration_per_s":    "0",   # = left/right party wall
         "parapet_height_m":          "0.9",
         "buidling_use_before_flood": "business",
         "buidling_use_after_flood":  "business",
@@ -331,11 +323,6 @@ BUILDINGS = {
         "owner_business":            "un",
         "sub_national_heritage _list": "yes",
         "property_of_local_significance": "yes",
-        "_llm_damage_level":        "2 (Moderate)",
-        "_llm_confidence":          "medium",
-        "_llm_water_depth_ft":      "4.0",
-        "_llm_reasoning":           "Aerial flood photo shows floodwater surrounding the building at street level, reaching into the arcade/ground-floor archway zone. Brick facade and upper floors appear structurally intact, but ground-floor commercial interior and any below-grade or slab-on-grade mechanical systems would have been inundated to several feet, consistent with moderate damage to first-floor finishes, lower drywall, electrical, and ground-floor contents.",
-        "_llm_limitations":         "No interior post-flood photos available; water-line staining on brick not clearly visible at photo resolution; exact flood stage relative to finished floor elevation unknown without survey data; interior inspection required to confirm drywall, electrical panel, HVAC, and elevator pit damage.",
     },
     "27 Langdon St, Montpelier, VT 05602": {
         **COMMON,
@@ -343,26 +330,12 @@ BUILDINGS = {
         "building_name_current":     "27 Langdon St — commercial (Langdon Street shopping area)",
         "building_name_listing":     "un — within Montpelier Historic District",
         "flood_height_building":     "~3.5 ft above first floor (LLM estimate, medium confidence)",
-        "latitude":                  "44.26051",
-        "longitude":                 "-72.5755308",
         "archetype":                 "7",  # F7: Small multi-unit commercial building
         "occupany_u":                "mercantile",
-        "number_stories":            "3",
         "year_built_u":              "un — Langdon St commercial development likely late 19th c.",
-        "front_elevation_orientation":"w",
-        # Verified via collect_building_attributes.py + analyze_visual_attributes.py (Street View vision pass).
         # Footprint is the 90 Main St tax parcel — this storefront's E911/parcel address is 90 Main St;
         # "27 Langdon St" is the shop's own Langdon-St-facing address. See LESSONS_LEARNED.md §2.
-        "buidling_height_m":         "10.5",
-        "building_area_m2":          "811.2",
-        "wall_length_front":         "43.0",
-        "wall_length_side":          "38.5",
-        "wall_fenesteration_front_per": "35",
         "wall_fenesteration_front_lowerlevel_per": "60",  # Buch Spieler Records storefront — wide picture-window display glass on both sides of the entry, modest brick piers
-        "wall_fenestration_per_w":    "35",  # = front (orientation w)
-        "wall_fenestration_per_e":    "un",  # = back, no rear imagery
-        "wall_fenestration_per_n":    "0",   # = left/right party wall
-        "wall_fenestration_per_s":    "0",   # = left/right party wall
         # Unlike the other 4 buildings, there is no back photo for 27 Langdon St at all
         # (neither before nor after) - override COMMON's photo-confirmed "no" back to "un"
         "wall_fenesteration_protection_back":              "un",
@@ -376,11 +349,6 @@ BUILDINGS = {
         "owner_business":            "un",
         "sub_national_heritage _list": "yes",
         "property_of_local_significance": "yes",
-        "_llm_damage_level":        "2 (Moderate)",
-        "_llm_confidence":          "medium",
-        "_llm_water_depth_ft":      "3.5",
-        "_llm_reasoning":           "After photos show floodwater reaching approximately mid-way up the first-floor storefront columns/facade — roughly 3–4 ft above grade at peak — consistent with water entering ground-floor commercial spaces and damaging lower drywall, electrical outlets, HVAC, and first-floor contents. Aerial photos confirm the entire block was inundated. Interior shot shows submerged lower cabinetry and equipment consistent with moderate (Level 2) damage.",
-        "_llm_limitations":         "No post-recession interior photos available to confirm waterline height on interior walls, condition of drywall, electrical panels, or mechanical equipment. Physical interior inspection with moisture readings and high-water mark stain line survey would significantly improve accuracy.",
     },
     "40 Main St, Montpelier, VT 05602": {
         **COMMON,
@@ -388,24 +356,10 @@ BUILDINGS = {
         "building_name_current":     "40 Main St — Aubuchon Hardware / Capitol Copy / Sherpa Dinner House",
         "building_name_listing":     "un — within Montpelier Historic District",
         "flood_height_building":     "~2.5 ft above first floor (LLM estimate, high confidence)",
-        "latitude":                  "44.2593998",
-        "longitude":                 "-72.5764979",
         "archetype":                 "7",  # F7: Small multi-unit commercial building (hardware + restaurant + copy shop = multi-unit retail, F7 is closest)
         "occupany_u":                "mercantile",
-        "number_stories":            "3",
         "year_built_u":              "un — commercial block likely late 19th–early 20th c.",
-        "front_elevation_orientation":"s",
-        # Verified via collect_building_attributes.py + analyze_visual_attributes.py (Street View vision pass)
-        "buidling_height_m":         "10.5",
-        "building_area_m2":          "812.4",
-        "wall_length_front":         "51.6",
-        "wall_length_side":          "36.9",
-        "wall_fenesteration_front_per": "30",
         "wall_fenesteration_front_lowerlevel_per": "35",  # Aubuchon Hardware / Capitol Copy / Sherpa Dinner House storefronts — standard Main St display windows under awnings
-        "wall_fenestration_per_s":    "30",  # = front (orientation s)
-        "wall_fenestration_per_n":    "un",  # = back, no rear imagery
-        "wall_fenestration_per_e":    "0",   # = left/right party wall
-        "wall_fenestration_per_w":    "0",   # = left/right party wall
         "parapet_height_m":          "0.6",
         "buidling_use_before_flood": "mercantile",
         "buidling_use_after_flood":  "mercantile",
@@ -414,11 +368,6 @@ BUILDINGS = {
         "owner_business":            "yes",
         "sub_national_heritage _list": "yes",
         "property_of_local_significance": "yes",
-        "_llm_damage_level":        "2 (Moderate)",
-        "_llm_confidence":          "high",
-        "_llm_water_depth_ft":      "2.5",
-        "_llm_reasoning":           "After photos show floodwater reaching approximately mid-shin to knee height on a standing adult in the street (roughly 2–3 ft exterior), and the interior shot of Aubuchon Hardware confirms water covering the entire floor slab with merchandise floating/scattered at roughly 6–12 inches of standing water inside the first-floor commercial space. Aerial views show the entire back alley and street submerged well above grade, indicating full first-floor inundation of the ground-level retail.",
-        "_llm_limitations":         "Interior photos only show the hardware store entry area during active flooding; post-flood interior inspections of all tenant spaces (Capitol Copy, Sherpa Dinner House, upper-floor units) needed to confirm wall-height waterline, drywall damage extent, HVAC/electrical panel submersion, and mold initiation.",
     },
     "54 Elm St, Montpelier, VT 05602": {
         **COMMON,
@@ -426,26 +375,10 @@ BUILDINGS = {
         "building_name_current":     "54 Elm St — laundromat (ground floor, closed/vacant post-flood); brick commercial building",
         "building_name_listing":     "un — within Montpelier Historic District",
         "flood_height_building":     "~3.0 ft above first floor (LLM estimate, low confidence — indirect visual evidence only)",
-        "latitude":                  "44.2616257",
-        "longitude":                 "-72.5757163",
         "archetype":                 "7",  # F7: Small multi-unit commercial building (laundromat ground floor + likely residential upper floors)
         "occupany_u":                "mercantile",
-        "number_stories":            "4",
         "year_built_u":              "un — brick construction likely late 19th–early 20th c.",
-        "front_elevation_orientation":"w",
-        # Verified via collect_building_attributes.py + analyze_visual_attributes.py (Street View + satellite vision pass)
-        "buidling_height_m":         "14.0",
-        "building_area_m2":          "137.7",
-        "wall_length_front":         "15.4",
-        "wall_length_side":          "19.9",
-        "wall_fenesteration_front_per": "15",
         "wall_fenesteration_front_lowerlevel_per": "40",  # corrected from "un": the Street View frame was ambiguous, but ref_photos/after Oct 2023 photo clearly shows the storefront open ("EXPRESS LAUNDROMAT" / "WASH DRY FOLD" signage) with two display windows + two glazed entry doors - not boarded/vacant as the existing building_name_current field assumes
-        "wall_fenestration_per_w":    "15",  # = front (orientation w)
-        "wall_fenestration_per_e":    "un",  # = back, no rear imagery
-        "wall_fenestration_per_n":    "0",   # = left/right party wall
-        "wall_fenestration_per_s":    "0",   # = left/right party wall
-        "parapet_height_m":          "0.6",
-        "soffit_present_u":          "yes",
         "soffit_type_u":             "un",
         "buidling_use_before_flood": "mercantile",
         "buidling_use_after_flood":  "not in use",
@@ -454,11 +387,6 @@ BUILDINGS = {
         "owner_business":            "un",
         "sub_national_heritage _list": "yes",
         "property_of_local_significance": "yes",
-        "_llm_damage_level":        "2 (Moderate)",
-        "_llm_confidence":          "low",
-        "_llm_water_depth_ft":      "3.0",
-        "_llm_reasoning":           "After photos show the laundromat on the ground floor appears closed/vacant with debris visible in the storefront window, and there is visible staining and deterioration at the base of the brick facade compared to the before photos. Montpelier VT experienced significant flooding in 2023 that inundated first floors of downtown commercial buildings to several feet. The exterior brick structure appears intact but ground-floor commercial spaces show signs consistent with moderate flood inundation.",
-        "_llm_limitations":         "No interior photos available to confirm wall damage height, mold, or mechanical equipment loss; after photos are exterior street-view imagery only and do not clearly show a flood tideline on the brick; interior inspection and documentation of water staining on walls, damaged finishes, and mechanical systems would be needed for a definitive assessment. Low confidence because visual evidence of inundation is indirect.",
     },
 }
 
@@ -688,8 +616,13 @@ tr:last-child td { border-bottom: none; }
 .badge-high   { color: #1565c0; font-weight: 600; }
 .badge-medium { color: #6a6a00; font-weight: 600; }
 .badge-low    { color: #b71c1c; font-weight: 600; }
-.badge-2 { display:inline-block; background:#fff3e0; color:#e65100;
-           font-weight:600; padding:0.1em 0.45em; border-radius:3px; font-size:0.9em; }
+.badge-level { display:inline-block; font-weight:600; padding:0.1em 0.45em;
+               border-radius:3px; font-size:0.9em; }
+.badge-0 { background:#e8f5e9; color:#2e7d32; }
+.badge-1 { background:#f1f8e9; color:#558b2f; }
+.badge-2 { background:#fff3e0; color:#e65100; }
+.badge-3 { background:#fbe9e7; color:#bf360c; }
+.badge-4 { background:#ffebee; color:#b71c1c; }
 """
 
 def safe_filename(address):
@@ -701,7 +634,8 @@ def fmt(key, val):
     if key == "_llm_confidence":
         return f'<span class="badge-{val}">{val}</span>'
     if key == "_llm_damage_level":
-        return f'<span class="badge-2">{val}</span>'
+        level = str(val).split()[0]  # "2 (Moderate)" -> "2"
+        return f'<span class="badge-level badge-{level}">{val}</span>'
     return str(val)
 
 def build_page(address, data):
@@ -711,6 +645,67 @@ def build_page(address, data):
     if rd:
         data["distance_from_river_centerline"] = rd["cl"]
         data["distance_from_river_edge"] = rd["edge"]
+
+    # Inject the LLM damage assessment live from address_assessments.json (run_pipeline.py's
+    # output) rather than a hand-copied snapshot, so re-running the pipeline stays in sync.
+    a = ASSESSMENTS.get(address, {})
+    level = a.get("damage_level")
+    if level is not None and a.get("assessable", True):
+        label = _DAMAGE_LABELS.get(level, "?")
+        data["_llm_damage_level"] = f"{level} ({label})"
+    data["_llm_confidence"]     = a.get("confidence", "un")
+    data["_llm_water_depth_ft"] = a.get("estimated_water_depth_ft", "un")
+    data["_llm_reasoning"]      = a.get("reasoning", "un")
+    data["_llm_limitations"]    = a.get("limitations", "un")
+
+    # Inject geo/footprint attributes live from collect_building_attributes.py's output.
+    ba = BUILDING_ATTRS.get(address, {})
+    if ba.get("latitude") is not None:
+        data["latitude"]  = str(ba["latitude"])
+        data["longitude"] = str(ba["longitude"])
+    if ba.get("building_area_m2") is not None:
+        data["building_area_m2"] = str(ba["building_area_m2"])
+
+    # Inject vision-pass attributes live from analyze_visual_attributes.py's output.
+    va = VISUAL_ATTRS.get(address, {})
+    orientation = va.get("front_elevation_orientation")
+    if orientation:
+        orientation = orientation.lower()
+        data["front_elevation_orientation"] = orientation
+    if va.get("number_stories") is not None:
+        data["number_stories"] = str(va["number_stories"])
+    if va.get("buidling_height_m") is not None:
+        data["buidling_height_m"] = str(va["buidling_height_m"])
+    if va.get("parapet_height_m") is not None:
+        data["parapet_height_m"] = str(va["parapet_height_m"])
+    if va.get("soffit_present_u") is not None:
+        data["soffit_present_u"] = "yes" if va["soffit_present_u"] else "no"
+    front_per = va.get("wall_fenesteration_front_per")
+    if front_per is not None:
+        data["wall_fenesteration_front_per"] = str(front_per)
+
+    # wall_length_front/side and the n/s/e/w fenestration columns are mechanical functions
+    # of orientation + the a/b footprint extents — compute rather than hand-copy, so a
+    # changed orientation or footprint always stays self-consistent with these.
+    a_ns, b_ew = ba.get("approx_wall_length_a_m"), ba.get("approx_wall_length_b_m")
+    if orientation and a_ns is not None and b_ew is not None:
+        if orientation in ("n", "s"):
+            front_len, side_len = b_ew, a_ns
+        else:  # e, w
+            front_len, side_len = a_ns, b_ew
+        data["wall_length_front"] = str(front_len)
+        data["wall_length_side"]  = str(side_len)
+    if orientation:
+        cardinals = ["n", "s", "e", "w"]
+        opposite = {"n": "s", "s": "n", "e": "w", "w": "e"}
+        for c in cardinals:
+            if c == orientation:
+                data[f"wall_fenestration_per_{c}"] = data.get("wall_fenesteration_front_per", "un")
+            elif c == opposite[orientation]:
+                data[f"wall_fenestration_per_{c}"] = data.get("wall_fenesteration_back_per", "un")
+            else:
+                data[f"wall_fenestration_per_{c}"] = "0"  # the two sides, party walls
+
     covered = set()
     sections_html = ""
 
