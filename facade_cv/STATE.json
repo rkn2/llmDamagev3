@@ -1,0 +1,20 @@
+{
+  "round": 6,
+  "best": {
+    "stories_exact_match": 4,
+    "stories_pct": 80,
+    "fenestration_mae": 9.2,
+    "node_id": "H1.3",
+    "config": "sobel_y_sigma20_poly3_detrend_fft_n3-7",
+    "output_file": "facade_cv_h1_3_output.json",
+    "script": "analyze_facade_h1_3.py"
+  },
+  "budget": {
+    "spent_usd_est": 0.30,
+    "limit_usd": 2.0
+  },
+  "model": "H1.3",
+  "last_round_file": "rounds/round_06.md",
+  "consecutive_no_gain": 0,
+  "status": "DONE — target met (4/5 stories, 9.2pp fen MAE)"
+}

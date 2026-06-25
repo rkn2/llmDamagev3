@@ -1,0 +1,89 @@
+{
+  "100 Main St, Montpelier, VT 05602": {
+    "address": "100 Main St, Montpelier, VT 05602",
+    "method": "H1",
+    "number_stories": 3,
+    "wall_fenesteration_front_per": 0.8,
+    "n_photos": 1,
+    "per_photo": [
+      {
+        "photo": "Front (84).png",
+        "stories": 3,
+        "fen_pct": 0.8,
+        "n_peaks": 2
+      }
+    ]
+  },
+  "112 State St, Montpelier, VT 05602": {
+    "address": "112 State St, Montpelier, VT 05602",
+    "method": "H1",
+    "number_stories": 6,
+    "wall_fenesteration_front_per": 5.7,
+    "n_photos": 1,
+    "per_photo": [
+      {
+        "photo": "Front (51).png",
+        "stories": 6,
+        "fen_pct": 5.7,
+        "n_peaks": 5
+      }
+    ]
+  },
+  "27 Langdon St, Montpelier, VT 05602": {
+    "address": "27 Langdon St, Montpelier, VT 05602",
+    "method": "H1",
+    "number_stories": 4,
+    "wall_fenesteration_front_per": 4.3,
+    "n_photos": 2,
+    "per_photo": [
+      {
+        "photo": "Front (80).png",
+        "stories": 3,
+        "fen_pct": 8.0,
+        "n_peaks": 2
+      },
+      {
+        "photo": "Front (81).png",
+        "stories": 5,
+        "fen_pct": 0.7,
+        "n_peaks": 4
+      }
+    ]
+  },
+  "40 Main St, Montpelier, VT 05602": {
+    "address": "40 Main St, Montpelier, VT 05602",
+    "method": "H1",
+    "number_stories": 6,
+    "wall_fenesteration_front_per": 0.0,
+    "n_photos": 2,
+    "per_photo": [
+      {
+        "photo": "Front (65).png",
+        "stories": 5,
+        "fen_pct": 0.0,
+        "n_peaks": 4
+      },
+      {
+        "photo": "Front (67).png",
+        "stories": 6,
+        "fen_pct": 0.0,
+        "n_peaks": 5
+      }
+    ]
+  },
+  "54 Elm St, Montpelier, VT 05602": {
+    "address": "54 Elm St, Montpelier, VT 05602",
+    "method": "H1",
+    "number_stories": 5,
+    "wall_fenesteration_front_per": 1.6,
+    "n_photos": 1,
+    "per_photo": [
+      {
+        "photo": "Front (74).png",
+        "stories": 5,
+        "fen_pct": 1.6,
+        "n_peaks": 4
+      }
+    ]
+  }
+}

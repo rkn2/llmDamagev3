@@ -1,0 +1,131 @@
+{
+  "100 Main St, Montpelier, VT 05602": {
+    "address": "100 Main St, Montpelier, VT 05602",
+    "method": "H1.2",
+    "number_stories": 3,
+    "wall_fenesteration_front_per": 18.7,
+    "n_photos": 1,
+    "per_photo": [
+      {
+        "photo": "Front (84).png",
+        "stories": 3,
+        "fen_pct": 18.7,
+        "scores": {
+          "3": 1337164.2,
+          "4": 984845.98,
+          "5": 347190.54,
+          "6": 73378.86,
+          "7": 16529.18
+        }
+      }
+    ]
+  },
+  "112 State St, Montpelier, VT 05602": {
+    "address": "112 State St, Montpelier, VT 05602",
+    "method": "H1.2",
+    "number_stories": 3,
+    "wall_fenesteration_front_per": 47.1,
+    "n_photos": 1,
+    "per_photo": [
+      {
+        "photo": "Front (51).png",
+        "stories": 3,
+        "fen_pct": 47.1,
+        "scores": {
+          "3": 839881.41,
+          "4": 558943.33,
+          "5": 308226.47,
+          "6": 262000.74,
+          "7": 299084.13
+        }
+      }
+    ]
+  },
+  "27 Langdon St, Montpelier, VT 05602": {
+    "address": "27 Langdon St, Montpelier, VT 05602",
+    "method": "H1.2",
+    "number_stories": 4,
+    "wall_fenesteration_front_per": 18.2,
+    "n_photos": 2,
+    "per_photo": [
+      {
+        "photo": "Front (80).png",
+        "stories": 3,
+        "fen_pct": 20.0,
+        "scores": {
+          "3": 456109.27,
+          "4": 200633.86,
+          "5": 23797.44,
+          "6": 21075.21,
+          "7": 4744.31
+        }
+      },
+      {
+        "photo": "Front (81).png",
+        "stories": 4,
+        "fen_pct": 16.5,
+        "scores": {
+          "3": 275149.42,
+          "4": 284995.72,
+          "5": 122910.26,
+          "6": 47477.03,
+          "7": 19653.23
+        }
+      }
+    ]
+  },
+  "40 Main St, Montpelier, VT 05602": {
+    "address": "40 Main St, Montpelier, VT 05602",
+    "method": "H1.2",
+    "number_stories": 3,
+    "wall_fenesteration_front_per": 12.4,
+    "n_photos": 2,
+    "per_photo": [
+      {
+        "photo": "Front (65).png",
+        "stories": 3,
+        "fen_pct": 9.7,
+        "scores": {
+          "3": 3693807.0,
+          "4": 1575208.95,
+          "5": 774325.9,
+          "6": 138245.46,
+          "7": 47175.11
+        }
+      },
+      {
+        "photo": "Front (67).png",
+        "stories": 3,
+        "fen_pct": 15.2,
+        "scores": {
+          "3": 3296046.1,
+          "4": 2359370.4,
+          "5": 730832.04,
+          "6": 343845.9,
+          "7": 269005.15
+        }
+      }
+    ]
+  },
+  "54 Elm St, Montpelier, VT 05602": {
+    "address": "54 Elm St, Montpelier, VT 05602",
+    "method": "H1.2",
+    "number_stories": 3,
+    "wall_fenesteration_front_per": 11.7,
+    "n_photos": 1,
+    "per_photo": [
+      {
+        "photo": "Front (74).png",
+        "stories": 3,
+        "fen_pct": 11.7,
+        "scores": {
+          "3": 6835058.69,
+          "4": 3988138.07,
+          "5": 522092.85,
+          "6": 221424.73,
+          "7": 104668.84
+        }
+      }
+    ]
+  }
+}

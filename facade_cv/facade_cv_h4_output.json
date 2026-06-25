@@ -1,0 +1,96 @@
+{
+  "100 Main St, Montpelier, VT 05602": {
+    "address": "100 Main St, Montpelier, VT 05602",
+    "method": "H4",
+    "number_stories": 8,
+    "wall_fenesteration_front_per": 3.5,
+    "n_photos": 1,
+    "per_photo": [
+      {
+        "photo": "Front (84).png",
+        "stories": 8,
+        "fen_pct": 3.5,
+        "T_px": 38,
+        "facade_h_px": 386
+      }
+    ]
+  },
+  "112 State St, Montpelier, VT 05602": {
+    "address": "112 State St, Montpelier, VT 05602",
+    "method": "H4",
+    "number_stories": 2,
+    "wall_fenesteration_front_per": 9.1,
+    "n_photos": 1,
+    "per_photo": [
+      {
+        "photo": "Front (51).png",
+        "stories": 2,
+        "fen_pct": 9.1,
+        "T_px": 227,
+        "facade_h_px": 464
+      }
+    ]
+  },
+  "27 Langdon St, Montpelier, VT 05602": {
+    "address": "27 Langdon St, Montpelier, VT 05602",
+    "method": "H4",
+    "number_stories": 8,
+    "wall_fenesteration_front_per": 5.8,
+    "n_photos": 2,
+    "per_photo": [
+      {
+        "photo": "Front (80).png",
+        "stories": 8,
+        "fen_pct": 7.8,
+        "T_px": 45,
+        "facade_h_px": 456
+      },
+      {
+        "photo": "Front (81).png",
+        "stories": 8,
+        "fen_pct": 3.7,
+        "T_px": 49,
+        "facade_h_px": 492
+      }
+    ]
+  },
+  "40 Main St, Montpelier, VT 05602": {
+    "address": "40 Main St, Montpelier, VT 05602",
+    "method": "H4",
+    "number_stories": 4,
+    "wall_fenesteration_front_per": 0.3,
+    "n_photos": 2,
+    "per_photo": [
+      {
+        "photo": "Front (65).png",
+        "stories": 1,
+        "fen_pct": 0.6,
+        "T_px": 331,
+        "facade_h_px": 405
+      },
+      {
+        "photo": "Front (67).png",
+        "stories": 8,
+        "fen_pct": 0.0,
+        "T_px": 44,
+        "facade_h_px": 444
+      }
+    ]
+  },
+  "54 Elm St, Montpelier, VT 05602": {
+    "address": "54 Elm St, Montpelier, VT 05602",
+    "method": "H4",
+    "number_stories": 8,
+    "wall_fenesteration_front_per": 2.7,
+    "n_photos": 1,
+    "per_photo": [
+      {
+        "photo": "Front (74).png",
+        "stories": 8,
+        "fen_pct": 2.7,
+        "T_px": 43,
+        "facade_h_px": 382
+      }
+    ]
+  }
+}

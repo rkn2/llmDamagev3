@@ -1,0 +1,96 @@
+{
+  "100 Main St, Montpelier, VT 05602": {
+    "address": "100 Main St, Montpelier, VT 05602",
+    "method": "H2",
+    "number_stories": 1,
+    "wall_fenesteration_front_per": 0.0,
+    "n_photos": 1,
+    "per_photo": [
+      {
+        "photo": "Front (84).png",
+        "stories": 1,
+        "fen_pct": 0.0,
+        "n_window_rows": 0,
+        "row_centers_y": []
+      }
+    ]
+  },
+  "112 State St, Montpelier, VT 05602": {
+    "address": "112 State St, Montpelier, VT 05602",
+    "method": "H2",
+    "number_stories": 1,
+    "wall_fenesteration_front_per": 0.0,
+    "n_photos": 1,
+    "per_photo": [
+      {
+        "photo": "Front (51).png",
+        "stories": 1,
+        "fen_pct": 0.0,
+        "n_window_rows": 0,
+        "row_centers_y": []
+      }
+    ]
+  },
+  "27 Langdon St, Montpelier, VT 05602": {
+    "address": "27 Langdon St, Montpelier, VT 05602",
+    "method": "H2",
+    "number_stories": 1,
+    "wall_fenesteration_front_per": 0.0,
+    "n_photos": 2,
+    "per_photo": [
+      {
+        "photo": "Front (80).png",
+        "stories": 1,
+        "fen_pct": 0.0,
+        "n_window_rows": 0,
+        "row_centers_y": []
+      },
+      {
+        "photo": "Front (81).png",
+        "stories": 1,
+        "fen_pct": 0.0,
+        "n_window_rows": 0,
+        "row_centers_y": []
+      }
+    ]
+  },
+  "40 Main St, Montpelier, VT 05602": {
+    "address": "40 Main St, Montpelier, VT 05602",
+    "method": "H2",
+    "number_stories": 1,
+    "wall_fenesteration_front_per": 0.0,
+    "n_photos": 2,
+    "per_photo": [
+      {
+        "photo": "Front (65).png",
+        "stories": 1,
+        "fen_pct": 0.0,
+        "n_window_rows": 0,
+        "row_centers_y": []
+      },
+      {
+        "photo": "Front (67).png",
+        "stories": 1,
+        "fen_pct": 0.0,
+        "n_window_rows": 0,
+        "row_centers_y": []
+      }
+    ]
+  },
+  "54 Elm St, Montpelier, VT 05602": {
+    "address": "54 Elm St, Montpelier, VT 05602",
+    "method": "H2",
+    "number_stories": 1,
+    "wall_fenesteration_front_per": 0.0,
+    "n_photos": 1,
+    "per_photo": [
+      {
+        "photo": "Front (74).png",
+        "stories": 1,
+        "fen_pct": 0.0,
+        "n_window_rows": 0,
+        "row_centers_y": []
+      }
+    ]
+  }
+}

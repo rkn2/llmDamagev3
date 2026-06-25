@@ -1,0 +1,218 @@
+{
+  "goal": "Replace LLM vision pass with CV pipeline for number_stories and fenestration_per from facade photos",
+  "vocabulary": ["horizontal-edge-projection", "pretrained-semantic-segmentation", "reference-geometry-calibration", "projective-grid-rectification", "window-blob-detection", "row-occupancy-projection", "fft-floor-period"],
+  "tree": {
+    "id": "root",
+    "children": [
+      {
+        "id": "H1",
+        "family": "horizontal-edge-projection",
+        "description": "Canny/Sobel horizontal gradient → 1D row profile → peak detection → story count",
+        "status": "promising",
+        "attempts": [
+          {
+            "round": 1,
+            "action": "min_dist=12% facade height; adaptive threshold INV for fenestration",
+            "delta_stories": -2,
+            "cost_usd": 0,
+            "verdict": "hurt",
+            "evidence": "rounds/round_01.md",
+            "failure_modes": ["decorative cornices fire as peaks at 12% spacing", "inverted thresh finds mortar joints not windows on brick facades"]
+          }
+        ],
+        "posterior": {"gain": "med-with-fixes", "confidence": "med", "cost_to_probe": "free"},
+        "children": [
+          {
+            "id": "H1.1",
+            "family": "fft-floor-period",
+            "description": "Sobel-Y profile → Hanning window → rfft → score bins N=[2,8]. Correctly identified 112 State=5 (bin-5 dominant) but failed for simple buildings (DC step at y=0 made bin-1 overwhelm floor-pitch bins).",
+            "status": "dead",
+            "attempts": [
+              {
+                "round": 5,
+                "action": "Sobel-Y + Hanning window + fft score bins [2,8]",
+                "stories_correct": "1/5",
+                "cost_usd": 0,
+                "verdict": "informative",
+                "evidence": "rounds/round_05.md",
+                "failure_modes": ["DC step at facade top makes bin-1 dominant for 100 Main/27 Langdon/40 Main", "Brick texture at 47px makes bin-8 dominant for 54 Elm"]
+              }
+            ],
+            "posterior": {"gain": "low", "confidence": "high", "cost_to_probe": "N/A"},
+            "children": [
+              {
+                "id": "H1.2",
+                "family": "fft-floor-period",
+                "description": "Row-mean brightness profile + σ=20px + poly3 detrend + fft N=[3,7]. Fixed DC contamination but lost 112 State's floor-edge signal.",
+                "status": "dead",
+                "attempts": [
+                  {
+                    "round": 6,
+                    "action": "brightness profile + σ=20 + poly3 + fft [3,7]",
+                    "stories_correct": "3/5",
+                    "cost_usd": 0,
+                    "verdict": "improved-direction",
+                    "evidence": "rounds/round_06.md",
+                    "failure_modes": ["112 State: brightness+smoothing loses arch-crown edge signal", "27 Langdon: photo(81) gives N=4 by thin margin → median=3.5→4"]
+                  }
+                ],
+                "posterior": {"gain": "none", "confidence": "high", "cost_to_probe": "N/A"},
+                "children": []
+              },
+              {
+                "id": "H1.3",
+                "family": "fft-floor-period",
+                "description": "Sobel-Y + σ=20px smooth + poly3 detrend + rfft N=[3,7]. GOAL NODE: 4/5 stories, 9.2pp fenestration MAE.",
+                "status": "exhausted",
+                "attempts": [
+                  {
+                    "round": 6,
+                    "action": "Sobel-Y + σ=20 + poly3 detrend + fft [3,7]",
+                    "stories_correct": "4/5",
+                    "fen_mae": 9.2,
+                    "cost_usd": 0,
+                    "verdict": "goal",
+                    "evidence": "rounds/round_06.md",
+                    "notes": "σ=20 suppresses 47px brick texture (→3%), keeps 127px floor pitch (→61%). poly3 detrend removes DC step. Fails only on 112 State (93px pitch attenuated to 40% < 155px N=3 component at 72%)."
+                  }
+                ],
+                "posterior": {"gain": "achieved-target", "confidence": "high", "cost_to_probe": "N/A"},
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "H2",
+        "family": "pretrained-semantic-segmentation",
+        "description": "SegFormer-b0 ADE20K window segmentation → cluster centroids → stories; mask area → fenestration",
+        "status": "dead",
+        "attempts": [
+          {
+            "round": 2,
+            "action": "nvidia/segformer-b0-finetuned-ade-512-512",
+            "delta_stories": -2,
+            "cost_usd": 0,
+            "verdict": "hurt",
+            "evidence": "rounds/round_02.md",
+            "failure_modes": ["95.3% classified as 'building', 0% as 'windowpane'. Domain shift fatal — ADE20K window label not trained on 19th-c. commercial masonry arched windows."]
+          }
+        ],
+        "posterior": {"gain": "none", "confidence": "high", "cost_to_probe": "N/A"},
+        "children": []
+      },
+      {
+        "id": "H3",
+        "family": "reference-geometry-calibration",
+        "description": "Detect known-size reference object (door ~2.1m) → px/m scale → facade height / 3.5m per story",
+        "status": "untried",
+        "attempts": [],
+        "posterior": {"gain": "low-med", "confidence": "low", "cost_to_probe": "free"},
+        "children": []
+      },
+      {
+        "id": "H4",
+        "family": "projective-grid-rectification",
+        "description": "1D autocorrelation of horizontal edge profile → dominant floor period T → stories = facade_height / T",
+        "status": "dead",
+        "attempts": [
+          {
+            "round": 3,
+            "action": "ACF argmax in [10%, 82%] range of facade height",
+            "delta_stories": -3,
+            "cost_usd": 0,
+            "verdict": "hurt",
+            "evidence": "rounds/round_03.md",
+            "failure_modes": ["ACF argmax finds 38px brick texture period not 130px floor-pitch period. Global argmax is always the wrong peak when multiple periodicities exist."]
+          }
+        ],
+        "posterior": {"gain": "none", "confidence": "high", "cost_to_probe": "N/A"},
+        "children": []
+      },
+      {
+        "id": "H5",
+        "family": "window-blob-detection",
+        "description": "35th-percentile threshold on CLAHE facade ROI → dark blobs → filter min/max dimension → cluster y-centroids with gap% → story rows = stories; blob area / facade area = fenestration",
+        "status": "promising",
+        "attempts": [
+          {
+            "round": 3,
+            "action": "percentile=35%, gap=12%, min_row=1; open-only morph",
+            "stories_correct": "3/5",
+            "fen_mae": 9.2,
+            "cost_usd": 0,
+            "verdict": "best",
+            "evidence": "rounds/round_03.md",
+            "notes": "Tied LLM baseline (3/5). Hard ceiling at 3/5: 112 State blobs chain into 1 row (spandrels < 56px); 54 Elm/27 Langdon singleton-row tradeoff."
+          }
+        ],
+        "posterior": {"gain": "low-further", "confidence": "high", "cost_to_probe": "free"},
+        "children": [
+          {
+            "id": "H5.1",
+            "family": "window-blob-detection",
+            "description": "H5 + top-margin filter: drop blobs with centroid_y < 9% of facade_h before clustering. Removes 54 Elm cornice (4%) but also removes 40 Main legitimate top blobs (5-7%). Net: different 3/5, no gain.",
+            "status": "dead",
+            "attempts": [
+              {
+                "round": 5,
+                "action": "gap=12%, min_row=1, top_margin=9%",
+                "stories_correct": "3/5",
+                "cost_usd": 0,
+                "verdict": "neutral",
+                "evidence": "rounds/round_05.md",
+                "failure_modes": ["54 Elm fixed but 40 Main broken (median [3,2]=2.5→2). Parameter spaces overlap — can't distinguish 4% cornice from 5-7% legitimate top blobs."]
+              }
+            ],
+            "posterior": {"gain": "none", "confidence": "high", "cost_to_probe": "N/A"},
+            "children": []
+          },
+          {
+            "id": "H6",
+            "family": "row-occupancy-projection",
+            "description": "Same H5 blobs, but project onto 1D row occupancy (occ[y] = sum blob widths at row y). Connected runs of occ>0 rows ≥ MIN_RUN_FRAC = stories.",
+            "status": "dead",
+            "attempts": [
+              {
+                "round": 4,
+                "action": "occ > 0; MIN_RUN_FRAC=0.06",
+                "stories_correct": "2/5",
+                "cost_usd": 0,
+                "verdict": "hurt",
+                "evidence": "rounds/round_04.md",
+                "failure_modes": [
+                  "112 State + 27 Langdon photo 80: spandrel bands have nonzero occ from mortar fragments → entire facade = one continuous run",
+                  "54 Elm: cornice run height 27px ≥ 6% of 450px → counted as story"
+                ]
+              }
+            ],
+            "posterior": {"gain": "med-with-fix", "confidence": "med", "cost_to_probe": "free"},
+            "children": [
+              {
+                "id": "H6.1",
+                "family": "row-occupancy-projection",
+                "description": "Width-gated occupancy: occ[y] ≥ 10% facade_w required for 'occupied'. Tested — 10% threshold is too strict for narrow windows; 40 Main/100 Main windows are only 8-13% of facade width.",
+                "status": "dead",
+                "attempts": [
+                  {
+                    "round": 5,
+                    "action": "occ >= 10% facade_w; MIN_RUN_FRAC=0.08",
+                    "stories_correct": "1/5",
+                    "cost_usd": 0,
+                    "verdict": "hurt",
+                    "evidence": "rounds/round_05.md",
+                    "failure_modes": ["10% threshold filters real windows on small facades (40 Main, 100 Main)", "112 State still 1 run (arcade blobs too wide/dense for any width threshold to create gaps)"]
+                  }
+                ],
+                "posterior": {"gain": "none", "confidence": "high", "cost_to_probe": "N/A"},
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "frontier": []
+}
