@@ -112,16 +112,22 @@ COMMON = {
     "wall_fenesteration_left_lowerlevel_per":   "0",
     "wall_fenesteration_back_per":             "un",
     "wall_fenesteration_back_lowerlevel_per":   "un",
+    # Protection (boards/shutters/sandbags): checked the actual ref_photos/before and
+    # ref_photos/after sets (July 2023 flood-period photos + Oct/Nov 2023 recovery photos)
+    # for all 5 buildings, all available sides. No plywood, storm shutters, or sandbags
+    # visible anywhere, on any side, before/during/after the flood — just ordinary glass
+    # storefronts and (on 100 Main St, 112 State St) fixed decorative window shutters that
+    # don't close over the glass. "no" below is from these photos, not inferred.
     "wall_fenesteration_protection_front":             "no",
     "wall_fenesteration_protection_front_lowerlevel":   "no",
-    "wall_fenesteration_protection_back":               "un",
-    "wall_fenesteration_protection_back_lowerlevel":    "un",
+    "wall_fenesteration_protection_back":               "no",
+    "wall_fenesteration_protection_back_lowerlevel":    "no",
     "wall_fenesteration_protection_right":              "no",
     "wall_fenesteration_protection_right_lowerlevel":   "no",
     "wall_fenesteration_protection_left":               "no",
     "wall_fenesteration_protection_left_lowerlevel":    "no",
     "fenestration_protection_type_front":  "not_applicable",
-    "fenestration_protection_type_back":   "un",
+    "fenestration_protection_type_back":   "not_applicable",
     "fenestration_protection_type_right":  "not_applicable",
     "fenestration_protection_type_left":   "not_applicable",
     "roof_shape_u":                 "flat",
@@ -357,6 +363,11 @@ BUILDINGS = {
         "wall_fenestration_per_e":    "un",  # = back, no rear imagery
         "wall_fenestration_per_n":    "0",   # = left/right party wall
         "wall_fenestration_per_s":    "0",   # = left/right party wall
+        # Unlike the other 4 buildings, there is no back photo for 27 Langdon St at all
+        # (neither before nor after) - override COMMON's photo-confirmed "no" back to "un"
+        "wall_fenesteration_protection_back":              "un",
+        "wall_fenesteration_protection_back_lowerlevel":   "un",
+        "fenestration_protection_type_back":  "un",
         "parapet_height_m":          "0.6",
         "buidling_use_before_flood": "mercantile",
         "buidling_use_after_flood":  "mercantile",
@@ -428,7 +439,7 @@ BUILDINGS = {
         "wall_length_front":         "15.4",
         "wall_length_side":          "19.9",
         "wall_fenesteration_front_per": "15",
-        "wall_fenesteration_front_lowerlevel_per": "un",  # ground floor shows mostly solid doors (vacant laundromat); glazing extent not clearly resolvable from available image
+        "wall_fenesteration_front_lowerlevel_per": "40",  # corrected from "un": the Street View frame was ambiguous, but ref_photos/after Oct 2023 photo clearly shows the storefront open ("EXPRESS LAUNDROMAT" / "WASH DRY FOLD" signage) with two display windows + two glazed entry doors - not boarded/vacant as the existing building_name_current field assumes
         "wall_fenestration_per_w":    "15",  # = front (orientation w)
         "wall_fenestration_per_e":    "un",  # = back, no rear imagery
         "wall_fenestration_per_n":    "0",   # = left/right party wall
