@@ -38,6 +38,16 @@ tr:last-child td { border-bottom: none; }
 .badge-2 { background:#fff3e0; color:#e65100; }
 .badge-3 { background:#fbe9e7; color:#bf360c; }
 .badge-4 { background:#ffebee; color:#b71c1c; }
+.flag-high   { background: #fdecea; }
+.flag-high   td.attr { color: #b71c1c; }
+.flag-medium { background: #fff8e1; }
+.flag-medium td.attr { color: #e65100; }
+.flag-low    { background: #f5f5f5; }
+.flag-low    td.attr { color: #666; }
+.critic-note { display: block; font-style: normal; font-weight: 600; margin-bottom: 0.25rem; }
+.critic-note.sev-high   { color: #b71c1c; }
+.critic-note.sev-medium { color: #e65100; }
+.critic-note.sev-low    { color: #666; }
 </style>
 </head>
 <body>
@@ -96,17 +106,17 @@ an <b>_unc</b> suffix is a certainty rating: <b>1</b> = 0–25%, <b>2</b> = 35�
               <td class="defn">town where the building is located</td>
               <td class="notes-col"></td>
             </tr>
-            <tr>
+            <tr class="flag-high">
               <td class="attr">latitude</td>
               <td class="value">44.2616257</td>
               <td class="defn">coordinate of the building</td>
-              <td class="notes-col">Nominatim-geocoded (collect_building_attributes.py); verified against VT state E911 address points for 27 Langdon St (see LESSONS_LEARNED.md §2). Not an approximate centroid.</td>
+              <td class="notes-col"><span class="critic-note sev-high">⚠ CRITIC (high): The existing note states coordinates were 'verified against VT state E911 address points for 27 Langdon St' — this is a different address entirely, strongly suggesting the lat/long values were duplicated from another building's record rather than verified for 54 Elm St.</span>Nominatim-geocoded (collect_building_attributes.py); verified against VT state E911 address points for 27 Langdon St (see LESSONS_LEARNED.md §2). Not an approximate centroid.</td>
             </tr>
-            <tr>
+            <tr class="flag-high">
               <td class="attr">longitude</td>
               <td class="value">-72.5757163</td>
               <td class="defn">coordinate of the building</td>
-              <td class="notes-col">Nominatim-geocoded (collect_building_attributes.py); verified against VT state E911 address points for 27 Langdon St (see LESSONS_LEARNED.md §2). Not an approximate centroid.</td>
+              <td class="notes-col"><span class="critic-note sev-high">⚠ CRITIC (high): Same issue as latitude: the note references verification against '27 Langdon St,' not 54 Elm St, indicating these coordinates may have been copied from a different building's record.</span>Nominatim-geocoded (collect_building_attributes.py); verified against VT state E911 address points for 27 Langdon St (see LESSONS_LEARNED.md §2). Not an approximate centroid.</td>
             </tr>
             <tr>
               <td class="attr">sub_national_heritage _list</td>
@@ -192,17 +202,17 @@ an <b>_unc</b> suffix is a certainty rating: <b>1</b> = 0–25%, <b>2</b> = 35�
               <td class="defn">categorizing building types based off of several characteristics (stories, height, construciton type, roof type, etc.) and best alligning the building with its corresponding number<br><span style='color:#aaa'>Options: 1-15</span></td>
               <td class="notes-col">Assigned from Nofal & van de Lindt (2020) 15-type portfolio. None of the 15 archetypes is a perfect match for a multi-story historic masonry downtown commercial block — F7 (7, small multi-unit commercial) is the closest for retail/mixed-use; F14 (14, office) for primarily office use. Certainty is inherently low for all 5 buildings.</td>
             </tr>
-            <tr>
+            <tr class="flag-medium">
               <td class="attr">occupany_u</td>
               <td class="value">mercantile</td>
               <td class="defn">current occupancy of the building when the event occurred<br><span style='color:#aaa'>Options: assembly, buisness, educational, factory,high-hazard, institutional, mercantile, residential, museum, storage, utilities, misc, not in use</span></td>
-              <td class="notes-col"></td>
+              <td class="notes-col"><span class="critic-note sev-medium">⚠ CRITIC (medium): Recorded as 'mercantile' only, but the before photos show upper floors with residential balconies, windows with residential character, and AC units, suggesting mixed-use (mercantile ground floor, residential upper floors); the single_unit = 'no' and multiple_unit = 'yes' fields also imply mixed occupancy that 'mercantile' alone does not capture.</span></td>
             </tr>
-            <tr>
+            <tr class="flag-high">
               <td class="attr">number_stories</td>
               <td class="value">4</td>
               <td class="defn"></td>
-              <td class="notes-col"></td>
+              <td class="notes-col"><span class="critic-note sev-high">⚠ CRITIC (high): The record claims 4 stories, but the before and after photos of the front facade consistently show 3 stories (ground-floor commercial plus two upper residential floors), with a decorative cornice at the top — no fourth story is visible.</span></td>
             </tr>
             <tr>
               <td class="attr">year_built_u</td>
@@ -216,11 +226,11 @@ an <b>_unc</b> suffix is a certainty rating: <b>1</b> = 0–25%, <b>2</b> = 35�
               <td class="defn">approximation of ground building area in meters sqaured</td>
               <td class="notes-col"></td>
             </tr>
-            <tr>
+            <tr class="flag-medium">
               <td class="attr">building_urban_setting</td>
               <td class="value">row_middle</td>
               <td class="defn">is the building within a row of buildings or isolated on its own as a stand alone structure?<br><span style='color:#aaa'>Options: isolated, row_end, row_middle</span></td>
-              <td class="notes-col"></td>
+              <td class="notes-col"><span class="critic-note sev-medium">⚠ CRITIC (medium): Recorded as 'row_middle' but the before and after photos show the building is a corner/end-of-row structure with an exposed side wall (clad in painted metal panels) visible on one elevation, consistent with 'row_end' rather than 'row_middle'.</span></td>
             </tr>
             <tr>
               <td class="attr">building_position_on_street</td>
@@ -270,11 +280,11 @@ an <b>_unc</b> suffix is a certainty rating: <b>1</b> = 0–25%, <b>2</b> = 35�
               <td class="defn">building risk category based on IBC Table 1604.5 Risk Category<br><span style='color:#aaa'>Options: 1,2,3,4</span></td>
               <td class="notes-col"></td>
             </tr>
-            <tr>
+            <tr class="flag-low">
               <td class="attr">building_low_rise</td>
               <td class="value">yes</td>
               <td class="defn">determining if the structure is a low rise building; anything 4 stories or less was taken as low rise<br><span style='color:#aaa'>Options: yes, no</span></td>
-              <td class="notes-col"></td>
+              <td class="notes-col"><span class="critic-note sev-low">⚠ CRITIC (low): This field is flagged only because it depends on number_stories: if the correct count is 3 (not 4), the 'yes' value for low-rise is still correct, but the justification is tied to an erroneous story count.</span></td>
             </tr></tbody>
         </table>
       </div>
@@ -285,11 +295,11 @@ an <b>_unc</b> suffix is a certainty rating: <b>1</b> = 0–25%, <b>2</b> = 35�
             <th>Attribute</th><th>Value</th><th>Definition / Options</th><th>Notes on this entry</th>
           </tr></thead>
           <tbody>
-            <tr>
+            <tr class="flag-medium">
               <td class="attr">roof_shape_u</td>
               <td class="value">flat</td>
               <td class="defn">most accurate roof shape classification; if multiple roof types present for a building, used the 'complex' input and added more details within the notes column at the end<br><span style='color:#aaa'>Options: complex,flat, gable, gable-hip_combo, gambrel, hip, mansard, monoslope, un, ot</span></td>
-              <td class="notes-col"></td>
+              <td class="notes-col"><span class="critic-note sev-medium">⚠ CRITIC (medium): The record states 'flat' roof, but the before and after photos show a prominent decorative Italianate cornice with visible overhang/soffit and bracket detailing at the roofline; while the roof deck itself may be flat, the cornice assembly creates a non-trivial overhang inconsistent with a bare flat roof classification, and the parapet_height_m and overhang_length_u = 0 conflict with the visible projecting cornice.</span></td>
             </tr>
             <tr>
               <td class="attr">roof_slope_u</td>
@@ -339,11 +349,11 @@ an <b>_unc</b> suffix is a certainty rating: <b>1</b> = 0–25%, <b>2</b> = 35�
               <td class="defn">corresponding certainty value to the previous column entry; used to show level of certainty with the input given<br><span style='color:#aaa'>Options: 1, 2, 3</span></td>
               <td class="notes-col"></td>
             </tr>
-            <tr>
+            <tr class="flag-medium">
               <td class="attr">overhang_length_u</td>
               <td class="value">0</td>
               <td class="defn">estimated overhang length of the roof system past the walls in meters; 0 is entered if no overhang is present; if multiple lengths are present, the dominant one is used</td>
-              <td class="notes-col"></td>
+              <td class="notes-col"><span class="critic-note sev-medium">⚠ CRITIC (medium): Set to 0 (no overhang), but the before and after photos clearly show a projecting Italianate bracketed cornice extending beyond the brick wall plane on the front elevation — a non-zero overhang is visible.</span></td>
             </tr>
             <tr>
               <td class="attr">parapet_height_m</td>
@@ -618,11 +628,11 @@ an <b>_unc</b> suffix is a certainty rating: <b>1</b> = 0–25%, <b>2</b> = 35�
               <td class="defn">percentage of fenestration at the lower level of the back side of the building<br><span style='color:#aaa'>Options: 0-100</span></td>
               <td class="notes-col"></td>
             </tr>
-            <tr>
+            <tr class="flag-medium">
               <td class="attr">wall_fenesteration_right_per</td>
               <td class="value">0</td>
               <td class="defn">percentage of fenestration on the right side of the building<br><span style='color:#aaa'>Options: 0-100</span></td>
-              <td class="notes-col"></td>
+              <td class="notes-col"><span class="critic-note sev-medium">⚠ CRITIC (medium): Set to 0%, but the before photos of the side elevation show several windows on the exposed side wall, so fenestration on at least one non-front side is clearly non-zero.</span></td>
             </tr>
             <tr>
               <td class="attr">wall_fenesteration_right_lowerlevel_per</td>
@@ -630,11 +640,11 @@ an <b>_unc</b> suffix is a certainty rating: <b>1</b> = 0–25%, <b>2</b> = 35�
               <td class="defn">percentage of fenestration at the lower level of the right side of the building<br><span style='color:#aaa'>Options: 0-100</span></td>
               <td class="notes-col"></td>
             </tr>
-            <tr>
+            <tr class="flag-medium">
               <td class="attr">wall_fenesteration_left_per</td>
               <td class="value">0</td>
               <td class="defn">percentage of fenestration on the left side of the building<br><span style='color:#aaa'>Options: 0-100</span></td>
-              <td class="notes-col"></td>
+              <td class="notes-col"><span class="critic-note sev-medium">⚠ CRITIC (medium): Set to 0%, but the before and after photos show the side elevation (exposed flank) has multiple windows visible, indicating non-zero fenestration on a side wall.</span></td>
             </tr>
             <tr>
               <td class="attr">wall_fenesteration_left_lowerlevel_per</td>
@@ -1221,11 +1231,11 @@ an <b>_unc</b> suffix is a certainty rating: <b>1</b> = 0–25%, <b>2</b> = 35�
               <td class="defn">building use before the flood; using the most current use (not the original historic building use)<br><span style='color:#aaa'>Options: assembly, buisness, educational, factory, high-hazard, institutional, mercantile, residential, storage, utilities, religious, military, museum, not in use, unknown, demolished</span></td>
               <td class="notes-col"></td>
             </tr>
-            <tr>
+            <tr class="flag-medium">
               <td class="attr">buidling_use_after_flood</td>
               <td class="value">not in use</td>
               <td class="defn">building use after the flood<br><span style='color:#aaa'>Options: assembly, buisness, educational, factory, high-hazard, institutional, mercantile, residential, storage, utilities, religious, military, museum, not in use, unknown, demolished</span></td>
-              <td class="notes-col"></td>
+              <td class="notes-col"><span class="critic-note sev-medium">⚠ CRITIC (medium): Recorded as 'not in use,' but the after photo of the front facade (post-flood Street View) shows the Capitol City Laundromat signage still present and the storefront appearing operational with 'WASH, DRY, FOLD' advertising visible — the ground floor may have resumed or continued some use.</span></td>
             </tr>
             <tr>
               <td class="attr">buidling_use_plan_after_flood</td>
@@ -1509,11 +1519,11 @@ an <b>_unc</b> suffix is a certainty rating: <b>1</b> = 0–25%, <b>2</b> = 35�
               <td class="defn">Options: yes, no</td>
               <td class="notes-col"></td>
             </tr>
-            <tr>
+            <tr class="flag-medium">
               <td class="attr">prop_residential facility</td>
               <td class="value">no</td>
               <td class="defn">this also includes all single family homes<br><span style='color:#aaa'>Options: yes, no</span></td>
-              <td class="notes-col"></td>
+              <td class="notes-col"><span class="critic-note sev-medium">⚠ CRITIC (medium): Set to 'no,' but the before photos clearly show residential balconies on upper floors with what appear to be apartment units, and the building is recorded as multiple_unit = 'yes'; the upper floors appear to be residential, making this classification incorrect.</span></td>
             </tr>
             <tr>
               <td class="attr">prop_scenic area</td>
@@ -1665,156 +1675,10 @@ an <b>_unc</b> suffix is a certainty rating: <b>1</b> = 0–25%, <b>2</b> = 35�
         </table>
       </div>
       <div class="section">
-        <div class="section-title">Construction Materials — Horizontal</div>
-        <table>
-          <thead><tr>
-            <th>Attribute</th><th>Value</th><th>Definition / Options</th><th>Notes on this entry</th>
-          </tr></thead>
-          <tbody>
-            <tr>
-              <td class="attr">const_material_h_stone</td>
-              <td class="value"><span class="un">un</span></td>
-              <td class="defn">horizontal materials are foundations, floors, roofs, etc. Is stone used within the horizontal members of the structure?<br><span style='color:#aaa'>Options: yes, no</span></td>
-              <td class="notes-col"></td>
-            </tr>
-            <tr>
-              <td class="attr">const_material_h_brick</td>
-              <td class="value"><span class="un">un</span></td>
-              <td class="defn">Is brick used within the horizontal members of the structure?<br><span style='color:#aaa'>Options: yes, no</span></td>
-              <td class="notes-col"></td>
-            </tr>
-            <tr>
-              <td class="attr">const_material_h_wood</td>
-              <td class="value"><span class="un">un</span></td>
-              <td class="defn">Is wood used within the horizontal members of the structure?<br><span style='color:#aaa'>Options: yes, no</span></td>
-              <td class="notes-col"></td>
-            </tr>
-            <tr>
-              <td class="attr">const_material_h_mud</td>
-              <td class="value"><span class="un">un</span></td>
-              <td class="defn">Is mud used within the horizontal members of the structure?<br><span style='color:#aaa'>Options: yes, no</span></td>
-              <td class="notes-col"></td>
-            </tr>
-            <tr>
-              <td class="attr">const_material_h_rf_masonry</td>
-              <td class="value"><span class="un">un</span></td>
-              <td class="defn">Is reinforced masonry used within the horizontal members of the structure?<br><span style='color:#aaa'>Options: yes, no</span></td>
-              <td class="notes-col"></td>
-            </tr>
-            <tr>
-              <td class="attr">const_material_h_rglr_stone</td>
-              <td class="value"><span class="un">un</span></td>
-              <td class="defn">Is regular stone used within the horizontal members of the structure?<br><span style='color:#aaa'>Options: yes, no</span></td>
-              <td class="notes-col"></td>
-            </tr>
-            <tr>
-              <td class="attr">const_material_h_rf_conc</td>
-              <td class="value"><span class="un">un</span></td>
-              <td class="defn">Is reinforced concrete used within the horizontal members of the structure?<br><span style='color:#aaa'>Options: yes, no</span></td>
-              <td class="notes-col"></td>
-            </tr>
-            <tr>
-              <td class="attr">const_material_h_ir_stone</td>
-              <td class="value"><span class="un">un</span></td>
-              <td class="defn">Is irregular stone used within the horizontal members of the structure?<br><span style='color:#aaa'>Options: yes, no</span></td>
-              <td class="notes-col"></td>
-            </tr>
-            <tr>
-              <td class="attr">const_material_h_steel</td>
-              <td class="value"><span class="un">un</span></td>
-              <td class="defn">Is steel used within the horizontal members of the structure?<br><span style='color:#aaa'>Options: yes, no</span></td>
-              <td class="notes-col"></td>
-            </tr>
-            <tr>
-              <td class="attr">const_material_h_othr</td>
-              <td class="value"><span class="un">un</span></td>
-              <td class="defn">Are any other materials used within the horizontal members of the structure?<br><span style='color:#aaa'>Options: yes, no</span></td>
-              <td class="notes-col"></td>
-            </tr></tbody>
-        </table>
-      </div>
-      <div class="section">
-        <div class="section-title">Construction Materials — Vertical</div>
-        <table>
-          <thead><tr>
-            <th>Attribute</th><th>Value</th><th>Definition / Options</th><th>Notes on this entry</th>
-          </tr></thead>
-          <tbody>
-            <tr>
-              <td class="attr">const_material_v_stone</td>
-              <td class="value"><span class="un">un</span></td>
-              <td class="defn">vertical materials are taken to be walls; Is stone used within the vertical members of the structure?<br><span style='color:#aaa'>Options: yes, no</span></td>
-              <td class="notes-col"></td>
-            </tr>
-            <tr>
-              <td class="attr">const_material_v_brick</td>
-              <td class="value"><span class="un">un</span></td>
-              <td class="defn">Is brick used within the vertical members of the structure?<br><span style='color:#aaa'>Options: yes, no</span></td>
-              <td class="notes-col"></td>
-            </tr>
-            <tr>
-              <td class="attr">const_material_v_wood</td>
-              <td class="value"><span class="un">un</span></td>
-              <td class="defn">Is wood used within the vertical members of the structure?<br><span style='color:#aaa'>Options: yes, no</span></td>
-              <td class="notes-col"></td>
-            </tr>
-            <tr>
-              <td class="attr">const_material_v_mud</td>
-              <td class="value"><span class="un">un</span></td>
-              <td class="defn">Is mud used within the vertical members of the structure?<br><span style='color:#aaa'>Options: yes, no</span></td>
-              <td class="notes-col"></td>
-            </tr>
-            <tr>
-              <td class="attr">const_material_v_rf_masonry</td>
-              <td class="value"><span class="un">un</span></td>
-              <td class="defn">Is reinforced masonry used within the vertical members of the structure?<br><span style='color:#aaa'>Options: yes, no</span></td>
-              <td class="notes-col"></td>
-            </tr>
-            <tr>
-              <td class="attr">const_material_v_rglr_stone</td>
-              <td class="value"><span class="un">un</span></td>
-              <td class="defn">Is regular stone used within the vertical members of the structure?<br><span style='color:#aaa'>Options: yes, no</span></td>
-              <td class="notes-col"></td>
-            </tr>
-            <tr>
-              <td class="attr">const_material_v_rf_conc</td>
-              <td class="value"><span class="un">un</span></td>
-              <td class="defn">Is reinforced concrete used within the vertical members of the structure?<br><span style='color:#aaa'>Options: yes, no</span></td>
-              <td class="notes-col"></td>
-            </tr>
-            <tr>
-              <td class="attr">const_material_v_ir_stone</td>
-              <td class="value"><span class="un">un</span></td>
-              <td class="defn">Is irregular stone used within the vertical members of the structure?<br><span style='color:#aaa'>Options: yes, no</span></td>
-              <td class="notes-col"></td>
-            </tr>
-            <tr>
-              <td class="attr">const_material_v_steel</td>
-              <td class="value"><span class="un">un</span></td>
-              <td class="defn">Is steel used within the vertical members of the structure?<br><span style='color:#aaa'>Options: yes, no</span></td>
-              <td class="notes-col"></td>
-            </tr>
-            <tr>
-              <td class="attr">const_material_v_othr</td>
-              <td class="value"><span class="un">un</span></td>
-              <td class="defn">Are any other materials used within the vertical members of the structure?<br><span style='color:#aaa'>Options: yes, no</span></td>
-              <td class="notes-col"></td>
-            </tr></tbody>
-        </table>
-      </div>
-      <div class="section">
         <div class="section-title">Additional Attributes</div>
         <table><thead><tr>
           <th>Attribute</th><th>Value</th><th>Definition</th><th>Notes</th>
-        </tr></thead><tbody>
-            <tr><td class="attr">wall_fenestration_per_n</td>
-            <td class="value">0</td>
-            <td class="defn"></td>
-            <td class="notes-col"></td></tr>
-            <tr><td class="attr">wall_fenestration_per_s</td>
-            <td class="value">0</td>
-            <td class="defn"></td>
-            <td class="notes-col"></td></tr></tbody></table>
+        </tr></thead><tbody><tr><td class="attr">wall_fenestration_per_n</td><td class="value">0</td><td class="defn"></td><td class="notes-col"></td></tr><tr><td class="attr">wall_fenestration_per_s</td><td class="value">0</td><td class="defn"></td><td class="notes-col"></td></tr></tbody></table>
       </div>
 </body>
 </html>

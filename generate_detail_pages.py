@@ -23,6 +23,11 @@ ASSESSMENTS = {
 BUILDING_ATTRS = json.loads((ROOT_DIR / "building_attributes_auto.json").read_text())
 VISUAL_ATTRS = json.loads((ROOT_DIR / "visual_attributes.json").read_text())
 
+# Live read of critic.py's output, guarded since it's a new optional stage someone may
+# not have run yet (unlike the three sources above, which the pipeline always produces).
+_critic_path = ROOT_DIR / "critic_findings.json"
+CRITIC_FINDINGS = json.loads(_critic_path.read_text()) if _critic_path.exists() else {}
+
 # River distances computed from USGS NHD flowlines via
 # hydro.nationalmap.gov/arcgis/rest/services/nhd/MapServer/6
 # Projected to UTM 19N (EPSG:32619) for metric accuracy.
@@ -544,18 +549,6 @@ SECTIONS = [
      ["owner_individual", "owner_business", "owner_government",
       "owner_ngo", "owner_religious ", "owner_unknown",
       "owner_occupied", "tenant_occupied"]),
-
-    ("Construction Materials — Horizontal",
-     ["const_material_h_stone", "const_material_h_brick", "const_material_h_wood",
-      "const_material_h_mud", "const_material_h_rf_masonry", "const_material_h_rglr_stone",
-      "const_material_h_rf_conc", "const_material_h_ir_stone",
-      "const_material_h_steel", "const_material_h_othr"]),
-
-    ("Construction Materials — Vertical",
-     ["const_material_v_stone", "const_material_v_brick", "const_material_v_wood",
-      "const_material_v_mud", "const_material_v_rf_masonry", "const_material_v_rglr_stone",
-      "const_material_v_rf_conc", "const_material_v_ir_stone",
-      "const_material_v_steel", "const_material_v_othr"]),
 ]
 
 # ── Inline notes specific to certain attributes ───────────────────────────────
@@ -679,6 +672,16 @@ tr:last-child td { border-bottom: none; }
 .badge-2 { background:#fff3e0; color:#e65100; }
 .badge-3 { background:#fbe9e7; color:#bf360c; }
 .badge-4 { background:#ffebee; color:#b71c1c; }
+.flag-high   { background: #fdecea; }
+.flag-high   td.attr { color: #b71c1c; }
+.flag-medium { background: #fff8e1; }
+.flag-medium td.attr { color: #e65100; }
+.flag-low    { background: #f5f5f5; }
+.flag-low    td.attr { color: #666; }
+.critic-note { display: block; font-style: normal; font-weight: 600; margin-bottom: 0.25rem; }
+.critic-note.sev-high   { color: #b71c1c; }
+.critic-note.sev-medium { color: #e65100; }
+.critic-note.sev-low    { color: #666; }
 """
 
 def safe_filename(address):
@@ -694,7 +697,13 @@ def fmt(key, val):
         return f'<span class="badge-level badge-{level}">{val}</span>'
     return str(val)
 
-def build_page(address, data):
+def resolve_building_data(address: str, data: dict) -> dict:
+    """Merge the hardcoded BUILDINGS/COMMON entry for `address` with the three live
+    JSON sources (ASSESSMENTS, BUILDING_ATTRS, VISUAL_ATTRS) plus computed fields
+    (river distance, wall lengths, per-cardinal fenestration) -- the exact record
+    build_page() renders, exposed standalone so critic.py can audit it without
+    duplicating this merge logic.
+    """
     # Inject computed river distances
     rd = RIVER_DISTANCES.get(address, {})
     data = dict(data)
@@ -761,7 +770,33 @@ def build_page(address, data):
                 data[f"wall_fenestration_per_{c}"] = data.get("wall_fenesteration_back_per", "un")
             else:
                 data[f"wall_fenestration_per_{c}"] = "0"  # the two sides, party walls
+    return data
 
+
+def iter_populated_fields(address: str, data: dict):
+    """Yield (key, value, defn, options, note) for every field with a real value
+    (not None/""/"un"), in spreadsheet order -- same traversal build_page() uses to
+    render rows, but skipping unset fields since there's nothing to critique there.
+    """
+    covered = set()
+    for _sec_name, keys in SECTIONS:
+        for k in keys:
+            covered.add(k)
+            val = data.get(k, "un")
+            if val in (None, "", "un"):
+                continue
+            info = ATTR_INFO.get(k, {})
+            note = NOTES_OVERRIDE.get(k, {}).get(address) or NOTES.get(k, "")
+            yield (k, str(val), info.get("defn", ""), info.get("options", ""), note)
+    for k, v in data.items():
+        if k in covered or k.startswith("_") or v in (None, "", "un"):
+            continue
+        info = ATTR_INFO.get(k, {})
+        yield (k, str(v), info.get("defn", ""), info.get("options", ""), NOTES.get(k, ""))
+
+
+def build_page(address, data):
+    data = resolve_building_data(address, data)
     covered = set()
     sections_html = ""
 
@@ -779,13 +814,24 @@ def build_page(address, data):
                 defn_display = f"{defn}<br><span style='color:#aaa'>Options: {opts}</span>" if defn else f"Options: {opts}"
             else:
                 defn_display = defn
-            llm_cls = ' class="llm-row"' if k.startswith("_llm") else ""
+            finding = CRITIC_FINDINGS.get(address, {}).get(k)
+            classes = []
+            if k.startswith("_llm"):
+                classes.append("llm-row")
+            if finding:
+                classes.append(f"flag-{finding['severity']}")
+            cls_attr = f' class="{" ".join(classes)}"' if classes else ""
+            note_html = note
+            if finding:
+                note_html = (f'<span class="critic-note sev-{finding["severity"]}">'
+                              f'⚠ CRITIC ({finding["severity"]}): {finding["issue"]}</span>'
+                              + note)
             rows += f"""
-            <tr{llm_cls}>
+            <tr{cls_attr}>
               <td class="attr">{k}</td>
               <td class="value">{fmt(k, val)}</td>
               <td class="defn">{defn_display}</td>
-              <td class="notes-col">{note}</td>
+              <td class="notes-col">{note_html}</td>
             </tr>"""
         if rows:
             sections_html += f"""
@@ -802,12 +848,19 @@ def build_page(address, data):
     # Catch anything in BUILDINGS data not in any section
     extra = {k: v for k, v in data.items() if k not in covered and not k.startswith("_")}
     if extra:
-        rows = "".join(f"""
-            <tr><td class="attr">{k}</td>
-            <td class="value">{fmt(k, v)}</td>
-            <td class="defn">{ATTR_INFO.get(k,{}).get('defn','')}</td>
-            <td class="notes-col">{NOTES.get(k,'')}</td></tr>"""
-            for k, v in extra.items())
+        def _extra_row(k, v):
+            finding = CRITIC_FINDINGS.get(address, {}).get(k)
+            cls_attr = f' class="flag-{finding["severity"]}"' if finding else ""
+            note_html = NOTES.get(k, "")
+            if finding:
+                note_html = (f'<span class="critic-note sev-{finding["severity"]}">'
+                              f'⚠ CRITIC ({finding["severity"]}): {finding["issue"]}</span>'
+                              + note_html)
+            return (f'<tr{cls_attr}><td class="attr">{k}</td>'
+                    f'<td class="value">{fmt(k, v)}</td>'
+                    f'<td class="defn">{ATTR_INFO.get(k,{}).get("defn","")}</td>'
+                    f'<td class="notes-col">{note_html}</td></tr>')
+        rows = "".join(_extra_row(k, v) for k, v in extra.items())
         sections_html += f"""
       <div class="section">
         <div class="section-title">Additional Attributes</div>

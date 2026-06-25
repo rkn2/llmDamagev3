@@ -1,0 +1,272 @@
+{
+  "100 Main St, Montpelier, VT 05602": {
+    "latitude": {
+      "severity": "high",
+      "issue": "The existing note states coordinates were 'verified against VT state E911 address points for 27 Langdon St' \u2014 a completely different address \u2014 strongly suggesting these coordinates were duplicated from another building's record rather than verified for 100 Main St.",
+      "source": "llm"
+    },
+    "longitude": {
+      "severity": "high",
+      "issue": "Same duplication problem as latitude: the note explicitly references '27 Langdon St' verification, not 100 Main St, indicating this value was copied from a different building's record.",
+      "source": "llm"
+    },
+    "occupany_u": {
+      "severity": "medium",
+      "issue": "The building is a mixed-use commercial block with a bar/restaurant on the ground floor and upper-floor spaces (likely office or residential); 'assembly' applies only to the taproom portion, and 'mercantile' or a mixed-use classification would better capture the full building use per the schema options.",
+      "source": "llm"
+    },
+    "buidling_use_before_flood": {
+      "severity": "medium",
+      "issue": "Same issue as occupany_u: the before photos show 'Three Penny Taproom' on the ground floor and what appear to be residential or office upper floors, making 'assembly' alone an incomplete and potentially incorrect characterization of the whole building.",
+      "source": "llm"
+    },
+    "soffit_present_u": {
+      "severity": "medium",
+      "issue": "The note claims this is 'an exception to the other 4 buildings' flat facades with no eaves,' but the before photos clearly show a prominent Italianate cornice/bracketed cornice at the roofline \u2014 not a soffit in the eave sense \u2014 and the roof is flat with a parapet; the front canopy/awning is not a building soffit.",
+      "source": "llm"
+    },
+    "_llm_water_depth_ft": {
+      "severity": "medium",
+      "issue": "The after photo showing the Three Penny Taproom frontage shows floodwater at roughly sidewalk to shin-to-knee level on a person standing outside, and the water surface sits well below the bottom of the awning fascia \u2014 consistent with roughly 1\u20132 ft at the fa\u00e7ade, not 3.5 ft; the LLM reasoning claiming 'mid-door height' and 'submerging the entire first-floor commercial space' is not supported by the street-level after photo.",
+      "source": "llm"
+    },
+    "flood_height_building": {
+      "severity": "medium",
+      "issue": "The street-level after photo shows the water surface at approximately 1\u20132 ft above the sidewalk at the building face, not ~3.5 ft; the claim of 3.5 ft above first floor is inconsistent with the visible water line relative to the storefront doors and awning.",
+      "source": "llm"
+    },
+    "mwfrs_u_moment_frame": {
+      "severity": "low",
+      "issue": "The note justifies 'no moment frame' by referencing 'historic unreinforced masonry construction,' but the record elsewhere asserts wood-frame construction (construction_type_u = wood_frame); the justification contradicts the construction type assigned in this same record.",
+      "source": "llm"
+    },
+    "wall_length_front": {
+      "severity": "medium",
+      "issue": "The front facade (facing Main St, oriented west per front_elevation_orientation) is clearly narrower than the side elevation in the before photos \u2014 the building is a deep rectangular block \u2014 yet wall_length_front (33.2 m) and wall_length_side (32.9 m) are recorded as nearly equal, which is implausible for a building described as row_middle on a downtown commercial block where depth typically greatly exceeds frontage.",
+      "source": "llm"
+    },
+    "prop_val_evidential": {
+      "severity": "low",
+      "issue": "Assessed as 'considerable' solely because of NRHP contributing status in the historic district per the note \u2014 no building-specific evidential reasoning (e.g. intact historic fabric, archaeological potential, documentary record) is provided, making this a generic templated value rather than a building-specific assessment.",
+      "source": "llm"
+    }
+  },
+  "112 State St, Montpelier, VT 05602": {
+    "roof_shape_u": {
+      "severity": "high",
+      "issue": "The field records 'flat' but all before and after photos clearly show a steeply pitched mansard/hip metal roof with dormers on the upper story \u2014 there is no flat roof visible on this building from any angle.",
+      "source": "llm"
+    },
+    "roof_slope_u": {
+      "severity": "high",
+      "issue": "Recorded as '0' (flat), but photos show a steeply sloped metal roof (mansard style with dormers) that is clearly not flat; slope is visually well above 30 degrees.",
+      "source": "llm"
+    },
+    "overhang_length_u": {
+      "severity": "medium",
+      "issue": "Recorded as '0' (no overhang), but the before photos show a pronounced cornice/eave overhang at the roofline transition above the upper brick parapet band, inconsistent with a zero overhang value.",
+      "source": "llm"
+    },
+    "parapet_height_m": {
+      "severity": "medium",
+      "issue": "A parapet of 0.9 m is recorded, but the photos show a sloped mansard roof rather than a flat roof with a parapet; the visible cornice band is a decorative element at the base of the mansard, not a true parapet above a flat roof deck.",
+      "source": "llm"
+    },
+    "number_stories": {
+      "severity": "high",
+      "issue": "Recorded as '4' stories, but before and after photos consistently show 5 above-grade floor levels (ground-floor arcade plus four upper office floors, with a fifth mansard attic story containing dormers) \u2014 at minimum 5 countable stories are visible.",
+      "source": "llm"
+    },
+    "building_low_rise": {
+      "severity": "medium",
+      "issue": "Recorded 'yes' (4 stories or less = low rise), but photos indicate the building is 5+ stories, which would place it outside the low-rise definition used in the schema.",
+      "source": "llm"
+    },
+    "buidling_height_m": {
+      "severity": "medium",
+      "issue": "14.0 m is implausibly low for a building that photos show has 5+ stories with a mansard roof; a 5-story masonry commercial block with a mansard would typically be 18\u201322 m to the ridge.",
+      "source": "llm"
+    },
+    "building_urban_setting": {
+      "severity": "medium",
+      "issue": "Recorded as 'row_middle' but before photos show the building is a free-standing structure set back from the street with open space (arcade, landscaping, parking) on multiple sides \u2014 it is not physically joined to adjacent buildings in a row.",
+      "source": "llm"
+    },
+    "building_position_on_street": {
+      "severity": "medium",
+      "issue": "Recorded as 'right_on_street' but before and after photos show the building is clearly recessed from the street with a landscaped forecourt and arcade setback, not flush with the street edge.",
+      "source": "llm"
+    },
+    "latitude": {
+      "severity": "medium",
+      "issue": "The existing note states coordinates were 'verified against VT state E911 address points for 27 Langdon St' \u2014 this is a different address entirely (27 Langdon St, not 112 State St), raising a concrete risk that coordinates were duplicated from another building record.",
+      "source": "llm"
+    },
+    "longitude": {
+      "severity": "medium",
+      "issue": "Same as latitude: the verification note references '27 Langdon St' not '112 State St', indicating these coordinates may have been copied from a different building's record without independent verification for this address.",
+      "source": "llm"
+    },
+    "wall_fenesteration_front_lowerlevel_per": {
+      "severity": "medium",
+      "issue": "Recorded as 55% fenestration at the lower level front, but the before photos show the ground floor is dominated by solid masonry arched piers with glazing set back within the arcade bays \u2014 the visible open/glazed area of the front face at grade is considerably less than 55% when the solid masonry arch spandrels and piers are included.",
+      "source": "llm"
+    },
+    "large_door_present_back": {
+      "severity": "low",
+      "issue": "The after photos of the rear/side elevation show what appears to be garage-bay openings under the arcade arches on at least one side elevation, suggesting large openings may be present that are recorded as 'no' across all sides.",
+      "source": "llm"
+    }
+  },
+  "27 Langdon St, Montpelier, VT 05602": {
+    "number_stories": {
+      "severity": "high",
+      "issue": "The before photos clearly show a 3-story facade on the left/corner portion but the right portion of the building (visible in the 2021 before photo and aerial after photo) appears to be only 2 stories above the commercial ground floor \u2014 the building is not uniformly 3 stories throughout; the record states '3' without qualification, which misrepresents the stepped massing visible in photos.",
+      "source": "llm"
+    },
+    "building_urban_setting": {
+      "severity": "high",
+      "issue": "The before and after photos show the building occupying a corner/end position \u2014 it has exposed side walls visible on at least two street-facing sides \u2014 making 'row_middle' incorrect; 'row_end' is the appropriate classification.",
+      "source": "llm"
+    },
+    "flood_height_building": {
+      "severity": "medium",
+      "issue": "The after street-level photo shows floodwater at roughly sidewalk/curb level on the exterior (water appears to be at or just above the base of the ground-floor columns/storefronts, not mid-way up them), suggesting the peak water depth at the building face was closer to 1\u20132 ft above grade, not 3.5 ft as claimed; the water line visible is inconsistent with a '~3.5 ft above first floor' estimate.",
+      "source": "llm"
+    },
+    "_llm_water_depth_ft": {
+      "severity": "medium",
+      "issue": "The after street-level photo shows pedestrians wading in water that appears shin- to knee-deep in the street, and the building's ground-floor storefront base is only just submerged; 3.5 ft above first-floor grade is not supported by the visible exterior water line in the after photos.",
+      "source": "llm"
+    },
+    "wall_fenesteration_front_per": {
+      "severity": "medium",
+      "issue": "The before photos show the upper floors of the front facade have relatively modest window openings with substantial masonry piers between them; 35% fenestration for the overall front elevation appears plausible, but the lower-level fenestration value of 60% is contradicted by the after photos which show the ground floor has solid masonry/stone columns and only moderate glazing \u2014 60% is likely an overestimate for the lower level.",
+      "source": "llm"
+    },
+    "wall_fenesteration_front_lowerlevel_per": {
+      "severity": "medium",
+      "issue": "After photos show the ground-floor commercial frontage has substantial masonry/stone column elements separating the storefront glazing, making 60% fenestration an overestimate; the before photos confirm wide stone pilasters occupy a significant portion of the ground-floor frontage.",
+      "source": "llm"
+    },
+    "building_area_m2": {
+      "severity": "medium",
+      "issue": "The wall_length_front is given as 43.0 m and wall_length_side as 38.5 m, which would imply a footprint of ~1,655 m\u00b2 \u2014 far larger than the recorded 811.2 m\u00b2; the product of the two stated wall lengths is roughly double the stated area, indicating either the dimensions or the area figure is erroneous (likely copied from another building).",
+      "source": "llm"
+    },
+    "front_elevation_orientation": {
+      "severity": "low",
+      "issue": "Langdon Street in downtown Montpelier runs roughly east\u2013west, and the before photos show the primary storefront facade facing south toward the street; a front orientation of 'w' (west) appears incorrect \u2014 's' (south) or possibly 'e' is more consistent with the street geometry and photo perspectives.",
+      "source": "llm"
+    }
+  },
+  "40 Main St, Montpelier, VT 05602": {
+    "number_stories": {
+      "severity": "high",
+      "issue": "The before photos clearly show a 3-story facade on the large Aubuchon Hardware block but the second before photo shows the Sherpa Dinner House building as only 2 stories above grade (ground floor commercial + one upper floor with arched windows). The record appears to conflate two different buildings or assign a single story count to a complex that includes a 2-story portion, making '3' incorrect for at least part of the building footprint.",
+      "source": "llm"
+    },
+    "buidling_height_m": {
+      "severity": "medium",
+      "issue": "The before photos show a substantial 3-story masonry commercial block; at roughly 4\u20134.5 m per commercial story, total height would be approximately 12\u201314 m, making the recorded 10.5 m an underestimate inconsistent with the visible facade proportions.",
+      "source": "llm"
+    },
+    "latitude": {
+      "severity": "high",
+      "issue": "The coordinate note explicitly states it was 'verified against VT state E911 address points for 27 Langdon St' \u2014 a completely different address \u2014 flagging a known duplication error across two buildings mentioned in LESSONS_LEARNED.md. The latitude/longitude for 40 Main St may actually belong to 27 Langdon St.",
+      "source": "llm"
+    },
+    "longitude": {
+      "severity": "high",
+      "issue": "Same as latitude: the existing note confirms these coordinates were verified against '27 Langdon St' E911 points, not 40 Main St, indicating the geocode was copied or mis-assigned from another building record.",
+      "source": "llm"
+    },
+    "wall_fenesteration_front_lowerlevel_per": {
+      "severity": "medium",
+      "issue": "The before photos show the ground-floor commercial frontage is predominantly opaque signage/awning with large but relatively narrow storefront windows and doors; the upper floors have more repetitive arched windows. A 35% lower-level fenestration estimate is plausible for the storefront bays but the after photo of the Aubuchon facade shows the ground level is largely solid fascia/signboard with only moderate glazing, suggesting 35% may be slightly high.",
+      "source": "llm"
+    },
+    "_llm_water_depth_ft": {
+      "severity": "medium",
+      "issue": "The after street-level photo shows floodwater reaching approximately mid-thigh on the reporter standing in the street (~3\u20133.5 ft exterior water depth), and the interior photo shows several inches of standing water on the floor slab but no waterline mark on the walls suggesting significant interior depth; the recorded 2.5 ft exterior depth may be slightly underestimated relative to what is visible in the street photo.",
+      "source": "llm"
+    },
+    "wall_fenesteration_right_per": {
+      "severity": "low",
+      "issue": "The before photos showing the side (right) elevation of the brick block reveal several window openings on upper stories of the side wall, yet wall_fenesteration_right_per is recorded as 0, contradicting the visible fenestration on the side elevation.",
+      "source": "llm"
+    },
+    "prop_culture _entertainment_facility": {
+      "severity": "low",
+      "issue": "The building hosts the Sherpa Dinner House restaurant, which is a food/entertainment venue; recording this as 'no' while marking only prop_commercial/exchange_facility as 'yes' is an arguable omission given the restaurant tenant, though the schema overlap makes this a borderline case.",
+      "source": "llm"
+    },
+    "building_name_current": {
+      "severity": "low",
+      "issue": "The after photos clearly show 'Aubuchon Paint Center' as a distinct storefront signage separate from 'Aubuchon Hardware' at 40 Main St, yet the current name field omits the Paint Center tenant while including Capitol Copy and Sherpa Dinner House, suggesting an incomplete tenant list that could affect multi-unit damage assessment.",
+      "source": "llm"
+    }
+  },
+  "54 Elm St, Montpelier, VT 05602": {
+    "number_stories": {
+      "severity": "high",
+      "issue": "The record claims 4 stories, but the before and after photos of the front facade consistently show 3 stories (ground-floor commercial plus two upper residential floors), with a decorative cornice at the top \u2014 no fourth story is visible.",
+      "source": "llm"
+    },
+    "building_low_rise": {
+      "severity": "low",
+      "issue": "This field is flagged only because it depends on number_stories: if the correct count is 3 (not 4), the 'yes' value for low-rise is still correct, but the justification is tied to an erroneous story count.",
+      "source": "llm"
+    },
+    "roof_shape_u": {
+      "severity": "medium",
+      "issue": "The record states 'flat' roof, but the before and after photos show a prominent decorative Italianate cornice with visible overhang/soffit and bracket detailing at the roofline; while the roof deck itself may be flat, the cornice assembly creates a non-trivial overhang inconsistent with a bare flat roof classification, and the parapet_height_m and overhang_length_u = 0 conflict with the visible projecting cornice.",
+      "source": "llm"
+    },
+    "overhang_length_u": {
+      "severity": "medium",
+      "issue": "Set to 0 (no overhang), but the before and after photos clearly show a projecting Italianate bracketed cornice extending beyond the brick wall plane on the front elevation \u2014 a non-zero overhang is visible.",
+      "source": "llm"
+    },
+    "building_urban_setting": {
+      "severity": "medium",
+      "issue": "Recorded as 'row_middle' but the before and after photos show the building is a corner/end-of-row structure with an exposed side wall (clad in painted metal panels) visible on one elevation, consistent with 'row_end' rather than 'row_middle'.",
+      "source": "llm"
+    },
+    "latitude": {
+      "severity": "high",
+      "issue": "The existing note states coordinates were 'verified against VT state E911 address points for 27 Langdon St' \u2014 this is a different address entirely, strongly suggesting the lat/long values were duplicated from another building's record rather than verified for 54 Elm St.",
+      "source": "llm"
+    },
+    "longitude": {
+      "severity": "high",
+      "issue": "Same issue as latitude: the note references verification against '27 Langdon St,' not 54 Elm St, indicating these coordinates may have been copied from a different building's record.",
+      "source": "llm"
+    },
+    "wall_fenesteration_right_per": {
+      "severity": "medium",
+      "issue": "Set to 0%, but the before photos of the side elevation show several windows on the exposed side wall, so fenestration on at least one non-front side is clearly non-zero.",
+      "source": "llm"
+    },
+    "wall_fenesteration_left_per": {
+      "severity": "medium",
+      "issue": "Set to 0%, but the before and after photos show the side elevation (exposed flank) has multiple windows visible, indicating non-zero fenestration on a side wall.",
+      "source": "llm"
+    },
+    "occupany_u": {
+      "severity": "medium",
+      "issue": "Recorded as 'mercantile' only, but the before photos show upper floors with residential balconies, windows with residential character, and AC units, suggesting mixed-use (mercantile ground floor, residential upper floors); the single_unit = 'no' and multiple_unit = 'yes' fields also imply mixed occupancy that 'mercantile' alone does not capture.",
+      "source": "llm"
+    },
+    "buidling_use_after_flood": {
+      "severity": "medium",
+      "issue": "Recorded as 'not in use,' but the after photo of the front facade (post-flood Street View) shows the Capitol City Laundromat signage still present and the storefront appearing operational with 'WASH, DRY, FOLD' advertising visible \u2014 the ground floor may have resumed or continued some use.",
+      "source": "llm"
+    },
+    "prop_residential facility": {
+      "severity": "medium",
+      "issue": "Set to 'no,' but the before photos clearly show residential balconies on upper floors with what appear to be apartment units, and the building is recorded as multiple_unit = 'yes'; the upper floors appear to be residential, making this classification incorrect.",
+      "source": "llm"
+    }
+  }
+}
