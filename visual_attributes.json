@@ -16,7 +16,9 @@
     "aerial_screenshot": "/private/tmp/claude-502/-Users-becca-Code-compvision/bcf10b2a-073e-4443-9ccb-9439661a200d/scratchpad/sat_100_Main_St.png",
     "wall_fenesteration_front_lowerlevel_per": 16.6,
     "window_sill_height_m": 0.0,
-    "window_sill_height_upper_m": 5.91
+    "window_sill_height_upper_m": 5.91,
+    "wall_length_front": 33.2,
+    "wall_length_side": 32.9
   },
   "112 State St, Montpelier, VT 05602": {
     "number_stories": 5,
@@ -35,7 +37,9 @@
     "aerial_screenshot": "/private/tmp/claude-502/-Users-becca-Code-compvision/bcf10b2a-073e-4443-9ccb-9439661a200d/scratchpad/sat_112_State_St.png",
     "wall_fenesteration_front_lowerlevel_per": 26.2,
     "window_sill_height_m": 0.0,
-    "window_sill_height_upper_m": 10.11
+    "window_sill_height_upper_m": 10.11,
+    "wall_length_front": 32.5,
+    "wall_length_side": 37.5
   },
   "27 Langdon St, Montpelier, VT 05602": {
     "number_stories": 3,
@@ -73,7 +77,9 @@
     "aerial_screenshot": "/private/tmp/claude-502/-Users-becca-Code-compvision/bcf10b2a-073e-4443-9ccb-9439661a200d/scratchpad/sat_40_Main_St.png",
     "wall_fenesteration_front_lowerlevel_per": 13.65,
     "window_sill_height_m": 0.0,
-    "window_sill_height_upper_m": 7.88
+    "window_sill_height_upper_m": 7.88,
+    "wall_length_front": 36.9,
+    "wall_length_side": 51.6
   },
   "54 Elm St, Montpelier, VT 05602": {
     "number_stories": 3,
@@ -92,6 +98,8 @@
     "aerial_screenshot": "/tmp/sat_54_Elm_St.png",
     "wall_fenesteration_front_lowerlevel_per": 18.5,
     "window_sill_height_m": 0.12,
-    "window_sill_height_upper_m": 7.57
+    "window_sill_height_upper_m": 7.57,
+    "wall_length_front": 19.9,
+    "wall_length_side": 15.4
   }
 }

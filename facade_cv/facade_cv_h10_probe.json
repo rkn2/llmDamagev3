@@ -1,0 +1,47 @@
+{
+  "100 Main St, Montpelier, VT 05602": {
+    "address": "100 Main St, Montpelier, VT 05602",
+    "known": "wood_frame",
+    "clap_energy_frac": 0.04075,
+    "brick_color_frac": 0.2259,
+    "hv_ratio": 1.3233,
+    "n_photos": 1,
+    "debug": "/Users/becca/Code/compvision/llmDamagev3/facade_cv/debug_h10/100_Main_St_h10.png"
+  },
+  "112 State St, Montpelier, VT 05602": {
+    "address": "112 State St, Montpelier, VT 05602",
+    "known": "URM",
+    "clap_energy_frac": 0.0402,
+    "brick_color_frac": 0.133,
+    "hv_ratio": 1.5223,
+    "n_photos": 1,
+    "debug": "/Users/becca/Code/compvision/llmDamagev3/facade_cv/debug_h10/112_State_St_h10.png"
+  },
+  "27 Langdon St, Montpelier, VT 05602": {
+    "address": "27 Langdon St, Montpelier, VT 05602",
+    "known": "URM",
+    "clap_energy_frac": 0.05962,
+    "brick_color_frac": 0.3799,
+    "hv_ratio": 0.8914,
+    "n_photos": 2,
+    "debug": "/Users/becca/Code/compvision/llmDamagev3/facade_cv/debug_h10/27_Langdon_St_h10.png"
+  },
+  "40 Main St, Montpelier, VT 05602": {
+    "address": "40 Main St, Montpelier, VT 05602",
+    "known": "URM",
+    "clap_energy_frac": 0.06026,
+    "brick_color_frac": 0.3542,
+    "hv_ratio": 1.3812,
+    "n_photos": 2,
+    "debug": "/Users/becca/Code/compvision/llmDamagev3/facade_cv/debug_h10/40_Main_St_h10.png"
+  },
+  "54 Elm St, Montpelier, VT 05602": {
+    "address": "54 Elm St, Montpelier, VT 05602",
+    "known": "URM",
+    "clap_energy_frac": 0.06427,
+    "brick_color_frac": 0.387,
+    "hv_ratio": 1.6675,
+    "n_photos": 1,
+    "debug": "/Users/becca/Code/compvision/llmDamagev3/facade_cv/debug_h10/54_Elm_St_h10.png"
+  }
+}
