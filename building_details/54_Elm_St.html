@@ -110,13 +110,13 @@ an <b>_unc</b> suffix is a certainty rating: <b>1</b> = 0–25%, <b>2</b> = 35�
               <td class="attr">latitude</td>
               <td class="value">44.2616257</td>
               <td class="defn">coordinate of the building</td>
-              <td class="notes-col"><span class="critic-note sev-high">⚠ CRITIC (high): The existing note states coordinates were 'verified against VT state E911 address points for 27 Langdon St' — this is a different address entirely, strongly suggesting the lat/long values were duplicated from another building's record rather than verified for 54 Elm St.</span>Nominatim-geocoded (collect_building_attributes.py); verified against VT state E911 address points for 27 Langdon St (see LESSONS_LEARNED.md §2). Not an approximate centroid.</td>
+              <td class="notes-col"><span class="critic-note sev-high">⚠ CRITIC (high): The existing note states coordinates were 'verified against VT state E911 address points for 27 Langdon St' — this is a different address entirely, strongly suggesting the lat/long values were duplicated from another building's record rather than verified for 54 Elm St.</span>Nominatim-geocoded (collect_building_attributes.py). Not an approximate centroid.</td>
             </tr>
             <tr class="flag-high">
               <td class="attr">longitude</td>
               <td class="value">-72.5757163</td>
               <td class="defn">coordinate of the building</td>
-              <td class="notes-col"><span class="critic-note sev-high">⚠ CRITIC (high): Same issue as latitude: the note references verification against '27 Langdon St,' not 54 Elm St, indicating these coordinates may have been copied from a different building's record.</span>Nominatim-geocoded (collect_building_attributes.py); verified against VT state E911 address points for 27 Langdon St (see LESSONS_LEARNED.md §2). Not an approximate centroid.</td>
+              <td class="notes-col"><span class="critic-note sev-high">⚠ CRITIC (high): Same issue as latitude: the note references verification against '27 Langdon St,' not 54 Elm St, indicating these coordinates may have been copied from a different building's record.</span>Nominatim-geocoded (collect_building_attributes.py). Not an approximate centroid.</td>
             </tr>
             <tr>
               <td class="attr">sub_national_heritage _list</td>
@@ -210,7 +210,7 @@ an <b>_unc</b> suffix is a certainty rating: <b>1</b> = 0–25%, <b>2</b> = 35�
             </tr>
             <tr class="flag-high">
               <td class="attr">number_stories</td>
-              <td class="value">4</td>
+              <td class="value">3</td>
               <td class="defn"></td>
               <td class="notes-col"><span class="critic-note sev-high">⚠ CRITIC (high): The record claims 4 stories, but the before and after photos of the front facade consistently show 3 stories (ground-floor commercial plus two upper residential floors), with a decorative cornice at the top — no fourth story is visible.</span></td>
             </tr>
@@ -228,9 +228,9 @@ an <b>_unc</b> suffix is a certainty rating: <b>1</b> = 0–25%, <b>2</b> = 35�
             </tr>
             <tr class="flag-medium">
               <td class="attr">building_urban_setting</td>
-              <td class="value">row_middle</td>
+              <td class="value">row_end</td>
               <td class="defn">is the building within a row of buildings or isolated on its own as a stand alone structure?<br><span style='color:#aaa'>Options: isolated, row_end, row_middle</span></td>
-              <td class="notes-col"><span class="critic-note sev-medium">⚠ CRITIC (medium): Recorded as 'row_middle' but the before and after photos show the building is a corner/end-of-row structure with an exposed side wall (clad in painted metal panels) visible on one elevation, consistent with 'row_end' rather than 'row_middle'.</span></td>
+              <td class="notes-col"><span class="critic-note sev-medium">⚠ CRITIC (medium): Recorded as 'row_middle' but the before and after photos show the building is a corner/end-of-row structure with an exposed side wall (clad in painted metal panels) visible on one elevation, consistent with 'row_end' rather than 'row_middle'.</span>Photo-grounded correction (critic_findings.json) where flagged; OSM adjacency (compute_urban_attrs.py) otherwise. OSM building polygon coverage in Montpelier VT is incomplete, limiting algorithm reliability.</td>
             </tr>
             <tr>
               <td class="attr">building_position_on_street</td>
@@ -240,9 +240,9 @@ an <b>_unc</b> suffix is a certainty rating: <b>1</b> = 0–25%, <b>2</b> = 35�
             </tr>
             <tr>
               <td class="attr">buidling_height_m</td>
-              <td class="value">14.0</td>
+              <td class="value">11.0</td>
               <td class="defn">best visual approximation of the building height in meters</td>
-              <td class="notes-col"></td>
+              <td class="notes-col">Formula-derived from CV story count (H7 ensemble): 4.0 m ground floor + 3.5 m per upper floor. Replaces LLM visual estimate.</td>
             </tr>
             <tr>
               <td class="attr">first_floor_elevation_m</td>
@@ -252,19 +252,19 @@ an <b>_unc</b> suffix is a certainty rating: <b>1</b> = 0–25%, <b>2</b> = 35�
             </tr>
             <tr>
               <td class="attr">front_elevation_orientation</td>
-              <td class="value">w</td>
+              <td class="value">s</td>
               <td class="defn">the cardinal direction which most aligns with the front of the building; if building was at an angle, the direction closest to the front face of the building was used<br><span style='color:#aaa'>Options: n, s, e, w</span></td>
-              <td class="notes-col"></td>
+              <td class="notes-col">OSM-derived (compute_urban_attrs.py): direction from building centroid to nearest named road segment matching the address street. Replaces LLM Street View estimate.</td>
             </tr>
             <tr>
               <td class="attr">wall_length_side</td>
-              <td class="value">19.9</td>
+              <td class="value">15.4</td>
               <td class="defn">length of the non-front side of the building (perpendicular to the front face)</td>
               <td class="notes-col"></td>
             </tr>
             <tr>
               <td class="attr">wall_length_front</td>
-              <td class="value">15.4</td>
+              <td class="value">19.9</td>
               <td class="defn">length of the front side of the building</td>
               <td class="notes-col"></td>
             </tr>
@@ -284,7 +284,7 @@ an <b>_unc</b> suffix is a certainty rating: <b>1</b> = 0–25%, <b>2</b> = 35�
               <td class="attr">building_low_rise</td>
               <td class="value">yes</td>
               <td class="defn">determining if the structure is a low rise building; anything 4 stories or less was taken as low rise<br><span style='color:#aaa'>Options: yes, no</span></td>
-              <td class="notes-col"><span class="critic-note sev-low">⚠ CRITIC (low): This field is flagged only because it depends on number_stories: if the correct count is 3 (not 4), the 'yes' value for low-rise is still correct, but the justification is tied to an erroneous story count.</span></td>
+              <td class="notes-col"><span class="critic-note sev-low">⚠ CRITIC (low): This field is flagged only because it depends on number_stories: if the correct count is 3 (not 4), the 'yes' value for low-rise is still correct, but the justification is tied to an erroneous story count.</span>Derived from CV story count (H7): low-rise = ≤4 stories per schema definition.</td>
             </tr></tbody>
         </table>
       </div>
@@ -666,13 +666,13 @@ an <b>_unc</b> suffix is a certainty rating: <b>1</b> = 0–25%, <b>2</b> = 35�
             </tr>
             <tr>
               <td class="attr">wall_fenestration_per_e</td>
-              <td class="value"><span class="un">un</span></td>
+              <td class="value">0</td>
               <td class="defn">percentage of fenestration on the east side of the building<br><span style='color:#aaa'>Options: 0-100</span></td>
               <td class="notes-col"></td>
             </tr>
             <tr>
               <td class="attr">wall_fenestration_per_w</td>
-              <td class="value">15</td>
+              <td class="value">0</td>
               <td class="defn">percentage of fenestration on the west side of the building<br><span style='color:#aaa'>Options: 0-100</span></td>
               <td class="notes-col"></td>
             </tr></tbody>
@@ -1678,7 +1678,7 @@ an <b>_unc</b> suffix is a certainty rating: <b>1</b> = 0–25%, <b>2</b> = 35�
         <div class="section-title">Additional Attributes</div>
         <table><thead><tr>
           <th>Attribute</th><th>Value</th><th>Definition</th><th>Notes</th>
-        </tr></thead><tbody><tr><td class="attr">wall_fenestration_per_n</td><td class="value">0</td><td class="defn"></td><td class="notes-col"></td></tr><tr><td class="attr">wall_fenestration_per_s</td><td class="value">0</td><td class="defn"></td><td class="notes-col"></td></tr></tbody></table>
+        </tr></thead><tbody><tr><td class="attr">wall_fenestration_per_n</td><td class="value"><span class="un">un</span></td><td class="defn"></td><td class="notes-col"></td></tr><tr><td class="attr">wall_fenestration_per_s</td><td class="value">15</td><td class="defn"></td><td class="notes-col"></td></tr></tbody></table>
       </div>
 </body>
 </html>

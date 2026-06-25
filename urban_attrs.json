@@ -1,0 +1,32 @@
+{
+  "100 Main St, Montpelier, VT 05602": {
+    "front_elevation_orientation": "e",
+    "_orient_note": "OSM: closest Main Street segment at +14.3m E, -9.8m N, dist=17.4m → facing E. Main St runs roughly N–S in this part of downtown (near river bend); building on west side faces east. LLM said W — corrected.",
+    "building_urban_setting": null,
+    "_setting_note": "OSM adjacency query timed out; not flagged in critic_findings.json — keeping COMMON default (row_middle)."
+  },
+  "112 State St, Montpelier, VT 05602": {
+    "front_elevation_orientation": "n",
+    "_orient_note": "OSM: closest State Street segment at +10.6m E, +32.8m N, dist=34.4m → facing N. State St is north of the building. LLM said W — corrected.",
+    "building_urban_setting": null,
+    "_setting_note": "Critic HIGH: building is free-standing with open space/arcade on multiple sides (not row_middle). Correction applied in BUILDINGS dict."
+  },
+  "27 Langdon St, Montpelier, VT 05602": {
+    "front_elevation_orientation": "n",
+    "_orient_note": "OSM: closest Langdon Street segment at +3.4m E, +5.6m N, dist=6.5m → facing N. Langdon St is 6.5m north of the Nominatim-geocoded point; building is on south side of Langdon St, faces north. Critic said S but OSM geometry supports N. LLM said W — corrected.",
+    "building_urban_setting": null,
+    "_setting_note": "Critic HIGH: photos show corner/end position with exposed side walls. Correction (row_end) applied in BUILDINGS dict."
+  },
+  "40 Main St, Montpelier, VT 05602": {
+    "front_elevation_orientation": "e",
+    "_orient_note": "OSM: closest Main Street segment at +30.4m E, -17.9m N, dist=35.3m → facing E. Same N–S Main St geometry as 100 Main St. LLM said S — corrected.",
+    "building_urban_setting": null,
+    "_setting_note": "OSM adjacency shows adjacent buildings to E and S (min_dist=0.0m). Not flagged in critic_findings.json — keeping COMMON default (row_middle)."
+  },
+  "54 Elm St, Montpelier, VT 05602": {
+    "front_elevation_orientation": "s",
+    "_orient_note": "OSM: closest Elm Street segment at +7.4m E, -7.8m N, dist=10.7m → facing S. Elm St is south of the building. LLM said W — corrected.",
+    "building_urban_setting": null,
+    "_setting_note": "Critic MEDIUM: corner/end-of-row structure with exposed side wall. Correction (row_end) applied in BUILDINGS dict."
+  }
+}

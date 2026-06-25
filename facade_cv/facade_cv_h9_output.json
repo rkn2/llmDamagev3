@@ -1,0 +1,47 @@
+{
+  "100 Main St, Montpelier, VT 05602": {
+    "address": "100 Main St, Montpelier, VT 05602",
+    "n_stories": 3,
+    "wall_fenesteration_front_per": 10.7,
+    "wall_fenesteration_front_lowerlevel_per": 16.6,
+    "window_sill_height_m": 0.0,
+    "window_sill_height_upper_m": 5.91,
+    "n_photos": 1
+  },
+  "112 State St, Montpelier, VT 05602": {
+    "address": "112 State St, Montpelier, VT 05602",
+    "n_stories": 5,
+    "wall_fenesteration_front_per": 38.8,
+    "wall_fenesteration_front_lowerlevel_per": 26.2,
+    "window_sill_height_m": 0.0,
+    "window_sill_height_upper_m": 10.11,
+    "n_photos": 1
+  },
+  "27 Langdon St, Montpelier, VT 05602": {
+    "address": "27 Langdon St, Montpelier, VT 05602",
+    "n_stories": 3,
+    "wall_fenesteration_front_per": 16.0,
+    "wall_fenesteration_front_lowerlevel_per": 29.75,
+    "window_sill_height_m": 0.0,
+    "window_sill_height_upper_m": 5.82,
+    "n_photos": 2
+  },
+  "40 Main St, Montpelier, VT 05602": {
+    "address": "40 Main St, Montpelier, VT 05602",
+    "n_stories": 3,
+    "wall_fenesteration_front_per": 8.05,
+    "wall_fenesteration_front_lowerlevel_per": 13.65,
+    "window_sill_height_m": 0.0,
+    "window_sill_height_upper_m": 7.88,
+    "n_photos": 2
+  },
+  "54 Elm St, Montpelier, VT 05602": {
+    "address": "54 Elm St, Montpelier, VT 05602",
+    "n_stories": 3,
+    "wall_fenesteration_front_per": 12.4,
+    "wall_fenesteration_front_lowerlevel_per": 18.5,
+    "window_sill_height_m": 0.12,
+    "window_sill_height_upper_m": 7.57,
+    "n_photos": 1
+  }
+}

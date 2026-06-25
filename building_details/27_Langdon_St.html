@@ -110,13 +110,13 @@ an <b>_unc</b> suffix is a certainty rating: <b>1</b> = 0–25%, <b>2</b> = 35�
               <td class="attr">latitude</td>
               <td class="value">44.26051</td>
               <td class="defn">coordinate of the building</td>
-              <td class="notes-col">Nominatim-geocoded (collect_building_attributes.py); verified against VT state E911 address points for 27 Langdon St (see LESSONS_LEARNED.md §2). Not an approximate centroid.</td>
+              <td class="notes-col">Nominatim-geocoded; independently verified against VT state E911 address points (see LESSONS_LEARNED.md §2) — E911 lists this storefront under 90 Main St (its tax-parcel address), not 27 Langdon St.</td>
             </tr>
             <tr>
               <td class="attr">longitude</td>
               <td class="value">-72.5755308</td>
               <td class="defn">coordinate of the building</td>
-              <td class="notes-col">Nominatim-geocoded (collect_building_attributes.py); verified against VT state E911 address points for 27 Langdon St (see LESSONS_LEARNED.md §2). Not an approximate centroid.</td>
+              <td class="notes-col">Same as latitude — Nominatim-geocoded, verified against VT state E911 address points; E911 parcel address is 90 Main St.</td>
             </tr>
             <tr>
               <td class="attr">sub_national_heritage _list</td>
@@ -228,9 +228,9 @@ an <b>_unc</b> suffix is a certainty rating: <b>1</b> = 0–25%, <b>2</b> = 35�
             </tr>
             <tr class="flag-high">
               <td class="attr">building_urban_setting</td>
-              <td class="value">row_middle</td>
+              <td class="value">row_end</td>
               <td class="defn">is the building within a row of buildings or isolated on its own as a stand alone structure?<br><span style='color:#aaa'>Options: isolated, row_end, row_middle</span></td>
-              <td class="notes-col"><span class="critic-note sev-high">⚠ CRITIC (high): The before and after photos show the building occupying a corner/end position — it has exposed side walls visible on at least two street-facing sides — making 'row_middle' incorrect; 'row_end' is the appropriate classification.</span></td>
+              <td class="notes-col"><span class="critic-note sev-high">⚠ CRITIC (high): The before and after photos show the building occupying a corner/end position — it has exposed side walls visible on at least two street-facing sides — making 'row_middle' incorrect; 'row_end' is the appropriate classification.</span>Photo-grounded correction (critic_findings.json) where flagged; OSM adjacency (compute_urban_attrs.py) otherwise. OSM building polygon coverage in Montpelier VT is incomplete, limiting algorithm reliability.</td>
             </tr>
             <tr>
               <td class="attr">building_position_on_street</td>
@@ -240,9 +240,9 @@ an <b>_unc</b> suffix is a certainty rating: <b>1</b> = 0–25%, <b>2</b> = 35�
             </tr>
             <tr>
               <td class="attr">buidling_height_m</td>
-              <td class="value">10.5</td>
+              <td class="value">11.0</td>
               <td class="defn">best visual approximation of the building height in meters</td>
-              <td class="notes-col"></td>
+              <td class="notes-col">Formula-derived from CV story count (H7 ensemble): 4.0 m ground floor + 3.5 m per upper floor. Replaces LLM visual estimate.</td>
             </tr>
             <tr>
               <td class="attr">first_floor_elevation_m</td>
@@ -252,19 +252,19 @@ an <b>_unc</b> suffix is a certainty rating: <b>1</b> = 0–25%, <b>2</b> = 35�
             </tr>
             <tr class="flag-low">
               <td class="attr">front_elevation_orientation</td>
-              <td class="value">w</td>
+              <td class="value">n</td>
               <td class="defn">the cardinal direction which most aligns with the front of the building; if building was at an angle, the direction closest to the front face of the building was used<br><span style='color:#aaa'>Options: n, s, e, w</span></td>
-              <td class="notes-col"><span class="critic-note sev-low">⚠ CRITIC (low): Langdon Street in downtown Montpelier runs roughly east–west, and the before photos show the primary storefront facade facing south toward the street; a front orientation of 'w' (west) appears incorrect — 's' (south) or possibly 'e' is more consistent with the street geometry and photo perspectives.</span></td>
+              <td class="notes-col"><span class="critic-note sev-low">⚠ CRITIC (low): Langdon Street in downtown Montpelier runs roughly east–west, and the before photos show the primary storefront facade facing south toward the street; a front orientation of 'w' (west) appears incorrect — 's' (south) or possibly 'e' is more consistent with the street geometry and photo perspectives.</span>OSM-derived (compute_urban_attrs.py): direction from building centroid to nearest named road segment matching the address street. Replaces LLM Street View estimate.</td>
             </tr>
             <tr>
               <td class="attr">wall_length_side</td>
-              <td class="value">38.5</td>
+              <td class="value">43.0</td>
               <td class="defn">length of the non-front side of the building (perpendicular to the front face)</td>
               <td class="notes-col"></td>
             </tr>
             <tr>
               <td class="attr">wall_length_front</td>
-              <td class="value">43.0</td>
+              <td class="value">38.5</td>
               <td class="defn">length of the front side of the building</td>
               <td class="notes-col"></td>
             </tr>
@@ -284,7 +284,7 @@ an <b>_unc</b> suffix is a certainty rating: <b>1</b> = 0–25%, <b>2</b> = 35�
               <td class="attr">building_low_rise</td>
               <td class="value">yes</td>
               <td class="defn">determining if the structure is a low rise building; anything 4 stories or less was taken as low rise<br><span style='color:#aaa'>Options: yes, no</span></td>
-              <td class="notes-col"></td>
+              <td class="notes-col">Derived from CV story count (H7): low-rise = ≤4 stories per schema definition.</td>
             </tr></tbody>
         </table>
       </div>
@@ -666,13 +666,13 @@ an <b>_unc</b> suffix is a certainty rating: <b>1</b> = 0–25%, <b>2</b> = 35�
             </tr>
             <tr>
               <td class="attr">wall_fenestration_per_e</td>
-              <td class="value"><span class="un">un</span></td>
+              <td class="value">0</td>
               <td class="defn">percentage of fenestration on the east side of the building<br><span style='color:#aaa'>Options: 0-100</span></td>
               <td class="notes-col"></td>
             </tr>
             <tr>
               <td class="attr">wall_fenestration_per_w</td>
-              <td class="value">35</td>
+              <td class="value">0</td>
               <td class="defn">percentage of fenestration on the west side of the building<br><span style='color:#aaa'>Options: 0-100</span></td>
               <td class="notes-col"></td>
             </tr></tbody>
@@ -1678,7 +1678,7 @@ an <b>_unc</b> suffix is a certainty rating: <b>1</b> = 0–25%, <b>2</b> = 35�
         <div class="section-title">Additional Attributes</div>
         <table><thead><tr>
           <th>Attribute</th><th>Value</th><th>Definition</th><th>Notes</th>
-        </tr></thead><tbody><tr><td class="attr">wall_fenestration_per_n</td><td class="value">0</td><td class="defn"></td><td class="notes-col"></td></tr><tr><td class="attr">wall_fenestration_per_s</td><td class="value">0</td><td class="defn"></td><td class="notes-col"></td></tr></tbody></table>
+        </tr></thead><tbody><tr><td class="attr">wall_fenestration_per_n</td><td class="value">35</td><td class="defn"></td><td class="notes-col"></td></tr><tr><td class="attr">wall_fenestration_per_s</td><td class="value"><span class="un">un</span></td><td class="defn"></td><td class="notes-col"></td></tr></tbody></table>
       </div>
 </body>
 </html>

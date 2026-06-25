@@ -1,0 +1,57 @@
+{
+  "100 Main St, Montpelier, VT 05602": {
+    "address": "100 Main St, Montpelier, VT 05602",
+    "roof_shape_cv": "flat",
+    "radial_ratio": 0.7883,
+    "inner_edge_density": 0.18643,
+    "n_diagonal_hough": 123,
+    "reason": "bright-centre ratio=0.788 < 0.92",
+    "ratio_note": "inner=174 outer=137 ratio=0.788",
+    "edge_note": "inner edges=2487/13340 density=0.1864",
+    "hough_note": "170 total lines, 123 diagonal"
+  },
+  "112 State St, Montpelier, VT 05602": {
+    "address": "112 State St, Montpelier, VT 05602",
+    "roof_shape_cv": "mansard",
+    "radial_ratio": 1.1228,
+    "inner_edge_density": 0.21284,
+    "n_diagonal_hough": 54,
+    "reason": "inner edge density=0.2128 > 0.08 with 54 diagonal lines",
+    "ratio_note": "inner=128 outer=144 ratio=1.123",
+    "edge_note": "inner edges=3271/15368 density=0.2128",
+    "hough_note": "171 total lines, 54 diagonal"
+  },
+  "27 Langdon St, Montpelier, VT 05602": {
+    "address": "27 Langdon St, Montpelier, VT 05602",
+    "roof_shape_cv": "flat",
+    "radial_ratio": 0.6773,
+    "inner_edge_density": 0.29684,
+    "n_diagonal_hough": 0,
+    "reason": "bright-centre ratio=0.677 < 0.92",
+    "ratio_note": "inner=185 outer=125 ratio=0.677",
+    "edge_note": "inner edges=751/2530 density=0.2968",
+    "hough_note": "4 total lines, 0 diagonal"
+  },
+  "40 Main St, Montpelier, VT 05602": {
+    "address": "40 Main St, Montpelier, VT 05602",
+    "roof_shape_cv": "flat",
+    "radial_ratio": 0.8193,
+    "inner_edge_density": 0.14649,
+    "n_diagonal_hough": 205,
+    "reason": "bright-centre ratio=0.819 < 0.92",
+    "ratio_note": "inner=179 outer=146 ratio=0.819",
+    "edge_note": "inner edges=3955/26999 density=0.1465",
+    "hough_note": "385 total lines, 205 diagonal"
+  },
+  "54 Elm St, Montpelier, VT 05602": {
+    "address": "54 Elm St, Montpelier, VT 05602",
+    "roof_shape_cv": "flat",
+    "radial_ratio": 1.1277,
+    "inner_edge_density": 0.21493,
+    "n_diagonal_hough": 1,
+    "reason": "ratio=1.128 edge_density=0.2149 1 diag lines \u2192 default flat",
+    "ratio_note": "inner=130 outer=146 ratio=1.128",
+    "edge_note": "inner edges=383/1782 density=0.2149",
+    "hough_note": "3 total lines, 1 diagonal"
+  }
+}

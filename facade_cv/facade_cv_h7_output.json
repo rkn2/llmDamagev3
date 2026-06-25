@@ -1,0 +1,190 @@
+{
+  "100 Main St, Montpelier, VT 05602": {
+    "address": "100 Main St, Montpelier, VT 05602",
+    "method": "H7-ensemble",
+    "number_stories": 3,
+    "valley_median": 3,
+    "fft_median": 3,
+    "n_photos": 1,
+    "per_photo": [
+      {
+        "photo": "Front (84).png",
+        "valley_count": 3,
+        "fft_count": 3,
+        "final": 3,
+        "valley_y_px": [
+          161,
+          265
+        ],
+        "fft_winner_score": 6093296,
+        "fft_scores": {
+          "3": 6093296.0,
+          "4": 4029209.0,
+          "5": 1186021.0,
+          "6": 435927.0,
+          "7": 334507.0
+        }
+      }
+    ]
+  },
+  "112 State St, Montpelier, VT 05602": {
+    "address": "112 State St, Montpelier, VT 05602",
+    "method": "H7-ensemble",
+    "number_stories": 5,
+    "valley_median": 5,
+    "fft_median": 3,
+    "n_photos": 1,
+    "per_photo": [
+      {
+        "photo": "Front (51).png",
+        "valley_count": 5,
+        "fft_count": 3,
+        "final": 5,
+        "valley_y_px": [
+          107,
+          184,
+          338,
+          414
+        ],
+        "fft_winner_score": 1717833,
+        "fft_scores": {
+          "3": 1717833.0,
+          "4": 194768.0,
+          "5": 304950.0,
+          "6": 201664.0,
+          "7": 167245.0
+        }
+      }
+    ]
+  },
+  "27 Langdon St, Montpelier, VT 05602": {
+    "address": "27 Langdon St, Montpelier, VT 05602",
+    "method": "H7-ensemble",
+    "number_stories": 3,
+    "valley_median": 4,
+    "fft_median": 3,
+    "n_photos": 2,
+    "per_photo": [
+      {
+        "photo": "Front (80).png",
+        "valley_count": 5,
+        "fft_count": 3,
+        "final": 3,
+        "valley_y_px": [
+          110,
+          314,
+          359,
+          413
+        ],
+        "fft_winner_score": 182203,
+        "fft_scores": {
+          "3": 182203.0,
+          "4": 72239.0,
+          "5": 64966.0,
+          "6": 45794.0,
+          "7": 32817.0
+        }
+      },
+      {
+        "photo": "Front (81).png",
+        "valley_count": 4,
+        "fft_count": 3,
+        "final": 3,
+        "valley_y_px": [
+          173,
+          315,
+          407
+        ],
+        "fft_winner_score": 737349,
+        "fft_scores": {
+          "3": 737349.0,
+          "4": 570682.0,
+          "5": 39070.0,
+          "6": 33772.0,
+          "7": 6026.0
+        }
+      }
+    ]
+  },
+  "40 Main St, Montpelier, VT 05602": {
+    "address": "40 Main St, Montpelier, VT 05602",
+    "method": "H7-ensemble",
+    "number_stories": 3,
+    "valley_median": 6,
+    "fft_median": 3,
+    "n_photos": 2,
+    "per_photo": [
+      {
+        "photo": "Front (65).png",
+        "valley_count": 4,
+        "fft_count": 3,
+        "final": 3,
+        "valley_y_px": [
+          153,
+          251,
+          343
+        ],
+        "fft_winner_score": 3914107,
+        "fft_scores": {
+          "3": 3914107.0,
+          "4": 3564603.0,
+          "5": 1586544.0,
+          "6": 1616343.0,
+          "7": 888565.0
+        }
+      },
+      {
+        "photo": "Front (67).png",
+        "valley_count": 7,
+        "fft_count": 3,
+        "final": 3,
+        "valley_y_px": [
+          87,
+          138,
+          186,
+          234,
+          280,
+          317
+        ],
+        "fft_winner_score": 8623037,
+        "fft_scores": {
+          "3": 8623037.0,
+          "4": 4714666.0,
+          "5": 3701546.0,
+          "6": 1527846.0,
+          "7": 475501.0
+        }
+      }
+    ]
+  },
+  "54 Elm St, Montpelier, VT 05602": {
+    "address": "54 Elm St, Montpelier, VT 05602",
+    "method": "H7-ensemble",
+    "number_stories": 3,
+    "valley_median": 5,
+    "fft_median": 3,
+    "n_photos": 1,
+    "per_photo": [
+      {
+        "photo": "Front (74).png",
+        "valley_count": 5,
+        "fft_count": 3,
+        "final": 3,
+        "valley_y_px": [
+          85,
+          151,
+          241,
+          295
+        ],
+        "fft_winner_score": 9701256,
+        "fft_scores": {
+          "3": 9701256.0,
+          "4": 3540725.0,
+          "5": 3419528.0,
+          "6": 1841197.0,
+          "7": 734551.0
+        }
+      }
+    ]
+  }
+}

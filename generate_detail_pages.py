@@ -28,6 +28,11 @@ VISUAL_ATTRS = json.loads((ROOT_DIR / "visual_attributes.json").read_text())
 _critic_path = ROOT_DIR / "critic_findings.json"
 CRITIC_FINDINGS = json.loads(_critic_path.read_text()) if _critic_path.exists() else {}
 
+# OSM-derived orientation and urban setting (compute_urban_attrs.py output).
+# Guarded — pages render fine without it, but the LLM orientation values get used instead.
+_ua_path = ROOT_DIR / "urban_attrs.json"
+URBAN_ATTRS = json.loads(_ua_path.read_text()) if _ua_path.exists() else {}
+
 # River distances computed from USGS NHD flowlines via
 # hydro.nationalmap.gov/arcgis/rest/services/nhd/MapServer/6
 # Projected to UTM 19N (EPSG:32619) for metric accuracy.
@@ -313,6 +318,10 @@ BUILDINGS = {
     "112 State St, Montpelier, VT 05602": {
         **COMMON,
         "complete address":          "112 State St, Montpelier, VT 05602",
+        # Critic HIGH: building is free-standing with arcade forecourt and landscaped setback —
+        # not joined to adjacent buildings. COMMON's row_middle default is wrong here.
+        "building_urban_setting":    "isolated",
+        "building_position_on_street": "set_back_from_street",
         "building_name_current":     "112 State St — commercial/office with arcade ground floor",
         "building_name_listing":     "un — within Montpelier Historic District",
         "flood_height_building":     "~4.0 ft above first floor (LLM estimate, medium confidence)",
@@ -320,7 +329,13 @@ BUILDINGS = {
         "occupany_u":                "business",
         "year_built_u":              "un — requires further research; commercial block likely late 19th–early 20th c.",
         "wall_fenesteration_front_lowerlevel_per": "55",  # Romanesque arched ground-floor glazing — heavily glazed arcade bays between brick piers
-        "parapet_height_m":          "0.9",
+        # Before/after photos clearly show a steeply pitched metal mansard roof with dormers —
+        # COMMON's "flat"/"0" defaults are wrong for this building. Slope is visually steep
+        # (>30°) but not measurable from photos, so "un". The visible cornice band is at the
+        # base of the mansard, not a true parapet above a flat deck, so parapet = "un".
+        "roof_shape_u":              "mansard",
+        "roof_slope_u":              "un",
+        "parapet_height_m":          "un",
         "buidling_use_before_flood": "business",
         "buidling_use_after_flood":  "business",
         "building_use_during_flood": "business",
@@ -332,6 +347,8 @@ BUILDINGS = {
     "27 Langdon St, Montpelier, VT 05602": {
         **COMMON,
         "complete address":          "27 Langdon St, Montpelier, VT 05602",
+        # Critic HIGH: corner/end position with exposed side walls on at least two sides.
+        "building_urban_setting":    "row_end",
         "building_name_current":     "27 Langdon St — commercial (Langdon Street shopping area)",
         "building_name_listing":     "un — within Montpelier Historic District",
         "flood_height_building":     "~3.5 ft above first floor (LLM estimate, medium confidence)",
@@ -377,6 +394,8 @@ BUILDINGS = {
     "54 Elm St, Montpelier, VT 05602": {
         **COMMON,
         "complete address":          "54 Elm St, Montpelier, VT 05602",
+        # Critic MEDIUM: corner/end-of-row structure with exposed side wall (painted metal panels).
+        "building_urban_setting":    "row_end",
         "building_name_current":     "54 Elm St — laundromat (ground floor, closed/vacant post-flood); brick commercial building",
         "building_name_listing":     "un — within Montpelier Historic District",
         "flood_height_building":     "~3.0 ft above first floor (LLM estimate, low confidence — indirect visual evidence only)",
@@ -559,8 +578,12 @@ NOTES = {
     "distance_from_river_edge":     "Computed from USGS NHD centerline minus estimated 5m half-width of N. Branch Winooski. Source: hydro.nationalmap.gov NHD Large-Scale Flowlines, UTM 19N (EPSG:32619). NHD does not provide a polygon for this reach.",
     "distance_from_river_centerline":"Computed from USGS NHD Large-Scale Flowlines (N. Branch Winooski River + Winooski River merged centerline). UTM 19N (EPSG:32619). Source: hydro.nationalmap.gov/arcgis/rest/services/nhd/MapServer/6.",
     "FEMA_floodzone":               "Downtown Montpelier along N. Branch Winooski is Zone AE. Verify exact parcel at FEMA Map Service Center.",
-    "latitude":                     "Nominatim-geocoded (collect_building_attributes.py); verified against VT state E911 address points for 27 Langdon St (see LESSONS_LEARNED.md §2). Not an approximate centroid.",
-    "longitude":                    "Nominatim-geocoded (collect_building_attributes.py); verified against VT state E911 address points for 27 Langdon St (see LESSONS_LEARNED.md §2). Not an approximate centroid.",
+    "latitude":                     "Nominatim-geocoded (collect_building_attributes.py). Not an approximate centroid.",
+    "longitude":                    "Nominatim-geocoded (collect_building_attributes.py). Not an approximate centroid.",
+    "front_elevation_orientation":  "OSM-derived (compute_urban_attrs.py): direction from building centroid to nearest named road segment matching the address street. Replaces LLM Street View estimate.",
+    "building_urban_setting":       "Photo-grounded correction (critic_findings.json) where flagged; OSM adjacency (compute_urban_attrs.py) otherwise. OSM building polygon coverage in Montpelier VT is incomplete, limiting algorithm reliability.",
+    "buidling_height_m":            "Formula-derived from CV story count (H7 ensemble): 4.0 m ground floor + 3.5 m per upper floor. Replaces LLM visual estimate.",
+    "building_low_rise":            "Derived from CV story count (H7): low-rise = ≤4 stories per schema definition.",
     "archetype":                    "Assigned from Nofal & van de Lindt (2020) 15-type portfolio. None of the 15 archetypes is a perfect match for a multi-story historic masonry downtown commercial block — F7 (7, small multi-unit commercial) is the closest for retail/mixed-use; F14 (14, office) for primarily office use. Certainty is inherently low for all 5 buildings.",
     "wall_thickness":               "0.46 m assumed (~18 inches) for late 19th c. load-bearing brick commercial construction. Guide default of 0.2 m is for residential wood frame — not appropriate here. Historic masonry commercial buildings typically 12–24 inches (0.30–0.61 m). Use 0.46 as a mid-range estimate; refine from damage photos or historic drawings.",
     "construction_type_u_unc":      "Certainty 2 (35–50%) — brick visible in exterior photos but interior structure not confirmed from drawings.",
@@ -590,6 +613,12 @@ NOTES = {
 # NOTES is one note per attribute for all 5 buildings, but a few buildings are real exceptions
 # to the brick/masonry/no-soffit majority case (found during the 2026-06-24 audit).
 NOTES_OVERRIDE = {
+    "latitude": {
+        "27 Langdon St, Montpelier, VT 05602": "Nominatim-geocoded; independently verified against VT state E911 address points (see LESSONS_LEARNED.md §2) — E911 lists this storefront under 90 Main St (its tax-parcel address), not 27 Langdon St.",
+    },
+    "longitude": {
+        "27 Langdon St, Montpelier, VT 05602": "Same as latitude — Nominatim-geocoded, verified against VT state E911 address points; E911 parcel address is 90 Main St.",
+    },
     "wall_thickness": {
         "100 Main St, Montpelier, VT 05602": "0.15 m assumed (~6 inches) for light wood-frame construction — this building is wood frame with clapboard siding, not masonry. See construction_type_u.",
     },
@@ -748,6 +777,27 @@ def resolve_building_data(address: str, data: dict) -> dict:
     front_per = va.get("wall_fenesteration_front_per")
     if front_per is not None:
         data["wall_fenesteration_front_per"] = str(front_per)
+
+    # Override orientation from OSM-derived compute_urban_attrs.py output.
+    # Must happen before the wall_length / cardinal-fenestration computation below so
+    # those derived fields stay consistent with the corrected orientation.
+    ua = URBAN_ATTRS.get(address, {})
+    if ua.get("front_elevation_orientation"):
+        orientation = ua["front_elevation_orientation"]
+        data["front_elevation_orientation"] = orientation
+    # building_urban_setting is handled via BUILDINGS dict overrides; urban_attrs.json
+    # stores null for all buildings since OSM adjacency detection is unreliable here.
+
+    # Derive building_low_rise and buidling_height_m from CV story count (H7 ensemble).
+    # Formula: 4.0 m commercial ground floor + 3.5 m per upper floor.
+    _n_str = data.get("number_stories")
+    if _n_str is not None:
+        try:
+            _n = int(_n_str)
+            data["building_low_rise"] = "yes" if _n <= 4 else "no"
+            data["buidling_height_m"] = str(round(4.0 + (_n - 1) * 3.5, 1))
+        except (ValueError, TypeError):
+            pass
 
     # wall_length_front/side and the n/s/e/w fenestration columns are mechanical functions
     # of orientation + the a/b footprint extents — compute rather than hand-copy, so a
