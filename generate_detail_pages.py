@@ -83,6 +83,24 @@ COMMON = {
     "wall_cladding_u_unc":          "3",
     "soffit_type_u":                "not_applicable",
     "soffit_present_u":             "no",
+    # Garage-door presence (per schema defn, not pedestrian entrance doors): "no" on the
+    # street-facing side is confirmed by Street View (standard storefront glass entries,
+    # no roll-up/sectional doors visible); side walls are party walls shared with adjoining
+    # row buildings (building_urban_setting=row_middle/row_end) with no street/alley access,
+    # so a garage door is structurally impossible there; no rear imagery exists, but garage
+    # doors are not a feature of this building typology (19th-c. Main St commercial storefronts).
+    "door_present_n":               "no",
+    "door_present_n_lowerlevel":    "no",
+    "door_present_s":               "no",
+    "door_present_s_lowerlevel":    "no",
+    "door_present_e":               "no",
+    "door_present_e_lowerlevel":    "no",
+    "door_present_w":               "no",
+    "door_present_w_lowerlevel":    "no",
+    "large_door_present_front":     "no",
+    "large_door_present_back":      "no",
+    "large_door_present_right":     "no",
+    "large_door_present_left":      "no",
     "roof_shape_u":                 "flat",
     "roof_slope_u":                 "0",
     "roof_system_u":                "un",
