@@ -101,6 +101,29 @@ COMMON = {
     "large_door_present_back":      "no",
     "large_door_present_right":     "no",
     "large_door_present_left":      "no",
+    # Fenestration by side: right/left are the party walls shared with adjoining row
+    # buildings (no street/alley exposure), so 0% fenestration there, no protection
+    # possible, type not_applicable. Back has no photographic coverage (Street View
+    # only captured the street-facing front) -> left "un" rather than guessed. Front
+    # values are per-building, from the Street View vision pass.
+    "wall_fenesteration_right_per":            "0",
+    "wall_fenesteration_right_lowerlevel_per":  "0",
+    "wall_fenesteration_left_per":             "0",
+    "wall_fenesteration_left_lowerlevel_per":   "0",
+    "wall_fenesteration_back_per":             "un",
+    "wall_fenesteration_back_lowerlevel_per":   "un",
+    "wall_fenesteration_protection_front":             "no",
+    "wall_fenesteration_protection_front_lowerlevel":   "no",
+    "wall_fenesteration_protection_back":               "un",
+    "wall_fenesteration_protection_back_lowerlevel":    "un",
+    "wall_fenesteration_protection_right":              "no",
+    "wall_fenesteration_protection_right_lowerlevel":   "no",
+    "wall_fenesteration_protection_left":               "no",
+    "wall_fenesteration_protection_left_lowerlevel":    "no",
+    "fenestration_protection_type_front":  "not_applicable",
+    "fenestration_protection_type_back":   "un",
+    "fenestration_protection_type_right":  "not_applicable",
+    "fenestration_protection_type_left":   "not_applicable",
     "roof_shape_u":                 "flat",
     "roof_slope_u":                 "0",
     "roof_system_u":                "un",
@@ -243,6 +266,11 @@ BUILDINGS = {
         "wall_length_front":         "33.2",
         "wall_length_side":          "32.9",
         "wall_fenesteration_front_per": "25",
+        "wall_fenesteration_front_lowerlevel_per": "30",  # storefront-level estimate from Street View (restaurant entry: glass door + display windows flanked by clapboard)
+        "wall_fenestration_per_w":    "25",  # = front (orientation w)
+        "wall_fenestration_per_e":    "un",  # = back, no rear imagery
+        "wall_fenestration_per_n":    "0",   # = left/right party wall
+        "wall_fenestration_per_s":    "0",   # = left/right party wall
         "parapet_height_m":          "0.6",
         "soffit_present_u":          "yes",
         "soffit_type_u":             "un",
@@ -284,6 +312,11 @@ BUILDINGS = {
         "wall_length_front":         "37.5",
         "wall_length_side":          "32.5",
         "wall_fenesteration_front_per": "45",
+        "wall_fenesteration_front_lowerlevel_per": "55",  # Romanesque arched ground-floor glazing — heavily glazed arcade bays between brick piers
+        "wall_fenestration_per_w":    "45",  # = front (orientation w)
+        "wall_fenestration_per_e":    "un",  # = back, no rear imagery
+        "wall_fenestration_per_n":    "0",   # = left/right party wall
+        "wall_fenestration_per_s":    "0",   # = left/right party wall
         "parapet_height_m":          "0.9",
         "buidling_use_before_flood": "business",
         "buidling_use_after_flood":  "business",
@@ -319,6 +352,11 @@ BUILDINGS = {
         "wall_length_front":         "43.0",
         "wall_length_side":          "38.5",
         "wall_fenesteration_front_per": "35",
+        "wall_fenesteration_front_lowerlevel_per": "60",  # Buch Spieler Records storefront — wide picture-window display glass on both sides of the entry, modest brick piers
+        "wall_fenestration_per_w":    "35",  # = front (orientation w)
+        "wall_fenestration_per_e":    "un",  # = back, no rear imagery
+        "wall_fenestration_per_n":    "0",   # = left/right party wall
+        "wall_fenestration_per_s":    "0",   # = left/right party wall
         "parapet_height_m":          "0.6",
         "buidling_use_before_flood": "mercantile",
         "buidling_use_after_flood":  "mercantile",
@@ -352,6 +390,11 @@ BUILDINGS = {
         "wall_length_front":         "51.6",
         "wall_length_side":          "36.9",
         "wall_fenesteration_front_per": "30",
+        "wall_fenesteration_front_lowerlevel_per": "35",  # Aubuchon Hardware / Capitol Copy / Sherpa Dinner House storefronts — standard Main St display windows under awnings
+        "wall_fenestration_per_s":    "30",  # = front (orientation s)
+        "wall_fenestration_per_n":    "un",  # = back, no rear imagery
+        "wall_fenestration_per_e":    "0",   # = left/right party wall
+        "wall_fenestration_per_w":    "0",   # = left/right party wall
         "parapet_height_m":          "0.6",
         "buidling_use_before_flood": "mercantile",
         "buidling_use_after_flood":  "mercantile",
@@ -385,6 +428,11 @@ BUILDINGS = {
         "wall_length_front":         "15.4",
         "wall_length_side":          "19.9",
         "wall_fenesteration_front_per": "15",
+        "wall_fenesteration_front_lowerlevel_per": "un",  # ground floor shows mostly solid doors (vacant laundromat); glazing extent not clearly resolvable from available image
+        "wall_fenestration_per_w":    "15",  # = front (orientation w)
+        "wall_fenestration_per_e":    "un",  # = back, no rear imagery
+        "wall_fenestration_per_n":    "0",   # = left/right party wall
+        "wall_fenestration_per_s":    "0",   # = left/right party wall
         "parapet_height_m":          "0.6",
         "soffit_present_u":          "yes",
         "soffit_type_u":             "un",
