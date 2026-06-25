@@ -32,7 +32,13 @@ def main():
     args = parser.parse_args()
 
     existing = json.loads(OUTPUT_PATH.read_text()) if OUTPUT_PATH.exists() else []
-    already_done = {row["address"] for row in existing}
+    # Only a real assessment counts as "done" - a row with an error or no damage_level
+    # (e.g. a transient API failure) is excluded so it gets retried automatically on the
+    # next run instead of being permanently stuck (found during the 2026-06-24 audit).
+    already_done = {
+        row["address"] for row in existing
+        if not row.get("error") and row.get("damage_level") is not None
+    }
 
     addresses = sorted(p.name for p in AFTER_ROOT.iterdir() if p.is_dir())
     pending = [a for a in addresses if a not in already_done]
@@ -58,6 +64,9 @@ def main():
                 "model": args.model,
             }
 
+        # Replace any prior row for this address (e.g. a stale error row being retried)
+        # rather than appending a duplicate.
+        existing = [r for r in existing if r.get("address") != address]
         existing.append(row)
         OUTPUT_PATH.write_text(json.dumps(existing, indent=2))
 

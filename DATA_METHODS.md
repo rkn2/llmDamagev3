@@ -72,7 +72,7 @@ the North Branch Winooski in downtown Montpelier — only a centerline. So:
    or the FEMA NFHL channel/floodway polygon. For the North Branch Winooski in downtown,
    the NHD Waterbody layer returned only 1 feature (FCode 46006) covering a small reach
    and did not span all 5 buildings. A better source would be the Vermont ANR hydrography
-   polygon layer (see §8 below).
+   polygon layer (see §9 below).
 
 ---
 
@@ -229,9 +229,14 @@ is the default for wood-frame residential — **not appropriate for historic mas
 For late 19th century commercial masonry buildings in downtown Montpelier:
 - Typical range: 12–24 inches (0.30–0.61 m) for load-bearing brick walls
 - 3-story buildings often have ~18-inch (0.46 m) walls at base
-- We used **0.46 m** as a mid-range assumed value; certainty 1
+- We used **0.46 m** as a mid-range assumed value; certainty 1, for 4 of the 5 buildings
 
-To refine: look for damage photos showing wall cross-section, or consult historic
+**Exception:** 100 Main St is wood frame (clapboard siding, confirmed via two independent
+Street View passes — see §12 and LESSONS_LEARNED.md), not masonry. It uses **0.15 m**
+(~6-inch wood stud wall) instead. `generate_detail_pages.py`'s `NOTES_OVERRIDE` dict
+carries this and the related construction-type exceptions per building.
+
+To refine further: look for damage photos showing wall cross-section, or consult historic
 structural drawings if available through Vermont Division for Historic Preservation.
 
 ---
@@ -241,44 +246,48 @@ structural drawings if available through Vermont Division for Historic Preservat
 **Attributes:** `_llm_damage_level`, `_llm_confidence`, `_llm_water_depth_ft`,
 `_llm_reasoning`, `_llm_limitations`, `status_u`, `degree_of_damage_u`, etc.
 
-These come directly from `address_assessments.json`, output of the llmDamagev3 pipeline
-(`run_pipeline.py`). The model (claude-sonnet-4-6) receives only before/after photos and
-the address — no ground truth, no HWM data, no historic context.
+These are read live from `address_assessments.json` by `generate_detail_pages.py`'s
+`build_page()` (not hand-copied — that was a bug, fixed 2026-06-24), output of the
+llmDamagev3 pipeline (`run_pipeline.py`). The model (claude-sonnet-4-6) receives only
+before/after photos and the address — no ground truth, no HWM data, no historic context.
 
 ---
 
-## 6. Coordinates (lat/lon)
+## 7. Coordinates (lat/lon)
 
-Current coordinates are approximate centroid estimates from address geocoding. To refine:
-- Open Google Earth Pro, navigate to each building, right-click for exact coordinates
-- Or use the Google Maps API geocoding endpoint for the full address string
+Nominatim-geocoded by `collect_building_attributes.py` and read live into
+`generate_detail_pages.py` from `building_attributes_auto.json` — not approximate
+centroids. 27 Langdon St's coordinate was additionally cross-checked against Vermont's
+official E911 address points and parcel boundaries (see LESSONS_LEARNED.md §2) after its
+OSM footprint collided with 100 Main St's.
 
 ---
 
-## 7. Attributes Still Requiring Field / GIS Work
+## 8. Attributes Still Requiring Field / GIS Work
 
-These attributes remain `un` and genuinely cannot be filled without additional data:
+These attributes remain `un` and genuinely cannot be filled without additional data.
+(As of 2026-06-24: `building_area_m2`, wall lengths, `buidling_height_m`,
+`wall_fenesteration_*_per`, and `parapet_height_m` were filled in via
+`collect_building_attributes.py` + `analyze_visual_attributes.py`/`analyze_roof_satellite.py`
+and are no longer on this list — see §11 and §12.)
 
 | Attribute group | What's needed |
 |---|---|
-| `building_area_m2`, `wall_length_side`, `wall_length_front`, `buidling_height_m`, `first_floor_elevation_m`, `wall_thickness` | Google Earth Pro measurement tool or ArcGIS / on-site inspection |
-| `building_area_m2` | Footprint polygon from parcel data or GE Pro area tool |
-| `first_floor_elevation_m` | Google Street View visual approximation or LiDAR DEM |
+| `first_floor_elevation_m` | `ground_elevation_m` (already collected, in `building_attributes_auto.json`) + a step-height-above-grade measurement from Street View — nobody has gone back to do the addition |
 | `roof_cover_u`, `roof_system_u`, `roof_substrate_type_u` | Google Earth aerial + Street View |
-| `wall_fenesteration_*_per` (all fenestration percentages) | Street View visual estimation |
-| `soffit_type_u` | Street View |
+| `soffit_type_u` | Material isn't visually determinable from available Street View resolution for the 2 buildings with a soffit (100 Main St, 54 Elm St) |
 | `masonry_leaves` | Damage photos showing wall cross-section, or historic drawings |
 | `wall_substrate_u` | Damage photos showing substrate behind cladding |
 | `archetype` | Full Nofal & van de Lindt (2020) archetype classification |
 | `r2wall_attachment_u` | Structural drawings or interior inspection |
-| `parapet_height_m` | Street View + scale estimation from story height |
 | `year_built_u` | NRHP individual resource record; Sanborn fire insurance maps |
 | `damage_*_per` (all damage percentages) | Post-event inspection / Fulcrum survey |
 | `rainwater_ingress_damage_rating_u` | StEER VAST Handbook rating from inspection |
+| `wall_fenesteration_back_per` (and back-side fields generally) | No rear photo exists for any building in the Street View/satellite passes (`ref_photos/` before/after sets do have some back photos, not yet incorporated into these fields) |
 
 ---
 
-## 8. Vermont-Specific GIS Resources
+## 9. Vermont-Specific GIS Resources
 
 For future attribute collection, these Vermont sources are most useful:
 
@@ -295,7 +304,7 @@ For future attribute collection, these Vermont sources are most useful:
 
 ---
 
-## 9. Generator Script
+## 10. Generator Script
 
 `generate_detail_pages.py` — run this to rebuild all 5 HTML detail pages after updating
 any attribute values. The script:
@@ -311,7 +320,7 @@ in the appropriate section.
 
 ---
 
-## 10. Auto-Collected Building Attributes
+## 11. Auto-Collected Building Attributes
 
 **Script:** `collect_building_attributes.py`
 **Output:** `building_attributes_auto.json`
@@ -330,11 +339,52 @@ Runs three API queries per building and writes results to JSON:
 **Resolved caveat:** 100 Main St and 27 Langdon St originally returned the same OSM polygon (their
 geocoded points are only ~25 m apart, so Overpass picked the same nearest building way for both).
 Cross-checked against Vermont's statewide E911 address points and tax parcel boundaries
-(VTrans `ROW/Parcels` ArcGIS REST service — see Section 8 sources) and found they are in fact
+(VTrans `ROW/Parcels` ArcGIS REST service — see Section 9 sources) and found they are in fact
 two separate buildings/parcels: 100 Main St is its own parcel (095.100000, owner City Line Realty
 LLC); 27 Langdon St is a unit address inside the building whose primary E911 address and parcel is
 90 Main St (095.090000, owner Malone 210 College Street Properties LLC). `building_attributes_auto.json`
 now uses the 90 Main St parcel boundary (811.2 m², ~43.0 × 38.5 m bounding box) for 27 Langdon St
 instead of the shared OSM figure.
 
-See Section 7 for the full list of attributes still requiring visual/manual entry.
+See Section 8 for the full list of attributes still requiring visual/manual entry.
+
+---
+
+## 12. Visual / Vision-Pass Attributes (Street View + Satellite)
+
+**Scripts:** `analyze_visual_attributes.py`, `analyze_roof_satellite.py`
+**Output:** `visual_attributes.json`
+
+This was previously undocumented here despite being a full sibling pipeline to §11 — found
+during the 2026-06-24 audit.
+
+`analyze_visual_attributes.py` captures one Google Street View screenshot per building
+(Playwright + headless Chromium, no API key) at a hand-tuned camera position/heading per
+address, then sends it to Claude (claude-sonnet-4-6) with a structured extraction prompt.
+Writes:
+
+| Attribute | Notes |
+|---|---|
+| `number_stories`, `buidling_height_m` | Height estimated at ~3.5 m/commercial story |
+| `wall_cladding_u`, `construction_type_u` | Free text (e.g. "wood clapboard siding", "URM") — manually mapped to the schema's controlled vocabulary in `generate_detail_pages.py`, not automated, since that mapping is a judgment call |
+| `wall_fenesteration_front_per` | Whole-front-facade estimate; lower-level (storefront-only) and back/side values are separate manual estimates, not from this script — see §8 |
+| `roof_shape_u`, `soffit_present_u`, `parapet_present`, `parapet_height_m` | |
+| `front_elevation_orientation` | Cardinal direction the street-facing facade looks toward |
+| `confidence`, `notes` | Model's own self-reported confidence + caveats |
+
+**Re-run safety:** like `collect_building_attributes.py`, this used to start from an empty
+dict and blindly overwrite every address — fixed 2026-06-24 to preserve any address already
+carrying an `aerial_screenshot` key (see below) rather than wiping it.
+
+**Known exception:** 100 Main St came back wood frame/clapboard siding, not brick/masonry
+like the other 4 — confirmed via two independent Street View passes. This is a real
+typological difference, not noise; `generate_detail_pages.py` overrides several
+COMMON masonry defaults for this one building (`wall_thickness`, `structural_wall_system_u`,
+`mwfrs_u_wall` — see §5b).
+
+`analyze_roof_satellite.py` is a targeted fallback for 54 Elm St specifically: Street View
+was blocked for its roof, so this captures a top-down Google Maps satellite screenshot
+instead and merges just `roof_shape_u`/`parapet_present` into the existing
+`visual_attributes.json` entry (flagged by an `aerial_screenshot` key). Satellite imagery at
+usable zoom has real perspective distortion for tall buildings — fine for a rough roof-shape
+call, not for footprint/area measurement (see LESSONS_LEARNED.md §5).

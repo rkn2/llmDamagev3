@@ -9,6 +9,7 @@ body { font-family: system-ui, sans-serif; background: #f4f4f0; color: #1a1a1a; 
 h1 { font-size: 1.15rem; font-weight: 600; margin-bottom: 0.2rem; }
 .meta { color: #777; font-size: 0.82rem; margin-bottom: 1.75rem; }
 .meta a { color: #555; text-decoration: none; border-bottom: 1px solid #ccc; }
+.legend { color: #999; font-size: 0.74rem; margin-bottom: 1.25rem; }
 .section { margin-bottom: 1.25rem; }
 .section-title { font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
                  letter-spacing: 0.07em; color: #999; margin-bottom: 0.4rem;
@@ -43,6 +44,8 @@ tr:last-child td { border-bottom: none; }
 <p class="meta"><a href="../results.html">← Back to all assessments</a></p>
 <h1>100 Main St, Montpelier, VT 05602</h1>
 <p class="meta">Three Penny Taproom (ground floor bar/restaurant) &nbsp;·&nbsp; Montpelier VT July 2023 flood &nbsp;·&nbsp; llmDamage v3 &nbsp;·&nbsp; Nearest USGS HWM: MM-739 (Main St rotary), elev 526.33 ft, 1.7 ft above grade</p>
+<p class="legend">Key (from the spreadsheet's AbbreviationsKey sheet): <b>un</b> = unknown, but might exist &nbsp;·&nbsp;
+an <b>_unc</b> suffix is a certainty rating: <b>1</b> = 0–25%, <b>2</b> = 35–50%, <b>3</b> = &gt;75%</p>
 
       <div class="section">
         <div class="section-title">Building Identity & Location</div>
@@ -97,13 +100,13 @@ tr:last-child td { border-bottom: none; }
               <td class="attr">latitude</td>
               <td class="value">44.2605489</td>
               <td class="defn">coordinate of the building</td>
-              <td class="notes-col">Approximate centroid; refine with Google Earth Pro.</td>
+              <td class="notes-col">Nominatim-geocoded (collect_building_attributes.py); verified against VT state E911 address points for 27 Langdon St (see LESSONS_LEARNED.md §2). Not an approximate centroid.</td>
             </tr>
             <tr>
               <td class="attr">longitude</td>
               <td class="value">-72.5752484</td>
               <td class="defn">coordinate of the building</td>
-              <td class="notes-col">Approximate centroid; refine with Google Earth Pro.</td>
+              <td class="notes-col">Nominatim-geocoded (collect_building_attributes.py); verified against VT state E911 address points for 27 Langdon St (see LESSONS_LEARNED.md §2). Not an approximate centroid.</td>
             </tr>
             <tr>
               <td class="attr">sub_national_heritage _list</td>
@@ -259,7 +262,7 @@ tr:last-child td { border-bottom: none; }
               <td class="attr">wall_thickness</td>
               <td class="value">0.15</td>
               <td class="defn">approximate thickness of exterior walls in meters</td>
-              <td class="notes-col">0.46 m assumed (~18 inches) for late 19th c. load-bearing brick commercial construction. Guide default of 0.2 m is for residential wood frame — not appropriate here. Historic masonry commercial buildings typically 12–24 inches (0.30–0.61 m). Use 0.46 as a mid-range estimate; refine from damage photos or historic drawings.</td>
+              <td class="notes-col">0.15 m assumed (~6 inches) for light wood-frame construction — this building is wood frame with clapboard siding, not masonry. See construction_type_u.</td>
             </tr>
             <tr>
               <td class="attr">risk_category_16</td>
@@ -367,7 +370,7 @@ tr:last-child td { border-bottom: none; }
               <td class="attr">construction_type_u_unc</td>
               <td class="value">2</td>
               <td class="defn">corresponding certainty value to the previous column entry; used to show level of certainty with the input given<br><span style='color:#aaa'>Options: 1, 2, 3</span></td>
-              <td class="notes-col">Certainty 2 (35–50%) — brick visible in exterior photos but interior structure not confirmed from drawings.</td>
+              <td class="notes-col">Certainty 3 (>75%) — wood clapboard siding clearly visible in two independent Street View passes; not brick/masonry like the other 4 buildings.</td>
             </tr>
             <tr>
               <td class="attr">mwfrs_u_wall</td>
@@ -469,13 +472,13 @@ tr:last-child td { border-bottom: none; }
               <td class="attr">wall_cladding_u_unc</td>
               <td class="value">3</td>
               <td class="defn">corresponding certainty value to the previous column entry; used to show level of certainty with the input given<br><span style='color:#aaa'>Options: 1, 2, 3</span></td>
-              <td class="notes-col">Certainty 3 (>75%) — brick clearly visible in assessment photos.</td>
+              <td class="notes-col">Certainty 3 (>75%) — wood clapboard siding clearly visible, confirmed via Street View.</td>
             </tr>
             <tr>
               <td class="attr">wall_thickness</td>
               <td class="value">0.15</td>
               <td class="defn">approximate thickness of exterior walls in meters</td>
-              <td class="notes-col">0.46 m assumed (~18 inches) for late 19th c. load-bearing brick commercial construction. Guide default of 0.2 m is for residential wood frame — not appropriate here. Historic masonry commercial buildings typically 12–24 inches (0.30–0.61 m). Use 0.46 as a mid-range estimate; refine from damage photos or historic drawings.</td>
+              <td class="notes-col">0.15 m assumed (~6 inches) for light wood-frame construction — this building is wood frame with clapboard siding, not masonry. See construction_type_u.</td>
             </tr></tbody>
         </table>
       </div>
@@ -496,7 +499,7 @@ tr:last-child td { border-bottom: none; }
               <td class="attr">soffit_present_u</td>
               <td class="value">yes</td>
               <td class="defn">is there a soffit present?<br><span style='color:#aaa'>Options: yes, no</span></td>
-              <td class="notes-col">No soffit — historic commercial masonry blocks in Montpelier typically have flat facades with no eaves/soffit.</td>
+              <td class="notes-col">Soffit present per the Street View vision pass — an exception to the other 4 buildings' flat facades with no eaves.</td>
             </tr>
             <tr>
               <td class="attr">raised_above_road_level</td>

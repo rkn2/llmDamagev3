@@ -237,6 +237,30 @@ def main() -> None:
     OUTPUT.write_text(json.dumps(results, indent=2))
     print(f"\n\nWrote → {OUTPUT.name}")
 
+    # Warn if two addresses resolved to the same OSM footprint - this is exactly how the
+    # 100 Main St / 27 Langdon St collision happened (their geocoded points were only
+    # ~25m apart, so Overpass picked the same nearest building way for both). See
+    # LESSONS_LEARNED.md §1. A manually-corrected address (footprint_source present) is
+    # expected to differ from its old OSM value, so it's excluded from this check.
+    by_footprint: dict[tuple, list[str]] = {}
+    for addr, rec in results.items():
+        if rec.get("footprint_source"):
+            continue
+        key = (rec.get("building_area_m2"), rec.get("approx_wall_length_a_m"), rec.get("approx_wall_length_b_m"))
+        if key[0] is not None:
+            by_footprint.setdefault(key, []).append(addr)
+    dupes = {k: v for k, v in by_footprint.items() if len(v) > 1}
+    if dupes:
+        print("\n" + "=" * 60)
+        print("WARNING: addresses sharing an identical OSM footprint")
+        print("=" * 60)
+        for key, addrs in dupes.items():
+            print(f"  {key} ->")
+            for a in addrs:
+                print(f"    - {a}")
+        print("  These may be the same building, or Overpass picked the same nearest\n"
+              "  way for both - needs manual disambiguation (see LESSONS_LEARNED.md §2).")
+
     # Manual-entry manifest
     print("\n" + "=" * 60)
     print("ATTRIBUTES STILL REQUIRING MANUAL / VISUAL ENTRY")

@@ -566,13 +566,17 @@ NOTES = {
     "distance_from_river_edge":     "Computed from USGS NHD centerline minus estimated 5m half-width of N. Branch Winooski. Source: hydro.nationalmap.gov NHD Large-Scale Flowlines, UTM 19N (EPSG:32619). NHD does not provide a polygon for this reach.",
     "distance_from_river_centerline":"Computed from USGS NHD Large-Scale Flowlines (N. Branch Winooski River + Winooski River merged centerline). UTM 19N (EPSG:32619). Source: hydro.nationalmap.gov/arcgis/rest/services/nhd/MapServer/6.",
     "FEMA_floodzone":               "Downtown Montpelier along N. Branch Winooski is Zone AE. Verify exact parcel at FEMA Map Service Center.",
-    "latitude":                     "Approximate centroid; refine with Google Earth Pro.",
-    "longitude":                    "Approximate centroid; refine with Google Earth Pro.",
+    "latitude":                     "Nominatim-geocoded (collect_building_attributes.py); verified against VT state E911 address points for 27 Langdon St (see LESSONS_LEARNED.md §2). Not an approximate centroid.",
+    "longitude":                    "Nominatim-geocoded (collect_building_attributes.py); verified against VT state E911 address points for 27 Langdon St (see LESSONS_LEARNED.md §2). Not an approximate centroid.",
     "archetype":                    "Assigned from Nofal & van de Lindt (2020) 15-type portfolio. None of the 15 archetypes is a perfect match for a multi-story historic masonry downtown commercial block — F7 (7, small multi-unit commercial) is the closest for retail/mixed-use; F14 (14, office) for primarily office use. Certainty is inherently low for all 5 buildings.",
     "wall_thickness":               "0.46 m assumed (~18 inches) for late 19th c. load-bearing brick commercial construction. Guide default of 0.2 m is for residential wood frame — not appropriate here. Historic masonry commercial buildings typically 12–24 inches (0.30–0.61 m). Use 0.46 as a mid-range estimate; refine from damage photos or historic drawings.",
     "construction_type_u_unc":      "Certainty 2 (35–50%) — brick visible in exterior photos but interior structure not confirmed from drawings.",
     "mwfrs_u_wall_unc":             "Certainty 2 — approximated from construction type.",
     "wall_cladding_u_unc":          "Certainty 3 (>75%) — brick clearly visible in assessment photos.",
+    # NOTE: the four notes above (wall_thickness, construction_type_u_unc, wall_cladding_u_unc,
+    # soffit_present_u below) describe the brick/masonry/no-soffit majority case. 100 Main St is
+    # wood frame, not brick, and both 100 Main St and 54 Elm St have a soffit -- see
+    # NOTES_OVERRIDE below, checked first in build_page() before falling back to these.
     "prop_val_evidential":          "Assessed as 'considerable' based on NRHP contributing status in historic district.",
     "prop_val_historical":          "Assessed as 'considerable' based on NRHP historic district listing.",
     "prop_val_aesthetic":           "Assessed as 'considerable' — 19th–early 20th c. commercial architecture in intact historic streetscape.",
@@ -589,12 +593,64 @@ NOTES = {
     "building_in_use_during_flood": "Buildings were closed during the July 2023 flood event.",
 }
 
+# Per-address exceptions to the NOTES above, checked first in build_page(). Needed because
+# NOTES is one note per attribute for all 5 buildings, but a few buildings are real exceptions
+# to the brick/masonry/no-soffit majority case (found during the 2026-06-24 audit).
+NOTES_OVERRIDE = {
+    "wall_thickness": {
+        "100 Main St, Montpelier, VT 05602": "0.15 m assumed (~6 inches) for light wood-frame construction — this building is wood frame with clapboard siding, not masonry. See construction_type_u.",
+    },
+    "construction_type_u_unc": {
+        "100 Main St, Montpelier, VT 05602": "Certainty 3 (>75%) — wood clapboard siding clearly visible in two independent Street View passes; not brick/masonry like the other 4 buildings.",
+    },
+    "wall_cladding_u_unc": {
+        "100 Main St, Montpelier, VT 05602": "Certainty 3 (>75%) — wood clapboard siding clearly visible, confirmed via Street View.",
+    },
+    "soffit_present_u": {
+        "100 Main St, Montpelier, VT 05602": "Soffit present per the Street View vision pass — an exception to the other 4 buildings' flat facades with no eaves.",
+        "54 Elm St, Montpelier, VT 05602":   "Soffit present per the Street View vision pass — an exception to the other 4 buildings' flat facades with no eaves.",
+    },
+}
+
+RESULTS_CSS = """
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: system-ui, sans-serif; background: #f4f4f0; color: #1a1a1a; padding: 2rem; }
+h1 { font-size: 1.4rem; font-weight: 600; margin-bottom: 0.25rem; }
+.subtitle { color: #666; font-size: 0.85rem; margin-bottom: 2rem; }
+.card { background: white; border-radius: 8px; border: 1px solid #e0e0d8;
+        padding: 1.25rem 1.5rem; margin-bottom: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+.card-header { display: flex; align-items: baseline; gap: 1rem; margin-bottom: 0.75rem; }
+.address { font-weight: 600; font-size: 1rem; }
+.address a { color: inherit; text-decoration: none; border-bottom: 1px dashed #aaa; }
+.address a:hover { border-bottom-color: #333; }
+.badge { display: inline-block; font-size: 0.75rem; font-weight: 600;
+         padding: 0.2em 0.6em; border-radius: 4px; white-space: nowrap; }
+.level-0 { background: #e8f5e9; color: #2e7d32; }
+.level-1 { background: #fff8e1; color: #f57f17; }
+.level-2 { background: #fff3e0; color: #e65100; }
+.level-3 { background: #fce4ec; color: #b71c1c; }
+.level-4 { background: #311b92; color: #fff; }
+.level-null { background: #eeeeee; color: #555; }
+.conf-high   { background: #e3f2fd; color: #0d47a1; }
+.conf-medium { background: #fafafa; color: #555; border: 1px solid #ddd; }
+.conf-low    { background: #fce4ec; color: #880e4f; }
+.meta { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
+.meta-item { font-size: 0.78rem; color: #666; background: #f9f9f7; border: 1px solid #e8e8e0;
+             border-radius: 4px; padding: 0.15em 0.5em; }
+.label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+         letter-spacing: 0.05em; color: #888; margin-bottom: 0.25rem; margin-top: 0.75rem; }
+.reasoning { font-size: 0.88rem; line-height: 1.55; color: #333; }
+.limitations { font-size: 0.82rem; line-height: 1.5; color: #777; font-style: italic; }
+.damage-label { font-size: 0.8rem; font-weight: 500; color: #555; margin-left: 0.25rem; }
+"""
+
 CSS = """
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: system-ui, sans-serif; background: #f4f4f0; color: #1a1a1a; padding: 2rem; max-width: 1100px; }
 h1 { font-size: 1.15rem; font-weight: 600; margin-bottom: 0.2rem; }
 .meta { color: #777; font-size: 0.82rem; margin-bottom: 1.75rem; }
 .meta a { color: #555; text-decoration: none; border-bottom: 1px solid #ccc; }
+.legend { color: #999; font-size: 0.74rem; margin-bottom: 1.25rem; }
 .section { margin-bottom: 1.25rem; }
 .section-title { font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
                  letter-spacing: 0.07em; color: #999; margin-bottom: 0.4rem;
@@ -717,7 +773,7 @@ def build_page(address, data):
             info = ATTR_INFO.get(k, {})
             defn = info.get("defn", "")
             opts = info.get("options", "")
-            note = NOTES.get(k, "")
+            note = NOTES_OVERRIDE.get(k, {}).get(address) or NOTES.get(k, "")
             # append options to defn if useful
             if opts and "options:" not in defn.lower():
                 defn_display = f"{defn}<br><span style='color:#aaa'>Options: {opts}</span>" if defn else f"Options: {opts}"
@@ -773,12 +829,66 @@ def build_page(address, data):
 <p class="meta"><a href="../results.html">← Back to all assessments</a></p>
 <h1>{address}</h1>
 <p class="meta">{title} &nbsp;·&nbsp; Montpelier VT July 2023 flood &nbsp;·&nbsp; llmDamage v3 &nbsp;·&nbsp; {usgs}</p>
+<p class="legend">Key (from the spreadsheet's AbbreviationsKey sheet): <b>un</b> = unknown, but might exist &nbsp;·&nbsp;
+an <b>_unc</b> suffix is a certainty rating: <b>1</b> = 0–25%, <b>2</b> = 35–50%, <b>3</b> = &gt;75%</p>
 {sections_html}
 </body>
 </html>"""
     out = OUTPUT_DIR / safe_filename(address)
     out.write_text(html)
     return str(out)
+
+DAMAGE_LABELS_JS = {0: "No Damage", 1: "Minor", 2: "Moderate", 3: "Major", 4: "Destroyed"}
+
+def build_results_page(manifest: dict) -> None:
+    """Render results.html server-side from ASSESSMENTS, live - this used to be a
+    hand-embedded copy of address_assessments.json's content with no generator at all,
+    so it would silently go stale the moment any building was reassessed."""
+    cards = ""
+    for address in BUILDINGS:
+        row = ASSESSMENTS.get(address, {})
+        lvl = row.get("damage_level")
+        conf = row.get("confidence") or "low"
+        level_class = f"level-{lvl}" if lvl is not None else "level-null"
+        depth = row.get("estimated_water_depth_ft")
+        depth_str = f"~{depth} ft water depth" if depth is not None else "depth unknown"
+        link = manifest.get(address)
+        address_html = f'<a href="{link}" target="_blank">{address}</a>' if link else address
+        cards += f"""
+    <div class="card">
+      <div class="card-header">
+        <span class="address">{address_html}</span>
+        <span class="badge {level_class}">Level {lvl if lvl is not None else '?'}</span>
+        <span class="damage-label">{DAMAGE_LABELS_JS.get(lvl, 'Not Assessable')}</span>
+        <span class="badge conf-{conf}">{conf} confidence</span>
+      </div>
+      <div class="meta">
+        <span class="meta-item">{depth_str}</span>
+        <span class="meta-item">{row.get('before_photo_count', '?')} before · {row.get('after_photo_count', '?')} after</span>
+        <span class="meta-item">{'assessable' if row.get('assessable') else 'not assessable'}</span>
+      </div>
+      <div class="label">Reasoning</div>
+      <div class="reasoning">{row.get('reasoning', 'un')}</div>
+      <div class="label">Limitations</div>
+      <div class="limitations">{row.get('limitations', 'un')}</div>
+    </div>"""
+
+    html = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>llmDamage v3 — Assessment Results</title>
+<style>
+{RESULTS_CSS}
+</style>
+</head>
+<body>
+<h1>llmDamage v3 — Flood Damage Assessment Results</h1>
+<p class="subtitle">Montpelier, VT · model: claude-sonnet-4-6 · {len(BUILDINGS)} addresses assessed</p>
+{cards}
+</body>
+</html>"""
+    (ROOT / "results.html").write_text(html)
 
 if __name__ == "__main__":
     manifest = {}
@@ -787,4 +897,6 @@ if __name__ == "__main__":
         manifest[address] = f"building_details/{safe_filename(address)}"
         print(f"  {path}")
     (ROOT / "building_detail_manifest.json").write_text(json.dumps(manifest, indent=2))
+    build_results_page(manifest)
+    print(f"  {ROOT / 'results.html'}")
     print(f"\nDone — {len(manifest)} pages, all 177 columns covered.")
