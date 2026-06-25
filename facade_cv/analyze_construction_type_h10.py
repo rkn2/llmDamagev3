@@ -2,14 +2,14 @@
 """
 H10: Construction type (wood frame vs. URM) from facade photos.
 
-HYPOTHESIS REJECTED after three probes.
+HYPOTHESIS REJECTED after five probes (Signals A, B, C, D-v1, D-v2).
 
-Three signals tested; none separates 100 Main (wood frame) from URM buildings:
+All signals tested; none separates 100 Main (wood frame) from URM buildings:
 
   Signal A -- Fine-scale Sobel-Y FFT (3-8 px clapboard band):
     wood_frame=0.041  URM=0.040-0.064
-    FAILS: dark maroon paint kills clapboard edge contrast. URM buildings with
-    decorative string courses / keystones contribute comparable or more energy.
+    FAILS: dark maroon paint kills clapboard edge contrast. Close-up side
+    photos bring brick coursing into the same 3-8px band (scale-dependent).
 
   Signal B -- Brick-red HSV pixel fraction:
     100 Main (wood)=0.226  112 State (URM)=0.133  others=0.35-0.39
@@ -18,28 +18,44 @@ Three signals tested; none separates 100 Main (wood frame) from URM buildings:
 
   Signal C -- Horizontal/vertical Sobel ratio in non-window wall zone:
     wood_frame=1.32  URM=0.89-1.67  (no separating threshold)
-    FAILS: horizontal elements common to all facades (window sills, cornices,
-    string courses) push H/V > 1 for URM buildings too.
+    FAILS: horizontal elements (window sills, cornices, string courses)
+    push H/V > 1 for URM buildings too.
+
+  Signal D-v1 -- Long horizontal HoughLinesP density (full facade, ±5°):
+    100 Main=0.78  112 State=0.58  27 Langdon=0.29
+    40 Main=4.96  54 Elm=5.76  ← FALSE POSITIVES
+    FAILS: commercial GF awnings at 40 Main and 54 Elm generate dense long
+    horizontal lines. Side-view photos of 100 Main show clapboard at oblique
+    angle → boards appear >5° from horizontal → not detected.
+
+  Signal D-v2 -- Long horizontal HoughLinesP, upper 2/3 only, ±12°:
+    100 Main=4.17 (Right side)  112 State=1.11  27 Langdon=5.06
+    40 Main=7.43  54 Elm=12.21  ← WORSE FALSE POSITIVES
+    FAILS: URM upper floors have horizontal architectural banding (sill bands,
+    string courses, cornices, lintels) that produces even MORE long horizontal
+    lines than the GF awnings. Relaxing to ±12° picks up oblique clapboard
+    but also picks up all architectural horizontals in brick buildings.
 
 OSM building:material tags: queried for all 5 buildings -- NONE populated.
 
-Root cause: the only non-URM building (100 Main, dark maroon clapboard) is the
-hardest possible case -- paint-to-board contrast is near zero at Street View
-distances, and the siding colour mimics brick. Individual clapboard boards at
-~10-15 cm (~4-6 px) are detectable in lighter painted or natural wood, but
-not here.
+Root cause (confirmed across all probes):
+  1. 100 Main's dark maroon paint destroys clapboard texture contrast — boards
+     are near-invisible in Sobel/FFT/color at Street View distance.
+  2. URM buildings have abundant horizontal architectural elements at ALL floor
+     levels (not just GF): no zone exclusion removes this interference.
+  3. The one wood-frame building is the hardest possible case.
 
 Decision: NO changes to construction_type_u in visual_attributes.json.
   LLM values are correct for all 5 buildings (4 URM, 1 wood frame).
-  A reliable CV approach would require close-up texture patches (not available)
-  or a trained classifier on many buildings.
+  A reliable CV approach requires: close-up wall texture patches (not
+  available here) OR a CNN trained on hundreds of labeled building photos.
 
 LEAKAGE POLICY: reads only image files from ref_photos/before/.
 Debug images remain in facade_cv/debug_h10/ for reference.
 """
 
 from __future__ import annotations
-import json, sys
+import json, math, sys
 import numpy as np, cv2
 import matplotlib
 matplotlib.use("Agg")
@@ -52,6 +68,21 @@ from analyze_facade_h5 import (
     find_front_photos, load_gray,
     estimate_facade_region, detect_window_blobs,
 )
+
+PHOTO_DIR = Path(__file__).parent.parent / "ref_photos" / "before"
+
+def find_all_photos(address: str) -> list[Path]:
+    """Return all before photos (front + back + left + right), sorted."""
+    addr_dir = PHOTO_DIR / address
+    if not addr_dir.exists():
+        return []
+    return sorted([
+        p for p in addr_dir.iterdir()
+        if p.suffix.lower() in (".png", ".jpg", ".jpeg", ".webp", ".avif")
+        and not p.stem.startswith(".")
+        and "Copy" not in p.name          # skip duplicate copies
+        and "Screenshot" not in p.name    # skip screenshots
+    ])
 
 REPO      = Path(__file__).parent.parent
 OUT_DIR   = Path(__file__).parent
@@ -159,6 +190,73 @@ def brick_color_fraction(bgr: np.ndarray, top: int, bottom: int,
     return fraction, hue_hist
 
 
+# ── Signal D: long horizontal line density (scale-invariant) ─────────────────
+
+def long_hline_density(gray: np.ndarray, top: int, bottom: int,
+                       blobs: list, n_stories: int = 3) -> tuple[float, list]:
+    """
+    Density of long horizontal Hough line segments in the UPPER-FLOOR wall zone.
+
+    Restricted to the top (n_stories-1)/n_stories of the facade to exclude
+    ground-floor commercial awnings, fascia, and canopy elements which create
+    spurious long horizontal lines in brick buildings.
+
+    Angle tolerance ±12° (vs. naive ±5°) to handle oblique side-view photos
+    where clapboard lines appear slightly tilted due to perspective.
+
+    Returns:
+      density: long_lines_per_100px_upper_facade_height
+      long_lines: list of (x1,y1,x2,y2) in ROI coords for debug plotting
+    """
+    roi_h = bottom - top
+    roi_w = gray.shape[1]
+
+    # Upper facade zone: exclude bottom 1/n_stories (GF band)
+    gf_top_px = int(roi_h * (n_stories - 1) / n_stories)
+    upper_top  = 0
+    upper_bot  = gf_top_px       # pixel row in ROI coords
+
+    if upper_bot < 30:
+        return 0.0, []
+
+    min_span = max(10, int(roi_w * 0.20))
+
+    # Build non-window mask for upper zone only
+    upper_h = upper_bot
+    mask = np.ones((upper_h, roi_w), dtype=np.uint8) * 255
+    border = 8
+    for (x, y, cw, ch) in blobs:
+        if y + ch < upper_h:     # blob entirely in upper zone
+            y0, y1 = max(0, y - border), min(upper_h, y + ch + border)
+            x0, x1 = max(0, x - border), min(roi_w, x + cw + border)
+            mask[y0:y1, x0:x1] = 0
+
+    upper_roi = gray[top:top + upper_h, :]
+    masked    = cv2.bitwise_and(upper_roi, upper_roi, mask=mask)
+    edges     = cv2.Canny(masked, 30, 90)
+
+    lines = cv2.HoughLinesP(edges, rho=1,
+                            theta=np.pi / 180,
+                            threshold=15,
+                            minLineLength=min_span,
+                            maxLineGap=6)
+
+    long_lines = []
+    if lines is not None:
+        for seg in lines:
+            x1, y1, x2, y2 = seg[0]
+            dx, dy = abs(x2 - x1), abs(y2 - y1)
+            length = math.sqrt(dx**2 + dy**2)
+            if dx == 0:
+                continue
+            angle_deg = abs(math.degrees(math.atan2(dy, dx)))
+            if angle_deg <= 12 and length >= min_span:
+                long_lines.append((x1, y1, x2, y2))
+
+    density = len(long_lines) / (upper_h / 100.0) if upper_h > 0 else 0.0
+    return round(density, 3), long_lines
+
+
 # ── Signal C: horizontal/vertical Sobel ratio in inter-window wall zones ──────
 
 def hv_ratio(gray: np.ndarray, top: int, bottom: int,
@@ -202,7 +300,7 @@ def hv_ratio(gray: np.ndarray, top: int, bottom: int,
 
 # ── Per-photo analysis ────────────────────────────────────────────────────────
 
-def analyse_photo(path: Path) -> dict:
+def analyse_photo(path: Path, n_stories: int = 3) -> dict:
     gray = load_gray(path)
     bgr  = cv2.imread(str(path))
     if bgr is None:
@@ -211,17 +309,24 @@ def analyse_photo(path: Path) -> dict:
     top, bottom  = estimate_facade_region(gray)
     _, blobs     = detect_window_blobs(gray, top, bottom)
 
+    roi_h = bottom - top
+    gf_top_px = int(roi_h * (n_stories - 1) / n_stories)
+
     clap_frac, profile, fft_mag = clapboard_energy(gray, top, bottom, blobs)
     brick_frac, hue_hist        = brick_color_fraction(bgr, top, bottom, blobs)
     hv, gy, gx                 = hv_ratio(gray, top, bottom, blobs)
+    hline_density, long_lines  = long_hline_density(gray, top, bottom, blobs, n_stories)
 
     return {
         "clap_energy_frac": round(clap_frac, 5),
         "brick_color_frac": round(brick_frac, 4),
         "hv_ratio":         hv,
+        "hline_density":    hline_density,
         "profile":  profile,
         "fft_mag":  fft_mag,
         "hue_hist": hue_hist,
+        "long_lines": long_lines,
+        "gf_top_px": gf_top_px,
         "top": top, "bottom": bottom,
         "gray": gray, "gy": gy, "gx": gx,
     }
@@ -274,17 +379,18 @@ def save_debug(address: str, photo_name: str, results: list[dict],
         axes[i][2].set_title(f"Hue  brick_frac={r['brick_color_frac']:.3f}", fontsize=7)
         axes[i][2].legend(fontsize=6)
 
-        # Panel 3: Row-mean of Sobel-Y vs Sobel-X in wall zone
-        gy_prof = r["gy"].mean(axis=1)
-        gx_prof = r["gx"].mean(axis=1)
-        axes[i][3].plot(gy_prof, np.arange(roi_h), color="red",  linewidth=0.8,
-                        label=f"Sobel-Y (horiz)")
-        axes[i][3].plot(gx_prof, np.arange(roi_h), color="blue", linewidth=0.8,
-                        label=f"Sobel-X (vert)")
-        axes[i][3].invert_yaxis()
-        axes[i][3].set_xlabel("Mean gradient magnitude")
-        axes[i][3].set_title("Row profiles", fontsize=7)
-        axes[i][3].legend(fontsize=6)
+        # Panel 3: Long horizontal lines overlaid on facade ROI (upper zone only)
+        roi_vis = cv2.cvtColor(r["gray"][r["top"]:r["bottom"], :], cv2.COLOR_GRAY2RGB)
+        gf_top = r.get("gf_top_px", roi_h)
+        # draw GF boundary in blue
+        cv2.line(roi_vis, (0, gf_top), (roi_vis.shape[1], gf_top), (80, 80, 255), 1)
+        for (x1, y1, x2, y2) in r.get("long_lines", []):
+            cv2.line(roi_vis, (x1, y1), (x2, y2), (255, 80, 0), 1)
+        axes[i][3].imshow(roi_vis, aspect="auto")
+        axes[i][3].set_title(
+            f"Long horiz lines upper zone ±12°  density={r['hline_density']:.2f}/100px",
+            fontsize=7)
+        axes[i][3].axis("off")
 
     plt.tight_layout()
     out_path = DEBUG_DIR / f"{slug}_h10.png"
@@ -295,40 +401,65 @@ def save_debug(address: str, photo_name: str, results: list[dict],
 
 # ── Main ─────────────────────────────────────────────────────────────────────
 
-def process(address: str) -> dict:
-    photos = find_front_photos(address)
+def process(address: str, n_stories: int = 3) -> dict:
+    photos = find_all_photos(address)
     if not photos:
-        return {"address": address, "error": "no front photos"}
+        return {"address": address, "error": "no photos"}
 
     per_photo = []
     for p in photos:
-        r = analyse_photo(p)
+        r = analyse_photo(p, n_stories)
+        r["photo"] = p.name
         per_photo.append(r)
+        print(f"    {p.name}: clap={r['clap_energy_frac']:.4f}  "
+              f"hline_d={r['hline_density']:.2f}  "
+              f"brick={r['brick_color_frac']:.3f}  hv={r['hv_ratio']:.3f}")
 
-    clap_median   = float(np.median([r["clap_energy_frac"] for r in per_photo]))
-    brick_median  = float(np.median([r["brick_color_frac"] for r in per_photo]))
-    hv_median     = float(np.median([r["hv_ratio"]         for r in per_photo]))
+    # Max clapboard energy across all views: if ANY photo shows clapboard
+    # periodicity, the building is wood frame. Brick has none in any view.
+    # Use max hline_density as the primary signal: if ANY photo shows clapboard
+    # line density, the building is wood frame.
+    best_idx       = int(np.argmax([r["hline_density"] for r in per_photo]))
+    hline_max      = float(per_photo[best_idx]["hline_density"])
+    best_photo     = per_photo[best_idx]["photo"]
 
-    debug_path = save_debug(address, "", per_photo, KNOWN.get(address, "?"))
+    clap_max     = float(max(r["clap_energy_frac"] for r in per_photo))
+    clap_median  = float(np.median([r["clap_energy_frac"] for r in per_photo]))
+    brick_median = float(np.median([r["brick_color_frac"] for r in per_photo]))
+    hv_median    = float(np.median([r["hv_ratio"]         for r in per_photo]))
+
+    # Debug: show only the best-signal photo to keep images manageable
+    debug_path = save_debug(address, best_photo,
+                            [per_photo[best_idx]], KNOWN.get(address, "?"))
 
     known = KNOWN.get(address, "?")
     return {
         "address":          address,
         "known":            known,
-        "clap_energy_frac": round(clap_median, 5),
+        "hline_density_max": round(hline_max, 3),
+        "clap_energy_max":  round(clap_max, 5),
+        "clap_energy_med":  round(clap_median, 5),
         "brick_color_frac": round(brick_median, 4),
         "hv_ratio":         round(hv_median, 4),
+        "best_photo":       best_photo,
         "n_photos":         len(photos),
         "debug":            debug_path,
     }
 
 
 def main():
+    h7_path = OUT_DIR / "facade_cv_h7_output.json"
+    story_counts: dict[str, int] = {}
+    if h7_path.exists():
+        h7 = json.loads(h7_path.read_text())
+        story_counts = {addr: rec["number_stories"] for addr, rec in h7.items()}
+
     results = {}
     for addr in ADDRESSES:
+        n = story_counts.get(addr, 3)
         label = addr.split(",")[0]
-        print(f"\n{label}  (known={KNOWN[addr]})")
-        r = process(addr)
+        print(f"\n{label}  (known={KNOWN[addr]}  n_stories={n})")
+        r = process(addr, n)
         results[addr] = r
         print(f"  clap_energy_frac={r.get('clap_energy_frac','?')}  "
               f"brick_color_frac={r.get('brick_color_frac','?')}")
@@ -342,18 +473,16 @@ def main():
     ))
     print(f"\nWrote probe data to {out_path}")
 
-    print("\n── Probe results (BEFORE threshold calibration) ─────────────────")
-    print(f"{'building':<15}  {'known':>10}  {'clap_e':>8}  {'brick_c':>8}  {'H/V':>6}")
+    print("\n── Probe results — all photos, max long-hline density ───────────")
+    print(f"{'building':<15}  {'known':>10}  {'hline_MAX':>10}  {'clap_MAX':>9}  {'best_photo'}")
     for addr in ADDRESSES:
         r = results[addr]
         print(f"{addr.split(',')[0]:<15}  {r.get('known','?'):>10}  "
-              f"{r.get('clap_energy_frac','?'):>8}  "
-              f"{r.get('brick_color_frac','?'):>8}  "
-              f"{r.get('hv_ratio','?'):>6}")
+              f"{r.get('hline_density_max','?'):>10}  "
+              f"{r.get('clap_energy_max','?'):>9}  "
+              f"{r.get('best_photo','?')}")
 
-    print(f"\nDebug images → {DEBUG_DIR}/")
-    print("\nNEXT: inspect debug images, check if clap_energy_frac separates")
-    print("wood_frame (100 Main) from URM (others), then set CLAPBOARD_ENERGY_THRESHOLD.")
+    print(f"\nDebug images (best photo per building) → {DEBUG_DIR}/")
 
 
 if __name__ == "__main__":
