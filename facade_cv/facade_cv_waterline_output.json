@@ -1,0 +1,46 @@
+{
+  "100 Main St, Montpelier, VT 05602": {
+    "address": "100 Main St, Montpelier, VT 05602",
+    "photo": "2023_7_13_front(13).webp",
+    "waterline_m_above_base": 1.292,
+    "waterline_ft_above_base": 4.24,
+    "llm_flood_height": "~3.5 ft above first floor",
+    "llm_flood_m": 1.067,
+    "delta_m": 0.225,
+    "px_per_m": 51.1,
+    "facade_h_px": 562,
+    "stories_used": 3
+  },
+  "112 State St, Montpelier, VT 05602": {
+    "address": "112 State St, Montpelier, VT 05602",
+    "skipped": "no during-flood street-level photo \u2014 October photos are post-flood"
+  },
+  "27 Langdon St, Montpelier, VT 05602": {
+    "address": "27 Langdon St, Montpelier, VT 05602",
+    "photo": "2023_7_11_front (20).png",
+    "waterline_m_above_base": 2.073,
+    "waterline_ft_above_base": 6.8,
+    "llm_flood_height": "~3.5 ft above first floor",
+    "llm_flood_m": 1.067,
+    "delta_m": 1.006,
+    "px_per_m": 34.7,
+    "facade_h_px": 382,
+    "stories_used": 3
+  },
+  "40 Main St, Montpelier, VT 05602": {
+    "address": "40 Main St, Montpelier, VT 05602",
+    "photo": "2023_7_12_front (2).png",
+    "waterline_m_above_base": 0.456,
+    "waterline_ft_above_base": 1.5,
+    "llm_flood_height": "~2.5 ft above first floor",
+    "llm_flood_m": 0.762,
+    "delta_m": -0.306,
+    "px_per_m": 57.0,
+    "facade_h_px": 627,
+    "stories_used": 3
+  },
+  "54 Elm St, Montpelier, VT 05602": {
+    "address": "54 Elm St, Montpelier, VT 05602",
+    "skipped": "no during-flood street-level photo \u2014 October photos are post-flood"
+  }
+}
