@@ -18,7 +18,9 @@
     "window_sill_height_m": 0.0,
     "window_sill_height_upper_m": 5.91,
     "wall_length_front": 33.2,
-    "wall_length_side": 32.9
+    "wall_length_side": 32.9,
+    "wall_fenesteration_back_per": 18,
+    "wall_fenesteration_back_lowerlevel_per": 10
   },
   "112 State St, Montpelier, VT 05602": {
     "number_stories": 5,
@@ -39,7 +41,9 @@
     "window_sill_height_m": 0.0,
     "window_sill_height_upper_m": 10.11,
     "wall_length_front": 32.5,
-    "wall_length_side": 37.5
+    "wall_length_side": 37.5,
+    "wall_fenesteration_back_per": 22,
+    "wall_fenesteration_back_lowerlevel_per": 18
   },
   "27 Langdon St, Montpelier, VT 05602": {
     "number_stories": 3,
@@ -100,6 +104,8 @@
     "window_sill_height_m": 0.12,
     "window_sill_height_upper_m": 7.57,
     "wall_length_front": 19.9,
-    "wall_length_side": 15.4
+    "wall_length_side": 15.4,
+    "wall_fenesteration_back_per": 18,
+    "wall_fenesteration_back_lowerlevel_per": 8
   }
 }

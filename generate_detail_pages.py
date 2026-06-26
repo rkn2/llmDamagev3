@@ -759,6 +759,8 @@ def resolve_building_data(address: str, data: dict) -> dict:
         data["longitude"] = str(ba["longitude"])
     if ba.get("building_area_m2") is not None:
         data["building_area_m2"] = str(ba["building_area_m2"])
+    if ba.get("first_floor_elevation_m") is not None:
+        data["first_floor_elevation_m"] = str(ba["first_floor_elevation_m"])
 
     # Inject vision-pass attributes live from analyze_visual_attributes.py's output.
     va = VISUAL_ATTRS.get(address, {})
@@ -777,6 +779,12 @@ def resolve_building_data(address: str, data: dict) -> dict:
     front_per = va.get("wall_fenesteration_front_per")
     if front_per is not None:
         data["wall_fenesteration_front_per"] = str(front_per)
+    back_per = va.get("wall_fenesteration_back_per")
+    if back_per is not None:
+        data["wall_fenesteration_back_per"] = str(back_per)
+    back_lower_per = va.get("wall_fenesteration_back_lowerlevel_per")
+    if back_lower_per is not None:
+        data["wall_fenesteration_back_lowerlevel_per"] = str(back_lower_per)
 
     # Override orientation from OSM-derived compute_urban_attrs.py output.
     # Must happen before the wall_length / cardinal-fenestration computation below so
