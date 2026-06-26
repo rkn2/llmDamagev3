@@ -33,6 +33,42 @@ CRITIC_FINDINGS = json.loads(_critic_path.read_text()) if _critic_path.exists() 
 _ua_path = ROOT_DIR / "urban_attrs.json"
 URBAN_ATTRS = json.loads(_ua_path.read_text()) if _ua_path.exists() else {}
 
+# USGS HWM-derived flood depths (compute_flood_depth_hwm.py output).
+# Guarded — if not yet computed, pages fall back to hardcoded LLM estimates below.
+_hwm_path = ROOT_DIR / "flood_depth_hwm.json"
+_HWM_DATA: dict = json.loads(_hwm_path.read_text()) if _hwm_path.exists() else {}
+
+
+def _flood_height_note(addr: str) -> str:
+    """Return flood_height_building string: HWM-derived if available, else LLM estimate."""
+    rec = _HWM_DATA.get(addr)
+    if not rec:
+        return "LLM estimate only — run compute_flood_depth_hwm.py"
+    above_ffe = rec["above_ffe_ft"]
+    wse       = rec["wse_ft"]
+    ffe       = rec["ffe_ft"]
+    src       = rec["hwm_sources"][0]
+    if above_ffe <= 0:
+        if rec.get("confirmed_flooded"):
+            above_grade = rec["above_grade_ft"]
+            return (
+                f"Confirmed flooded via lower/rear access (~{above_grade:.1f} ft above grade "
+                f"at building perimeter); front entrance not overtopped per HWM IDW "
+                f"(WSE {wse:.2f} ft NAVD88 < front FFE {ffe:.2f} ft NAVD88; "
+                f"Δ = {above_ffe:.2f} ft; nearest HWM {src['label']}). "
+                f"Evidence: business website states rebuilding after flooding."
+            )
+        return (
+            f"Below first floor — water did not reach FFE "
+            f"(WSE {wse:.2f} ft NAVD88 < FFE {ffe:.2f} ft NAVD88; "
+            f"Δ = {above_ffe:.2f} ft; source: USGS HWM IDW, nearest {src['label']})"
+        )
+    return (
+        f"~{above_ffe:.1f} ft above first floor "
+        f"(USGS HWM IDW: WSE {wse:.2f} ft NAVD88, FFE {ffe:.2f} ft NAVD88; "
+        f"nearest HWM {src['label']} at {src['elev_ft']} ft, {src['dist_m']:.0f} m away)"
+    )
+
 # River distances computed from USGS NHD flowlines via
 # hydro.nationalmap.gov/arcgis/rest/services/nhd/MapServer/6
 # Projected to UTM 19N (EPSG:32619) for metric accuracy.
@@ -72,13 +108,26 @@ for row in ws_info.iter_rows(min_row=2, values_only=True):
 #   - FEMA NFHL        (Zone AE for downtown Montpelier along N. Branch Winooski)
 #   - Visual inspection from assessment before/after photos
 
-USGS_NOTE = {
-    "100 Main St, Montpelier, VT 05602":  "Nearest USGS HWM: MM-739 (Main St rotary), elev 526.33 ft, 1.7 ft above grade",
-    "112 State St, Montpelier, VT 05602": "Nearest USGS HWM: MM-738 (State/Main intersection), elev 526.46 ft, 2.27 ft above grade",
-    "27 Langdon St, Montpelier, VT 05602":"Nearest USGS HWM: MM-738 (State/Main intersection), elev 526.46 ft, 2.27 ft above grade",
-    "40 Main St, Montpelier, VT 05602":   "Nearest USGS HWM: MM-739 (Main St rotary), elev 526.33 ft, 1.7 ft above grade",
-    "54 Elm St, Montpelier, VT 05602":    "Nearest USGS HWM: MM-741 (Elm St Cemetery), elev 526.41 ft, 2.3 ft above grade",
-}
+def _usgs_note(addr: str) -> str:
+    """Build the per-building USGS HWM note from computed flood_depth_hwm.json."""
+    rec = _HWM_DATA.get(addr)
+    if not rec:
+        return "USGS HWM data not yet computed — run compute_flood_depth_hwm.py"
+    src = rec["hwm_sources"][0]
+    return (
+        f"USGS HWM IDW (3 nearest Good+/Fair): WSE {rec['wse_ft']:.2f} ft NAVD88 — "
+        f"{rec['above_grade_ft']:.2f} ft above grade, "
+        f"{rec['above_ffe_ft']:.2f} ft above FFE. "
+        f"Nearest: {src['label']} at {src['elev_ft']} ft ({src['dist_m']:.0f} m, {src['quality']})"
+    )
+
+USGS_NOTE = {addr: _usgs_note(addr) for addr in [
+    "100 Main St, Montpelier, VT 05602",
+    "112 State St, Montpelier, VT 05602",
+    "27 Langdon St, Montpelier, VT 05602",
+    "40 Main St, Montpelier, VT 05602",
+    "54 Elm St, Montpelier, VT 05602",
+]}
 
 NRHP_NOTE = "Part of Montpelier Historic District (NRHP 1978, amended 1989/2017). Individual resource # not confirmed — requires NPS database lookup."
 
@@ -288,7 +337,7 @@ BUILDINGS = {
         "complete address":          "100 Main St, Montpelier, VT 05602",
         "building_name_current":     "Three Penny Taproom (ground floor bar/restaurant)",
         "building_name_listing":     "un — within Montpelier Historic District",
-        "flood_height_building":     "~3.5 ft above first floor (LLM estimate, high confidence)",
+        "flood_height_building":     _flood_height_note("100 Main St, Montpelier, VT 05602"),
         # latitude/longitude/number_stories/front_elevation_orientation/buidling_height_m/
         # building_area_m2/wall_length_front+side/wall_fenesteration_front_per/
         # parapet_height_m/soffit_present_u/wall_fenestration_per_n,s,e,w are all injected
@@ -324,7 +373,7 @@ BUILDINGS = {
         "building_position_on_street": "set_back_from_street",
         "building_name_current":     "112 State St — commercial/office with arcade ground floor",
         "building_name_listing":     "un — within Montpelier Historic District",
-        "flood_height_building":     "~4.0 ft above first floor (LLM estimate, medium confidence)",
+        "flood_height_building":     _flood_height_note("112 State St, Montpelier, VT 05602"),
         "archetype":                 "14", # F14: Office building (best match for bank/commercial office use; no multi-story masonry commercial archetype in Nofal 2020)
         "occupany_u":                "business",
         "year_built_u":              "un — requires further research; commercial block likely late 19th–early 20th c.",
@@ -351,7 +400,7 @@ BUILDINGS = {
         "building_urban_setting":    "row_end",
         "building_name_current":     "27 Langdon St — commercial (Langdon Street shopping area)",
         "building_name_listing":     "un — within Montpelier Historic District",
-        "flood_height_building":     "~3.5 ft above first floor (LLM estimate, medium confidence)",
+        "flood_height_building":     _flood_height_note("27 Langdon St, Montpelier, VT 05602"),
         "archetype":                 "7",  # F7: Small multi-unit commercial building
         "occupany_u":                "mercantile",
         "year_built_u":              "un — Langdon St commercial development likely late 19th c.",
@@ -377,7 +426,7 @@ BUILDINGS = {
         "complete address":          "40 Main St, Montpelier, VT 05602",
         "building_name_current":     "40 Main St — Aubuchon Hardware / Capitol Copy / Sherpa Dinner House",
         "building_name_listing":     "un — within Montpelier Historic District",
-        "flood_height_building":     "~2.5 ft above first floor (LLM estimate, high confidence)",
+        "flood_height_building":     _flood_height_note("40 Main St, Montpelier, VT 05602"),
         "archetype":                 "7",  # F7: Small multi-unit commercial building (hardware + restaurant + copy shop = multi-unit retail, F7 is closest)
         "occupany_u":                "mercantile",
         "year_built_u":              "un — commercial block likely late 19th–early 20th c.",
@@ -396,16 +445,16 @@ BUILDINGS = {
         "complete address":          "54 Elm St, Montpelier, VT 05602",
         # Critic MEDIUM: corner/end-of-row structure with exposed side wall (painted metal panels).
         "building_urban_setting":    "row_end",
-        "building_name_current":     "54 Elm St — laundromat (ground floor, closed/vacant post-flood); brick commercial building",
+        "building_name_current":     "54 Elm St — Capitol City Laundromat / Laundry on Elm (ground floor); brick commercial building; confirmed flooded and rebuilt",
         "building_name_listing":     "un — within Montpelier Historic District",
-        "flood_height_building":     "~3.0 ft above first floor (LLM estimate, low confidence — indirect visual evidence only)",
+        "flood_height_building":     _flood_height_note("54 Elm St, Montpelier, VT 05602"),
         "archetype":                 "7",  # F7: Small multi-unit commercial building (laundromat ground floor + likely residential upper floors)
         "occupany_u":                "mercantile",
         "year_built_u":              "un — brick construction likely late 19th–early 20th c.",
         "wall_fenesteration_front_lowerlevel_per": "40",  # corrected from "un": the Street View frame was ambiguous, but ref_photos/after Oct 2023 photo clearly shows the storefront open ("EXPRESS LAUNDROMAT" / "WASH DRY FOLD" signage) with two display windows + two glazed entry doors - not boarded/vacant as the existing building_name_current field assumes
         "soffit_type_u":             "un",
         "buidling_use_before_flood": "mercantile",
-        "buidling_use_after_flood":  "not in use",
+        "buidling_use_after_flood":  "mercantile (reopened after rebuild; date unknown — Oct 2023 photo shows active remediation)",
         "building_use_during_flood": "mercantile",
         "restoration_completed_building_in_use_1_yrs_after_event": "un",
         "owner_business":            "un",
@@ -574,7 +623,7 @@ SECTIONS = [
 NOTES = {
     "NRHP_ref_number":              NRHP_NOTE,
     "national_register_listing_year": "1978 is the Montpelier Historic District listing year. " + NRHP_NOTE,
-    "flood_height_building":        "Primary source: USGS High Water Mark survey (July 2023). LLM estimate from photo analysis. Point-cloud not available.",
+    "flood_height_building":        "USGS High Water Mark survey (July 2023) via IDW interpolation from 3 nearest Good+/Fair HWMs in montpelierContext/USGS Highwater Data/table_JulyHWMs.csv. Computed by compute_flood_depth_hwm.py. WSE and FFE both in NAVD88 ft.",
     "distance_from_river_edge":     "Computed from USGS NHD centerline minus estimated 5m half-width of N. Branch Winooski. Source: hydro.nationalmap.gov NHD Large-Scale Flowlines, UTM 19N (EPSG:32619). NHD does not provide a polygon for this reach.",
     "distance_from_river_centerline":"Computed from USGS NHD Large-Scale Flowlines (N. Branch Winooski River + Winooski River merged centerline). UTM 19N (EPSG:32619). Source: hydro.nationalmap.gov/arcgis/rest/services/nhd/MapServer/6.",
     "FEMA_floodzone":               "Downtown Montpelier along N. Branch Winooski is Zone AE. Verify exact parcel at FEMA Map Service Center.",

@@ -53,7 +53,7 @@ tr:last-child td { border-bottom: none; }
 <body>
 <p class="meta"><a href="../results.html">← Back to all assessments</a></p>
 <h1>54 Elm St, Montpelier, VT 05602</h1>
-<p class="meta">54 Elm St — laundromat (ground floor, closed/vacant post-flood); brick commercial building &nbsp;·&nbsp; Montpelier VT July 2023 flood &nbsp;·&nbsp; llmDamage v3 &nbsp;·&nbsp; Nearest USGS HWM: MM-741 (Elm St Cemetery), elev 526.41 ft, 2.3 ft above grade</p>
+<p class="meta">54 Elm St — Capitol City Laundromat / Laundry on Elm (ground floor); brick commercial building; confirmed flooded and rebuilt &nbsp;·&nbsp; Montpelier VT July 2023 flood &nbsp;·&nbsp; llmDamage v3 &nbsp;·&nbsp; USGS HWM IDW (3 nearest Good+/Fair): WSE 526.23 ft NAVD88 — 0.84 ft above grade, -0.94 ft above FFE. Nearest: VT-023-MM-737 at 526.3 ft (74 m, Good: +/- 0.10 ft)</p>
 <p class="legend">Key (from the spreadsheet's AbbreviationsKey sheet): <b>un</b> = unknown, but might exist &nbsp;·&nbsp;
 an <b>_unc</b> suffix is a certainty rating: <b>1</b> = 0–25%, <b>2</b> = 35–50%, <b>3</b> = &gt;75%</p>
 
@@ -90,7 +90,7 @@ an <b>_unc</b> suffix is a certainty rating: <b>1</b> = 0–25%, <b>2</b> = 35�
             </tr>
             <tr>
               <td class="attr">building_name_current</td>
-              <td class="value">54 Elm St — laundromat (ground floor, closed/vacant post-flood); brick commercial building</td>
+              <td class="value">54 Elm St — Capitol City Laundromat / Laundry on Elm (ground floor); brick commercial building; confirmed flooded and rebuilt</td>
               <td class="defn">current building name/alternative name</td>
               <td class="notes-col"></td>
             </tr>
@@ -165,9 +165,9 @@ an <b>_unc</b> suffix is a certainty rating: <b>1</b> = 0–25%, <b>2</b> = 35�
             </tr>
             <tr>
               <td class="attr">flood_height_building</td>
-              <td class="value">~3.0 ft above first floor (LLM estimate, low confidence — indirect visual evidence only)</td>
+              <td class="value">Confirmed flooded via lower/rear access (~0.8 ft above grade at building perimeter); front entrance not overtopped per HWM IDW (WSE 526.23 ft NAVD88 < front FFE 527.16 ft NAVD88; Δ = -0.94 ft; nearest HWM VT-023-MM-737). Evidence: business website states rebuilding after flooding.</td>
               <td class="defn">based on point cloud</td>
-              <td class="notes-col">Primary source: USGS High Water Mark survey (July 2023). LLM estimate from photo analysis. Point-cloud not available.</td>
+              <td class="notes-col">USGS High Water Mark survey (July 2023) via IDW interpolation from 3 nearest Good+/Fair HWMs in montpelierContext/USGS Highwater Data/table_JulyHWMs.csv. Computed by compute_flood_depth_hwm.py. WSE and FFE both in NAVD88 ft.</td>
             </tr>
             <tr>
               <td class="attr">distance_from_river_edge</td>
@@ -1233,7 +1233,7 @@ an <b>_unc</b> suffix is a certainty rating: <b>1</b> = 0–25%, <b>2</b> = 35�
             </tr>
             <tr class="flag-medium">
               <td class="attr">buidling_use_after_flood</td>
-              <td class="value">not in use</td>
+              <td class="value">mercantile (reopened after rebuild; date unknown — Oct 2023 photo shows active remediation)</td>
               <td class="defn">building use after the flood<br><span style='color:#aaa'>Options: assembly, buisness, educational, factory, high-hazard, institutional, mercantile, residential, storage, utilities, religious, military, museum, not in use, unknown, demolished</span></td>
               <td class="notes-col"><span class="critic-note sev-medium">⚠ CRITIC (medium): Recorded as 'not in use,' but the after photo of the front facade (post-flood Street View) shows the Capitol City Laundromat signage still present and the storefront appearing operational with 'WASH, DRY, FOLD' advertising visible — the ground floor may have resumed or continued some use.</span></td>
             </tr>

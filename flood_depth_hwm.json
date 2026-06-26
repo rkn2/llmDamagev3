@@ -1,0 +1,144 @@
+{
+  "100 Main St, Montpelier, VT 05602": {
+    "wse_ft": 526.303,
+    "ground_elev_ft": 522.713,
+    "ffe_ft": 523.894,
+    "above_grade_ft": 3.589,
+    "above_ffe_ft": 2.408,
+    "flooded": true,
+    "hwm_sources": [
+      {
+        "label": "VT-023-MM-738",
+        "elev_ft": 526.46,
+        "dist_m": 53.8,
+        "quality": "Good: +/- 0.10 ft"
+      },
+      {
+        "label": "VT-023-MP-715",
+        "elev_ft": 526.18,
+        "dist_m": 80.5,
+        "quality": "Fair: +/- 0.20 ft"
+      },
+      {
+        "label": "VT-023-MP-716",
+        "elev_ft": 526.18,
+        "dist_m": 87.7,
+        "quality": "Good: +/- 0.10 ft"
+      }
+    ]
+  },
+  "112 State St, Montpelier, VT 05602": {
+    "wse_ft": 525.897,
+    "ground_elev_ft": 523.701,
+    "ffe_ft": 523.701,
+    "above_grade_ft": 2.196,
+    "above_ffe_ft": 2.196,
+    "flooded": true,
+    "hwm_sources": [
+      {
+        "label": "VT-023-MP-721",
+        "elev_ft": 525.77,
+        "dist_m": 66.6,
+        "quality": "Good: +/- 0.10 ft"
+      },
+      {
+        "label": "VT-023-MP-726",
+        "elev_ft": 525.86,
+        "dist_m": 144.2,
+        "quality": "Good: +/- 0.10 ft"
+      },
+      {
+        "label": "VT-023-MP-720",
+        "elev_ft": 526.25,
+        "dist_m": 162.6,
+        "quality": "Fair: +/- 0.20 ft"
+      }
+    ]
+  },
+  "27 Langdon St, Montpelier, VT 05602": {
+    "wse_ft": 526.316,
+    "ground_elev_ft": 523.156,
+    "ffe_ft": 524.928,
+    "above_grade_ft": 3.159,
+    "above_ffe_ft": 1.388,
+    "flooded": true,
+    "hwm_sources": [
+      {
+        "label": "VT-023-MM-738",
+        "elev_ft": 526.46,
+        "dist_m": 35.1,
+        "quality": "Good: +/- 0.10 ft"
+      },
+      {
+        "label": "VT-023-MP-715",
+        "elev_ft": 526.18,
+        "dist_m": 62.4,
+        "quality": "Fair: +/- 0.20 ft"
+      },
+      {
+        "label": "VT-023-MP-716",
+        "elev_ft": 526.18,
+        "dist_m": 69.7,
+        "quality": "Good: +/- 0.10 ft"
+      }
+    ]
+  },
+  "40 Main St, Montpelier, VT 05602": {
+    "wse_ft": 526.274,
+    "ground_elev_ft": 522.687,
+    "ffe_ft": 522.687,
+    "above_grade_ft": 3.587,
+    "above_ffe_ft": 3.587,
+    "flooded": true,
+    "hwm_sources": [
+      {
+        "label": "VT-023-MP-719",
+        "elev_ft": 526.16,
+        "dist_m": 74.8,
+        "quality": "Good: +/- 0.10 ft"
+      },
+      {
+        "label": "VT-023-MP-714",
+        "elev_ft": 526.26,
+        "dist_m": 94.6,
+        "quality": "Good: +/- 0.10 ft"
+      },
+      {
+        "label": "VT-023-MM-738",
+        "elev_ft": 526.46,
+        "dist_m": 110.2,
+        "quality": "Good: +/- 0.10 ft"
+      }
+    ]
+  },
+  "54 Elm St, Montpelier, VT 05602": {
+    "wse_ft": 526.227,
+    "ground_elev_ft": 525.39,
+    "ffe_ft": 527.162,
+    "above_grade_ft": 0.837,
+    "above_ffe_ft": -0.935,
+    "flooded": true,
+    "confirmed_flooded": true,
+    "flood_evidence": "Business website (laundryonelm.com): 'Even when flooding tested our town, we rebuilt quickly.' Elm Street confirmed coated in floodwater (VTDigger, July 10 2023). HWM IDW shows water 0.84 ft above grade at building perimeter; front entrance (3-step raised FFE) was not overtopped, but building likely entered via lower rear or grade-level access.",
+    "hwm_sources": [
+      {
+        "label": "VT-023-MM-737",
+        "elev_ft": 526.3,
+        "dist_m": 74.5,
+        "quality": "Good: +/- 0.10 ft"
+      },
+      {
+        "label": "VT-023-MP-716",
+        "elev_ft": 526.18,
+        "dist_m": 96.7,
+        "quality": "Good: +/- 0.10 ft"
+      },
+      {
+        "label": "VT-023-MP-715",
+        "elev_ft": 526.18,
+        "dist_m": 97.6,
+        "quality": "Fair: +/- 0.20 ft"
+      }
+    ]
+  }
+}

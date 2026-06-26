@@ -15,7 +15,46 @@ vision pass, LLM damage assessment, detail-page generation — closing staleness
   ref_photos/before front photo (`analyze_entrance_step.py`). All 5 buildings populated;
   confidence=medium for all (partial occlusion of entrances).
 
+## Key Decisions (continued)
+- `flood_height_building` now derived from USGS HWM survey data (IDW from 3 nearest Good+/Fair
+  HWMs in montpelierContext/USGS Highwater Data/table_JulyHWMs.csv) via `compute_flood_depth_hwm.py`.
+  LLM estimates replaced for all 5 buildings. Flood depths above FFE: 100 Main=2.4ft, 112 State=2.2ft,
+  27 Langdon=1.4ft, 40 Main=3.6ft. 54 Elm: front entrance not overtopped (WSE 526.23 ft < front FFE
+  527.16 ft; Δ=−0.93 ft) BUT confirmed flooded via lower/rear access — business website
+  (laundryonelm.com) states rebuilding after flooding; water was 0.84 ft above grade at perimeter.
+  flood_depth_hwm.json carries confirmed_flooded=true + evidence string; _flood_height_note()
+  in generate_detail_pages.py handles this case explicitly. Building is "Capitol City Laundromat /
+  Laundry on Elm," confirmed reopened post-flood.
+
 ## Next Steps
-- Ask Becca: should 54 Elm St's "closed/vacant" status update? Oct 2023 photo shows reopened.
-- critic_findings.json: flood depth estimates, occupancy classification (medium severity) still open.
-- 27 Langdon and 40 Main back fenestration remain "un" — no usable Street View coverage behind either building (40 Main: "no imagery", 27 Langdon: camera landed on wrong street).
+- critic_findings.json: 54 Elm occupancy finding is now stale (use_after_flood corrected to mercantile).
+- 27 Langdon and 40 Main back fenestration remain "un" — no usable Street View coverage.
+
+## Pipeline Limitations / Known Issues (for v4 or paper)
+
+### `flooded` boolean uses wrong predicate
+`above_ffe > 0` (front-entrance FFE) is insufficient. Water enters through the lowest
+accessible opening — rear doors, utility access, drain backflow — not just the front
+entrance. Correct logic should use three states:
+  - `above_ffe`: water reached first floor (above front FFE)
+  - `above_grade_only`: street inundated but front entrance not overtopped (uncertain interior)
+  - `dry`: above_grade <= 0
+54 Elm was miscalled `dry` when it was `above_grade_only` with confirmed interior flooding.
+
+### FFE from front entrance only
+`first_floor_elevation_m` = ground_elev + step_height captures front entrance only.
+For sloping terrain or buildings with rear access at lower elevation, this overstates
+the effective flood threshold. A complete model needs the minimum FFE across all ingress
+points (front, rear, side).
+
+### IDW carries no uncertainty estimate
+WSE is reported as a point estimate with no confidence interval. For 54 Elm, the
+"not flooded" margin was only 0.93 ft — well within the noise of Fair-quality HWMs
+(±0.20 ft) at 75–97 m distance. Results within ~1.0 ft of FFE should be flagged as
+"uncertain" rather than resolved binary.
+
+### Surprising results need automated sanity check
+If `above_grade > 0` but `flooded = false`, flag for manual review. A block with
+0.84 ft of street-level water calling a building "dry" should never pass silently.
+External verification (business websites, news archives, social media) can resolve
+these cases quickly.

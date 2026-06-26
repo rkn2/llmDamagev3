@@ -53,7 +53,7 @@ tr:last-child td { border-bottom: none; }
 <body>
 <p class="meta"><a href="../results.html">← Back to all assessments</a></p>
 <h1>40 Main St, Montpelier, VT 05602</h1>
-<p class="meta">40 Main St — Aubuchon Hardware / Capitol Copy / Sherpa Dinner House &nbsp;·&nbsp; Montpelier VT July 2023 flood &nbsp;·&nbsp; llmDamage v3 &nbsp;·&nbsp; Nearest USGS HWM: MM-739 (Main St rotary), elev 526.33 ft, 1.7 ft above grade</p>
+<p class="meta">40 Main St — Aubuchon Hardware / Capitol Copy / Sherpa Dinner House &nbsp;·&nbsp; Montpelier VT July 2023 flood &nbsp;·&nbsp; llmDamage v3 &nbsp;·&nbsp; USGS HWM IDW (3 nearest Good+/Fair): WSE 526.27 ft NAVD88 — 3.59 ft above grade, 3.59 ft above FFE. Nearest: VT-023-MP-719 at 526.16 ft (75 m, Good: +/- 0.10 ft)</p>
 <p class="legend">Key (from the spreadsheet's AbbreviationsKey sheet): <b>un</b> = unknown, but might exist &nbsp;·&nbsp;
 an <b>_unc</b> suffix is a certainty rating: <b>1</b> = 0–25%, <b>2</b> = 35–50%, <b>3</b> = &gt;75%</p>
 
@@ -165,9 +165,9 @@ an <b>_unc</b> suffix is a certainty rating: <b>1</b> = 0–25%, <b>2</b> = 35�
             </tr>
             <tr>
               <td class="attr">flood_height_building</td>
-              <td class="value">~2.5 ft above first floor (LLM estimate, high confidence)</td>
+              <td class="value">~3.6 ft above first floor (USGS HWM IDW: WSE 526.27 ft NAVD88, FFE 522.69 ft NAVD88; nearest HWM VT-023-MP-719 at 526.16 ft, 75 m away)</td>
               <td class="defn">based on point cloud</td>
-              <td class="notes-col">Primary source: USGS High Water Mark survey (July 2023). LLM estimate from photo analysis. Point-cloud not available.</td>
+              <td class="notes-col">USGS High Water Mark survey (July 2023) via IDW interpolation from 3 nearest Good+/Fair HWMs in montpelierContext/USGS Highwater Data/table_JulyHWMs.csv. Computed by compute_flood_depth_hwm.py. WSE and FFE both in NAVD88 ft.</td>
             </tr>
             <tr>
               <td class="attr">distance_from_river_edge</td>
