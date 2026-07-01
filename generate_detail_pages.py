@@ -922,6 +922,8 @@ def build_page(address, data):
             else:
                 defn_display = defn
             finding = CRITIC_FINDINGS.get(address, {}).get(k)
+            if finding and finding.get("dismissed"):
+                finding = None
             classes = []
             if k.startswith("_llm"):
                 classes.append("llm-row")
@@ -957,6 +959,8 @@ def build_page(address, data):
     if extra:
         def _extra_row(k, v):
             finding = CRITIC_FINDINGS.get(address, {}).get(k)
+            if finding and finding.get("dismissed"):
+                finding = None
             cls_attr = f' class="flag-{finding["severity"]}"' if finding else ""
             note_html = NOTES.get(k, "")
             if finding:

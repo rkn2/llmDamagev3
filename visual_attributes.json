@@ -83,7 +83,9 @@
     "window_sill_height_m": 0.0,
     "window_sill_height_upper_m": 7.88,
     "wall_length_front": 36.9,
-    "wall_length_side": 51.6
+    "wall_length_side": 51.6,
+    "wall_fenesteration_back_per": 18,
+    "wall_fenesteration_back_lowerlevel_per": 6
   },
   "54 Elm St, Montpelier, VT 05602": {
     "number_stories": 3,

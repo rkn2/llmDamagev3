@@ -2,36 +2,32 @@
   "100 Main St, Montpelier, VT 05602": {
     "wall_fenesteration_back_per": 18,
     "wall_fenesteration_back_lowerlevel_per": 10,
-    "notes": "The rear facade of this three-story red clapboard building is visible with upper floors showing regularly spaced double-hung windows (~6-8 windows per floor) and the ground floor having fewer and smaller openings partially obscured by a canopy, HVAC equipment, and utility infrastructure.",
+    "notes": "The rear facade of this 3-story red clapboard building is visible; upper two floors show regularly spaced double-hung windows (~6-7 windows per floor), while the ground floor has fewer and smaller openings partially obscured by a canopy overhang, utility equipment, and parked vehicles.",
     "confidence": "medium",
-    "source": "ref_photos/before/Back (26).png"
+    "source": "ref_photos/before/100 Main St, Montpelier, VT 05602/Back (26).png"
   },
   "112 State St, Montpelier, VT 05602": {
     "wall_fenesteration_back_per": 22,
     "wall_fenesteration_back_lowerlevel_per": 18,
-    "notes": "The rear brick facade is clearly visible showing approximately 4-5 stories with regularly spaced double-hung windows on upper floors and arched openings at ground level, though some lower portions are partially obscured by parked cars and street-level landscaping.",
+    "notes": "The rear brick facade is largely visible showing four floors with regularly spaced double-hung windows and arched ground-floor openings, though partial obstruction from trees and parked cars limits precise ground-floor assessment.",
     "confidence": "medium",
-    "source": "ref_photos/before/Back (17).png"
+    "source": "ref_photos/before/112 State St, Montpelier, VT 05602/Back (17).png"
   },
   "27 Langdon St, Montpelier, VT 05602": {
-    "wall_fenesteration_back_per": null,
-    "wall_fenesteration_back_lowerlevel_per": null,
-    "notes": "The image shows a Google Street View of 2 State St, Montpelier, VT with downtown commercial buildings visible, but 27 Langdon St rear facade cannot be confidently isolated or identified from this vantage point with sufficient certainty to estimate fenestration percentages.",
-    "confidence": "low",
-    "source": "Street View (back capture, sv_back_27_Langdon_St.png)"
+    "source": "missing \u2014 no back photo or Street View screenshot"
   },
   "40 Main St, Montpelier, VT 05602": {
-    "wall_fenesteration_back_per": null,
-    "wall_fenesteration_back_lowerlevel_per": null,
-    "notes": "The image shows a bike path, parking lot, and surrounding streetscape near State Street in Montpelier, but the rear facade of 40 Main St is not clearly identifiable or sufficiently visible to estimate fenestration.",
-    "confidence": "low",
-    "source": "Street View (back capture, sv_back_40_Main_St.png)"
+    "wall_fenesteration_back_per": 18,
+    "wall_fenesteration_back_lowerlevel_per": 6,
+    "notes": "The rear brick facade shows two upper floors with approximately 8 regularly spaced double-hung windows each, but the ground floor is almost entirely obscured by floodwater and a lower attached structure/lean-to roof, leaving only a small blue door visible at ground level.",
+    "confidence": "medium",
+    "source": "ref_photos/after/40 Main St, Montpelier, VT 05602/2023_7_11_back (5).png"
   },
   "54 Elm St, Montpelier, VT 05602": {
     "wall_fenesteration_back_per": 18,
     "wall_fenesteration_back_lowerlevel_per": 8,
-    "notes": "The rear brick wall is partially visible across three stories with several window openings discernible, but deep balconies/porches on each floor obscure portions of the wall surface, and graffiti-covered propane tanks block the lower ground-floor wall; upper floors show more windows than the ground level.",
+    "notes": "The rear brick facade shows approximately 3 stories with several window openings visible on upper floors, but the ground floor is heavily obscured by propane tanks, graffiti-covered surfaces, and the stop sign structure, making lower-level fenestration difficult to assess; balconies and porch structures were excluded from the estimate.",
     "confidence": "low",
-    "source": "ref_photos/before/Back (23).png"
+    "source": "ref_photos/before/54 Elm St, Montpelier, VT 05602/Back (23).png"
   }
 }

@@ -261,7 +261,9 @@
     "buidling_use_after_flood": {
       "severity": "medium",
       "issue": "Recorded as 'not in use,' but the after photo of the front facade (post-flood Street View) shows the Capitol City Laundromat signage still present and the storefront appearing operational with 'WASH, DRY, FOLD' advertising visible \u2014 the ground floor may have resumed or continued some use.",
-      "source": "llm"
+      "source": "llm",
+      "dismissed": true,
+      "dismissed_reason": "Corrected 2026-06-26: buidling_use_after_flood updated to confirmed-flooded + reopened; laundryonelm.com confirms rebuild."
     },
     "prop_residential facility": {
       "severity": "medium",

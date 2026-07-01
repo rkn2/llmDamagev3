@@ -21,10 +21,11 @@ from pathlib import Path
 
 from vision_client import get_client
 
-REPO      = Path(__file__).parent
-PHOTOS    = REPO / "ref_photos" / "before"
-VA_PATH   = REPO / "visual_attributes.json"
-OUT_PATH  = REPO / "facade_cv" / "facade_cv_back_output.json"
+REPO          = Path(__file__).parent
+PHOTOS_BEFORE = REPO / "ref_photos" / "before"
+PHOTOS_AFTER  = REPO / "ref_photos" / "after"
+VA_PATH       = REPO / "visual_attributes.json"
+OUT_PATH      = REPO / "facade_cv" / "facade_cv_back_output.json"
 
 ADDRESSES = [
     "100 Main St, Montpelier, VT 05602",
@@ -76,16 +77,19 @@ both percentage fields and confidence="low"."""
 
 
 def find_back_photo(address: str) -> Path | None:
-    addr_dir = PHOTOS / address
-    if not addr_dir.is_dir():
-        return None
-    candidates = sorted(
-        p for p in addr_dir.iterdir()
-        if p.stem.lower().startswith("back")
-        and " - copy" not in p.stem.lower()
-        and p.suffix.lower() in (".png", ".jpg", ".jpeg", ".webp")
-    )
-    return candidates[0] if candidates else None
+    for photos_dir in [PHOTOS_BEFORE, PHOTOS_AFTER]:
+        addr_dir = photos_dir / address
+        if not addr_dir.is_dir():
+            continue
+        candidates = sorted(
+            p for p in addr_dir.iterdir()
+            if "back" in p.stem.lower()
+            and " - copy" not in p.stem.lower()
+            and p.suffix.lower() in (".png", ".jpg", ".jpeg", ".webp")
+        )
+        if candidates:
+            return candidates[0]
+    return None
 
 
 def vision_from_file(client, address: str, photo: Path) -> dict:
@@ -159,7 +163,7 @@ def main(do_capture: bool = False) -> None:
         if photo:
             print(f"\n{label}  → {photo.name}")
             result = vision_from_file(client, addr, photo)
-            result["source"] = f"ref_photos/before/{photo.name}"
+            result["source"] = str(photo.relative_to(REPO))
             results[addr] = result
             print(f"  back%={result.get('wall_fenesteration_back_per')}  "
                   f"lower%={result.get('wall_fenesteration_back_lowerlevel_per')}  "
