@@ -35,6 +35,10 @@ EXCLUDE_QUALITY = {"Poor", "Unknown/Historical"}
 # IDW: use 3 nearest qualifying HWMs
 N_NEAREST = 3
 
+# Results within this margin of FFE are within HWM survey noise (Fair quality is
+# +/- 0.20 ft, but siting/IDW error compounds it) — flag rather than resolve binary.
+UNCERTAIN_MARGIN_FT = 1.0
+
 M_TO_FT = 3.28084
 DEG_LAT_M = 111_000.0
 DEG_LON_M = 111_000.0 * math.cos(math.radians(44.26))
@@ -107,14 +111,26 @@ def main(force: bool = False) -> None:
             print(f"flood_depth_hwm.json already complete — pass --force to recompute")
             return
 
+    # Manual research overrides (e.g. 54 Elm's confirmed-flooded-via-rear-access finding)
+    # live only in the output file — carry them forward across recomputes instead of
+    # silently dropping them.
+    manual_overrides: dict[str, dict] = {}
+    if OUT.exists():
+        existing = json.loads(OUT.read_text())
+        for addr, rec in existing.items():
+            keep = {k: v for k, v in rec.items() if k in ("confirmed_flooded", "flood_evidence")}
+            if keep:
+                manual_overrides[addr] = keep
+
     hwms = load_hwms()
     print(f"Loaded {len(hwms)} qualifying HWMs in downtown bounding box\n")
 
     attrs = json.loads(ATTRS.read_text())
     results: dict[str, dict] = {}
+    review_flags: list[str] = []
 
-    print(f"{'Building':<20} {'WSE(ft)':>8} {'▲grade':>8} {'▲FFE':>8} {'LLM▲FFE':>9} {'flooded':>8}")
-    print("─" * 70)
+    print(f"{'Building':<20} {'WSE(ft)':>8} {'▲grade':>8} {'▲FFE':>8} {'LLM▲FFE':>9} {'status':>17}")
+    print("─" * 80)
 
     for addr in ADDRESSES:
         rec = attrs[addr]
@@ -126,7 +142,28 @@ def main(force: bool = False) -> None:
         wse, sources = idw_wse(blat, blon, hwms)
         above_grade = wse - gnd_ft
         above_ffe   = wse - ffe_ft
-        flooded     = above_ffe > 0.0
+
+        # Three-state model: water enters through the lowest accessible opening, not
+        # just the front entrance, so `above_ffe <= 0` alone does NOT mean "dry" — it
+        # only means the front entrance wasn't overtopped. above_grade_only means the
+        # street/perimeter was inundated with the interior status unresolved by HWM
+        # data alone (see 54 Elm: confirmed flooded via rear access despite front FFE
+        # not being overtopped).
+        if above_ffe > 0.0:
+            status = "above_ffe"
+        elif above_grade > 0.0:
+            status = "above_grade_only"
+        else:
+            status = "dry"
+        flooded   = status != "dry"
+        uncertain = abs(above_ffe) < UNCERTAIN_MARGIN_FT
+
+        if status == "above_grade_only":
+            review_flags.append(
+                f"{addr.split(',')[0]}: above_grade={above_grade:.2f}ft but front FFE not "
+                f"overtopped (above_ffe={above_ffe:.2f}ft) — interior flooding unresolved by "
+                f"HWM alone, verify via external sources (news, business records, site visit)"
+            )
 
         results[addr] = {
             "wse_ft":          round(wse, 3),
@@ -134,16 +171,25 @@ def main(force: bool = False) -> None:
             "ffe_ft":          round(ffe_ft, 3),
             "above_grade_ft":  round(above_grade, 3),
             "above_ffe_ft":    round(above_ffe, 3),
+            "status":          status,
             "flooded":         flooded,
+            "uncertain":       uncertain,
             "hwm_sources":     sources,
+            **manual_overrides.get(addr, {}),
         }
 
         name = addr.split(",")[0]
         llm  = LLM_ABOVE_FFE[addr]
-        flag = "YES" if flooded else "no"
-        print(f"{name:<20} {wse:>8.2f} {above_grade:>8.2f} {above_ffe:>8.2f} {llm:>9.1f} {flag:>8}")
+        tag  = status + (" (uncertain)" if uncertain else "")
+        print(f"{name:<20} {wse:>8.2f} {above_grade:>8.2f} {above_ffe:>8.2f} {llm:>9.1f} {tag:>17}")
 
     print()
+    if review_flags:
+        print("NEEDS MANUAL REVIEW:")
+        for msg in review_flags:
+            print(f"  - {msg}")
+        print()
+
     OUT.write_text(json.dumps(results, indent=2))
     print(f"Wrote → {OUT.name}")
 

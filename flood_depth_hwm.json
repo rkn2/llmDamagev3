@@ -5,7 +5,9 @@
     "ffe_ft": 523.894,
     "above_grade_ft": 3.589,
     "above_ffe_ft": 2.408,
+    "status": "above_ffe",
     "flooded": true,
+    "uncertain": false,
     "hwm_sources": [
       {
         "label": "VT-023-MM-738",
@@ -33,7 +35,9 @@
     "ffe_ft": 523.701,
     "above_grade_ft": 2.196,
     "above_ffe_ft": 2.196,
+    "status": "above_ffe",
     "flooded": true,
+    "uncertain": false,
     "hwm_sources": [
       {
         "label": "VT-023-MP-721",
@@ -61,7 +65,9 @@
     "ffe_ft": 524.928,
     "above_grade_ft": 3.159,
     "above_ffe_ft": 1.388,
+    "status": "above_ffe",
     "flooded": true,
+    "uncertain": false,
     "hwm_sources": [
       {
         "label": "VT-023-MM-738",
@@ -89,7 +95,9 @@
     "ffe_ft": 522.687,
     "above_grade_ft": 3.587,
     "above_ffe_ft": 3.587,
+    "status": "above_ffe",
     "flooded": true,
+    "uncertain": false,
     "hwm_sources": [
       {
         "label": "VT-023-MP-719",
@@ -117,9 +125,9 @@
     "ffe_ft": 527.162,
     "above_grade_ft": 0.837,
     "above_ffe_ft": -0.935,
+    "status": "above_grade_only",
     "flooded": true,
-    "confirmed_flooded": true,
-    "flood_evidence": "Business website (laundryonelm.com): 'Even when flooding tested our town, we rebuilt quickly.' Elm Street confirmed coated in floodwater (VTDigger, July 10 2023). HWM IDW shows water 0.84 ft above grade at building perimeter; front entrance (3-step raised FFE) was not overtopped, but building likely entered via lower rear or grade-level access.",
+    "uncertain": true,
     "hwm_sources": [
       {
         "label": "VT-023-MM-737",
@@ -139,6 +147,8 @@
         "dist_m": 97.6,
         "quality": "Fair: +/- 0.20 ft"
       }
-    ]
+    ],
+    "confirmed_flooded": true,
+    "flood_evidence": "Business website (laundryonelm.com): 'Even when flooding tested our town, we rebuilt quickly.' Elm Street confirmed coated in floodwater (VTDigger, July 10 2023). HWM IDW shows water 0.84 ft above grade at building perimeter; front entrance (3-step raised FFE) was not overtopped, but building likely entered via lower rear or grade-level access."
   }
 }

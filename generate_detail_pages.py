@@ -48,25 +48,32 @@ def _flood_height_note(addr: str) -> str:
     wse       = rec["wse_ft"]
     ffe       = rec["ffe_ft"]
     src       = rec["hwm_sources"][0]
-    if above_ffe <= 0:
-        if rec.get("confirmed_flooded"):
-            above_grade = rec["above_grade_ft"]
-            return (
-                f"Confirmed flooded via lower/rear access (~{above_grade:.1f} ft above grade "
-                f"at building perimeter); front entrance not overtopped per HWM IDW "
-                f"(WSE {wse:.2f} ft NAVD88 < front FFE {ffe:.2f} ft NAVD88; "
-                f"Δ = {above_ffe:.2f} ft; nearest HWM {src['label']}). "
-                f"Evidence: business website states rebuilding after flooding."
-            )
-        return (
-            f"Below first floor — water did not reach FFE "
-            f"(WSE {wse:.2f} ft NAVD88 < FFE {ffe:.2f} ft NAVD88; "
-            f"Δ = {above_ffe:.2f} ft; source: USGS HWM IDW, nearest {src['label']})"
+    status    = rec.get("status", "above_ffe" if above_ffe > 0 else "dry")
+    uncertain_tag = " [uncertain — within HWM survey margin]" if rec.get("uncertain") else ""
+
+    if status == "above_grade_only":
+        above_grade = rec["above_grade_ft"]
+        base = (
+            f"Street/perimeter inundated (~{above_grade:.1f} ft above grade) but front "
+            f"entrance not overtopped per HWM IDW (WSE {wse:.2f} ft NAVD88 < front FFE "
+            f"{ffe:.2f} ft NAVD88; Δ = {above_ffe:.2f} ft; nearest HWM {src['label']}); "
+            f"interior flooding unresolved by HWM data alone{uncertain_tag}."
         )
+        if rec.get("confirmed_flooded"):
+            base += f" {rec['flood_evidence']}"
+        return base
+
+    if status == "dry":
+        return (
+            f"Dry — water did not reach grade or FFE "
+            f"(WSE {wse:.2f} ft NAVD88 < FFE {ffe:.2f} ft NAVD88; "
+            f"Δ = {above_ffe:.2f} ft; source: USGS HWM IDW, nearest {src['label']}){uncertain_tag}"
+        )
+
     return (
         f"~{above_ffe:.1f} ft above first floor "
         f"(USGS HWM IDW: WSE {wse:.2f} ft NAVD88, FFE {ffe:.2f} ft NAVD88; "
-        f"nearest HWM {src['label']} at {src['elev_ft']} ft, {src['dist_m']:.0f} m away)"
+        f"nearest HWM {src['label']} at {src['elev_ft']} ft, {src['dist_m']:.0f} m away){uncertain_tag}"
     )
 
 # River distances computed from USGS NHD flowlines via
