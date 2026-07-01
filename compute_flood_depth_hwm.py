@@ -25,6 +25,13 @@ CSV_PATH = REPO / "montpelierContext" / "USGS Highwater Data" / "table_JulyHWMs.
 ATTRS    = REPO / "building_attributes_auto.json"
 OUT      = REPO / "flood_depth_hwm.json"
 
+# compute_lowest_ffe.py's effective (min front/rear) FFE — guarded, since pages
+# should still render off the front-only FFE if it hasn't been run yet.
+_LOWEST_FFE_PATH = REPO / "lowest_ffe.json"
+_LOWEST_FFE: dict = (
+    json.loads(_LOWEST_FFE_PATH.read_text()) if _LOWEST_FFE_PATH.exists() else {}
+)
+
 # Downtown Montpelier bounding box (covers all 5 buildings + surrounding HWMs)
 LAT_MIN, LAT_MAX =  44.255,  44.270
 LON_MIN, LON_MAX = -72.585, -72.565
@@ -137,7 +144,14 @@ def main(force: bool = False) -> None:
         blat = rec["latitude"]
         blon = rec["longitude"]
         gnd_ft  = rec["ground_elevation_m"]      * M_TO_FT
-        ffe_ft  = rec["first_floor_elevation_m"] * M_TO_FT
+        lowest  = _LOWEST_FFE.get(addr)
+        if lowest:
+            ffe_m     = lowest["effective_ffe_m"]
+            ffe_source = f"effective (lowest-ingress: {lowest['lowest_ingress']}) — see compute_lowest_ffe.py"
+        else:
+            ffe_m     = rec["first_floor_elevation_m"]
+            ffe_source = "front entrance only — run compute_lowest_ffe.py for rear-ingress check"
+        ffe_ft  = ffe_m * M_TO_FT
 
         wse, sources = idw_wse(blat, blon, hwms)
         above_grade = wse - gnd_ft
@@ -171,6 +185,7 @@ def main(force: bool = False) -> None:
             "ffe_ft":          round(ffe_ft, 3),
             "above_grade_ft":  round(above_grade, 3),
             "above_ffe_ft":    round(above_ffe, 3),
+            "ffe_source":      ffe_source,
             "status":          status,
             "flooded":         flooded,
             "uncertain":       uncertain,

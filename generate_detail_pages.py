@@ -50,6 +50,8 @@ def _flood_height_note(addr: str) -> str:
     src       = rec["hwm_sources"][0]
     status    = rec.get("status", "above_ffe" if above_ffe > 0 else "dry")
     uncertain_tag = " [uncertain — within HWM survey margin]" if rec.get("uncertain") else ""
+    if "lowest-ingress: rear" in rec.get("ffe_source", ""):
+        uncertain_tag += " [FFE = rear-ingress point, lower than front entrance]"
 
     if status == "above_grade_only":
         above_grade = rec["above_grade_ft"]
@@ -124,7 +126,7 @@ def _usgs_note(addr: str) -> str:
     return (
         f"USGS HWM IDW (3 nearest Good+/Fair): WSE {rec['wse_ft']:.2f} ft NAVD88 — "
         f"{rec['above_grade_ft']:.2f} ft above grade, "
-        f"{rec['above_ffe_ft']:.2f} ft above FFE. "
+        f"{rec['above_ffe_ft']:.2f} ft above FFE ({rec.get('ffe_source', 'front entrance only')}). "
         f"Nearest: {src['label']} at {src['elev_ft']} ft ({src['dist_m']:.0f} m, {src['quality']})"
     )
 

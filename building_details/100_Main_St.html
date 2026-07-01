@@ -53,7 +53,7 @@ tr:last-child td { border-bottom: none; }
 <body>
 <p class="meta"><a href="../results.html">← Back to all assessments</a></p>
 <h1>100 Main St, Montpelier, VT 05602</h1>
-<p class="meta">Three Penny Taproom (ground floor bar/restaurant) &nbsp;·&nbsp; Montpelier VT July 2023 flood &nbsp;·&nbsp; llmDamage v3 &nbsp;·&nbsp; USGS HWM IDW (3 nearest Good+/Fair): WSE 526.30 ft NAVD88 — 3.59 ft above grade, 2.41 ft above FFE. Nearest: VT-023-MM-738 at 526.46 ft (54 m, Good: +/- 0.10 ft)</p>
+<p class="meta">Three Penny Taproom (ground floor bar/restaurant) &nbsp;·&nbsp; Montpelier VT July 2023 flood &nbsp;·&nbsp; llmDamage v3 &nbsp;·&nbsp; USGS HWM IDW (3 nearest Good+/Fair): WSE 526.30 ft NAVD88 — 3.59 ft above grade, 4.34 ft above FFE (effective (lowest-ingress: rear) — see compute_lowest_ffe.py). Nearest: VT-023-MM-738 at 526.46 ft (54 m, Good: +/- 0.10 ft)</p>
 <p class="legend">Key (from the spreadsheet's AbbreviationsKey sheet): <b>un</b> = unknown, but might exist &nbsp;·&nbsp;
 an <b>_unc</b> suffix is a certainty rating: <b>1</b> = 0–25%, <b>2</b> = 35–50%, <b>3</b> = &gt;75%</p>
 
@@ -165,7 +165,7 @@ an <b>_unc</b> suffix is a certainty rating: <b>1</b> = 0–25%, <b>2</b> = 35�
             </tr>
             <tr class="flag-medium">
               <td class="attr">flood_height_building</td>
-              <td class="value">~2.4 ft above first floor (USGS HWM IDW: WSE 526.30 ft NAVD88, FFE 523.89 ft NAVD88; nearest HWM VT-023-MM-738 at 526.46 ft, 54 m away)</td>
+              <td class="value">~4.3 ft above first floor (USGS HWM IDW: WSE 526.30 ft NAVD88, FFE 521.96 ft NAVD88; nearest HWM VT-023-MM-738 at 526.46 ft, 54 m away) [FFE = rear-ingress point, lower than front entrance]</td>
               <td class="defn">based on point cloud</td>
               <td class="notes-col"><span class="critic-note sev-medium">⚠ CRITIC (medium): The street-level after photo shows the water surface at approximately 1–2 ft above the sidewalk at the building face, not ~3.5 ft; the claim of 3.5 ft above first floor is inconsistent with the visible water line relative to the storefront doors and awning.</span>USGS High Water Mark survey (July 2023) via IDW interpolation from 3 nearest Good+/Fair HWMs in montpelierContext/USGS Highwater Data/table_JulyHWMs.csv. Computed by compute_flood_depth_hwm.py. WSE and FFE both in NAVD88 ft.</td>
             </tr>

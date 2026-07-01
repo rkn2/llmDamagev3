@@ -1,0 +1,72 @@
+{
+  "100 Main St, Montpelier, VT 05602": {
+    "front_ffe_m": 159.683,
+    "rear_ground_elevation_m": 159.094,
+    "rear_offset_point": {
+      "lat": 44.2605489,
+      "lon": -72.5754931,
+      "direction": "w",
+      "dist_m": 19.4
+    },
+    "effective_ffe_m": 159.094,
+    "lowest_ingress": "rear",
+    "delta_front_minus_rear_ft": 1.93,
+    "note": "rear ingress elevation assumes grade-level access (0 rear steps) \u2014 no systematic rear-entrance step survey exists; this is a conservative lower bound, not a measured rear FFE"
+  },
+  "112 State St, Montpelier, VT 05602": {
+    "front_ffe_m": 159.624,
+    "rear_ground_elevation_m": 159.052,
+    "rear_offset_point": {
+      "lat": 44.2606162,
+      "lon": -72.579971,
+      "direction": "s",
+      "dist_m": 21.8
+    },
+    "effective_ffe_m": 159.052,
+    "lowest_ingress": "rear",
+    "delta_front_minus_rear_ft": 1.88,
+    "note": "rear ingress elevation assumes grade-level access (0 rear steps) \u2014 no systematic rear-entrance step survey exists; this is a conservative lower bound, not a measured rear FFE"
+  },
+  "27 Langdon St, Montpelier, VT 05602": {
+    "front_ffe_m": 159.998,
+    "rear_ground_elevation_m": 159.485,
+    "rear_offset_point": {
+      "lat": 44.2603929,
+      "lon": -72.5755308,
+      "direction": "s",
+      "dist_m": 13.0
+    },
+    "effective_ffe_m": 159.485,
+    "lowest_ingress": "rear",
+    "delta_front_minus_rear_ft": 1.68,
+    "note": "rear ingress elevation assumes grade-level access (0 rear steps) \u2014 no systematic rear-entrance step survey exists; this is a conservative lower bound, not a measured rear FFE"
+  },
+  "40 Main St, Montpelier, VT 05602": {
+    "front_ffe_m": 159.315,
+    "rear_ground_elevation_m": 158.89,
+    "rear_offset_point": {
+      "lat": 44.2593998,
+      "lon": -72.5768602,
+      "direction": "w",
+      "dist_m": 28.8
+    },
+    "effective_ffe_m": 158.89,
+    "lowest_ingress": "rear",
+    "delta_front_minus_rear_ft": 1.39,
+    "note": "rear ingress elevation assumes grade-level access (0 rear steps) \u2014 no systematic rear-entrance step survey exists; this is a conservative lower bound, not a measured rear FFE"
+  },
+  "54 Elm St, Montpelier, VT 05602": {
+    "front_ffe_m": 160.679,
+    "rear_ground_elevation_m": 160.472,
+    "rear_offset_point": {
+      "lat": 44.2617221,
+      "lon": -72.5757163,
+      "direction": "n",
+      "dist_m": 10.7
+    },
+    "effective_ffe_m": 160.472,
+    "lowest_ingress": "rear",
+    "delta_front_minus_rear_ft": 0.68,
+    "note": "rear ingress elevation assumes grade-level access (0 rear steps) \u2014 no systematic rear-entrance step survey exists; this is a conservative lower bound, not a measured rear FFE"
+  }
+}
