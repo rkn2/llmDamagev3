@@ -1,0 +1,4 @@
+{
+  "urm_after_1978|112 State St, Montpelier, VT 05602": "Resolved 2026-07-02: generate_detail_pages.py overrides construction_type_u/wall_thickness/structural_wall_system_u/mwfrs_u_wall to 'un' with a veneer-over-frame note for this building (NRHP resource #487, 1994 replacement). visual_attributes.json intentionally keeps the raw LLM output ('URM') — producer files record what the model said; adjudications live in the page generator. See nrhp/nrhp_cross_validation.json.",
+  "stories_disagreement|112 State St, Montpelier, VT 05602": "Resolved 2026-07-02: ruling = 5 stories (NRHP document + critic-corrected LLM agree; CV H1.3 predicts 3 — its one known failure, documented in facade_cv/FINAL_REPORT.md: sigma=20px smoothing attenuates this building's 93px floor pitch). Detail pages render the corrected visual_attributes value (5)."
+}

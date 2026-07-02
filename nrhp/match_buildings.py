@@ -94,6 +94,7 @@ def _hit(rec, method, confidence, entry_addr):
         "header_raw": rec["header_raw"],
         "status": rec["status"],
         "year_built": rec["year_built"],
+        "year_built_circa": rec.get("year_built_circa"),
         "stories": rec["stories"],
         "construction": rec["construction"],
         "cladding": rec["cladding"],

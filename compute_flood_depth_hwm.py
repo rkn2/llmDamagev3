@@ -93,12 +93,40 @@ def dist_m(lat1, lon1, lat2, lon2) -> float:
     return math.sqrt(dlat**2 + dlon**2)
 
 
-def idw_wse(blat: float, blon: float, hwms: list[dict]) -> tuple[float, list[dict]]:
+# Survey sigma by quality tier, from the "+/- X ft" in the quality strings
+# (Excellent +/-0.05, Good +/-0.10, Fair +/-0.20). Fallback if unparseable: Fair.
+_QUALITY_SIGMA_RE = None  # set lazily to avoid an import-order footgun with re
+
+
+def quality_sigma_ft(quality: str) -> float:
+    global _QUALITY_SIGMA_RE
+    import re
+    if _QUALITY_SIGMA_RE is None:
+        _QUALITY_SIGMA_RE = re.compile(r"([\d.]+)\s*ft")
+    m = _QUALITY_SIGMA_RE.search(quality)
+    return float(m.group(1)) if m else 0.20
+
+
+def idw_wse(blat: float, blon: float, hwms: list[dict]) -> tuple[float, float, list[dict]]:
     ranked = sorted(hwms, key=lambda h: dist_m(blat, blon, h["lat"], h["lon"]))
     top = ranked[:N_NEAREST]
     dists = [dist_m(blat, blon, h["lat"], h["lon"]) for h in top]
     weights = [1.0 / d for d in dists]
-    wse = sum(w * h["elev_ft"] for w, h in zip(weights, top)) / sum(weights)
+    wsum = sum(weights)
+    wse = sum(w * h["elev_ft"] for w, h in zip(weights, top)) / wsum
+
+    # Uncertainty = survey error + spatial disagreement, combined in quadrature:
+    #  - measurement term: IDW-propagated survey sigma, sqrt(Σ(w_i σ_i)²)/Σw
+    #    (independent per-mark errors through the weighted mean)
+    #  - spread term: weighted stdev of the contributing marks around the IDW value
+    #    (captures the real water-surface gradient / siting error the survey sigma
+    #    can't see — this is usually the dominant term)
+    meas = math.sqrt(sum((w * quality_sigma_ft(h["quality"])) ** 2
+                         for w, h in zip(weights, top))) / wsum
+    spread = math.sqrt(sum(w * (h["elev_ft"] - wse) ** 2
+                           for w, h in zip(weights, top)) / wsum)
+    sigma = math.sqrt(meas**2 + spread**2)
+
     sources = [
         {
             "label":    h["label"],
@@ -108,7 +136,7 @@ def idw_wse(blat: float, blon: float, hwms: list[dict]) -> tuple[float, list[dic
         }
         for h, d in zip(top, dists)
     ]
-    return wse, sources
+    return wse, sigma, sources
 
 
 def main(force: bool = False) -> None:
@@ -153,7 +181,7 @@ def main(force: bool = False) -> None:
             ffe_source = "front entrance only — run compute_lowest_ffe.py for rear-ingress check"
         ffe_ft  = ffe_m * M_TO_FT
 
-        wse, sources = idw_wse(blat, blon, hwms)
+        wse, wse_sigma, sources = idw_wse(blat, blon, hwms)
         above_grade = wse - gnd_ft
         above_ffe   = wse - ffe_ft
 
@@ -170,7 +198,10 @@ def main(force: bool = False) -> None:
         else:
             status = "dry"
         flooded   = status != "dry"
-        uncertain = abs(above_ffe) < UNCERTAIN_MARGIN_FT
+        # Uncertain when the FFE margin is inside either the fixed noise floor or
+        # the 2-sigma band of the interpolated WSE (whichever is wider) — a margin
+        # of 0.9 ft means nothing when the WSE itself is only known to +/-0.5 ft.
+        uncertain = abs(above_ffe) < max(UNCERTAIN_MARGIN_FT, 2 * wse_sigma)
 
         if status == "above_grade_only":
             review_flags.append(
@@ -181,6 +212,8 @@ def main(force: bool = False) -> None:
 
         results[addr] = {
             "wse_ft":          round(wse, 3),
+            "wse_sigma_ft":    round(wse_sigma, 3),
+            "above_ffe_z":     round(above_ffe / wse_sigma, 2) if wse_sigma > 0 else None,
             "ground_elev_ft":  round(gnd_ft, 3),
             "ffe_ft":          round(ffe_ft, 3),
             "above_grade_ft":  round(above_grade, 3),

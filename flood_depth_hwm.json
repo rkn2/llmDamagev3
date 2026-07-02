@@ -1,6 +1,8 @@
 {
   "100 Main St, Montpelier, VT 05602": {
     "wse_ft": 526.303,
+    "wse_sigma_ft": 0.159,
+    "above_ffe_z": 27.25,
     "ground_elev_ft": 522.713,
     "ffe_ft": 521.962,
     "above_grade_ft": 3.589,
@@ -32,6 +34,8 @@
   },
   "112 State St, Montpelier, VT 05602": {
     "wse_ft": 525.897,
+    "wse_sigma_ft": 0.204,
+    "above_ffe_z": 19.97,
     "ground_elev_ft": 523.701,
     "ffe_ft": 521.824,
     "above_grade_ft": 2.196,
@@ -63,6 +67,8 @@
   },
   "27 Langdon St, Montpelier, VT 05602": {
     "wse_ft": 526.316,
+    "wse_sigma_ft": 0.16,
+    "above_ffe_z": 19.24,
     "ground_elev_ft": 523.156,
     "ffe_ft": 523.245,
     "above_grade_ft": 3.159,
@@ -94,6 +100,8 @@
   },
   "40 Main St, Montpelier, VT 05602": {
     "wse_ft": 526.274,
+    "wse_sigma_ft": 0.135,
+    "above_ffe_z": 36.87,
     "ground_elev_ft": 522.687,
     "ffe_ft": 521.293,
     "above_grade_ft": 3.587,
@@ -125,6 +133,8 @@
   },
   "54 Elm St, Montpelier, VT 05602": {
     "wse_ft": 526.227,
+    "wse_sigma_ft": 0.098,
+    "above_ffe_z": -2.61,
     "ground_elev_ft": 525.39,
     "ffe_ft": 526.483,
     "above_grade_ft": 0.837,

@@ -72,6 +72,19 @@ def main():
 
     print(f"\nDone -- {len(existing)} addresses in {OUTPUT_PATH.name}")
 
+    # Deterministic cross-source invariant checks (sanity_checks.py) — report only,
+    # never blocks the pipeline; high-severity findings need resolving before the
+    # numbers are used (see sanity_findings.json / sanity_adjudications.json).
+    try:
+        from sanity_checks import apply_adjudications, run_checks
+        findings = apply_adjudications(run_checks())
+        high = [f for f in findings if f["severity"] == "high"]
+        print(f"\nSanity checks: {len(findings)} finding(s), {len(high)} high-severity")
+        for f in high:
+            print(f"  [high] {f['rule']} {f['address'].split(',')[0]}: {f['detail'][:100]}")
+    except Exception as exc:
+        print(f"\nSanity checks failed to run: {exc}")
+
 
 if __name__ == "__main__":
     main()

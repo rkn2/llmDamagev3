@@ -35,12 +35,15 @@ vision pass, LLM damage assessment, detail-page generation — closing staleness
   Laundry on Elm," confirmed reopened post-flood.
 
 ## Next Steps
-- Wire `nrhp/nrhp_matches.json` into `generate_detail_pages.py` (`year_built_u`,
-  `NRHP_ref_number`, `building_name_listing`, contributing status) — PYTHONIC_ROADMAP §4.3.
-- Fix 112 State St `construction_type_u`: NRHP shows 1994 brick-veneer replacement, not
-  URM; `wall_thickness=0.46 m` masonry assumption invalid (high-severity finding in
-  `nrhp/nrhp_cross_validation.json`).
-- Build order for pythonic conversions: PYTHONIC_ROADMAP.md §5.5.
+- Build order for remaining pythonic conversions: PYTHONIC_ROADMAP.md §5.5
+  (construction texture classifier, step-height CV, hazards/ intensity layer,
+  before/after change detection).
+- DONE 2026-07-02 (overnight session): NRHP wired into detail pages (`NRHP_ref_number`,
+  `building_name_listing`, `year_built_u` live from nrhp/nrhp_matches.json); 112 State
+  construction corrected to veneer-on-frame "un" (adjudicated in
+  sanity_adjudications.json); `sanity_checks.py` invariant gate added (runs at end of
+  run_pipeline.py); WSE uncertainty (`wse_sigma_ft`, `above_ffe_z`) propagated through
+  compute_flood_depth_hwm.py IDW.
 - critic_findings.json: 54 Elm occupancy finding is now stale (use_after_flood corrected to mercantile).
 - 27 Langdon and 40 Main back fenestration remain "un" — no usable Street View coverage.
 

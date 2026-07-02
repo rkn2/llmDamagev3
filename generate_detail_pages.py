@@ -38,6 +38,12 @@ URBAN_ATTRS = json.loads(_ua_path.read_text()) if _ua_path.exists() else {}
 _hwm_path = ROOT_DIR / "flood_depth_hwm.json"
 _HWM_DATA: dict = json.loads(_hwm_path.read_text()) if _hwm_path.exists() else {}
 
+# NRHP 2017 amendment inventory matches (nrhp/parse_nrhp.py → nrhp/match_buildings.py).
+# Guarded — pages fall back to the district-level placeholders below if the parser
+# hasn't been run. Supplies NRHP_ref_number, building_name_listing, year_built_u.
+_nrhp_path = ROOT_DIR / "nrhp" / "nrhp_matches.json"
+NRHP_MATCHES: dict = json.loads(_nrhp_path.read_text()) if _nrhp_path.exists() else {}
+
 
 def _flood_height_note(addr: str) -> str:
     """Return flood_height_building string: HWM-derived if available, else LLM estimate."""
@@ -138,7 +144,9 @@ USGS_NOTE = {addr: _usgs_note(addr) for addr in [
     "54 Elm St, Montpelier, VT 05602",
 ]}
 
-NRHP_NOTE = "Part of Montpelier Historic District (NRHP 1978, amended 1989/2017). Individual resource # not confirmed — requires NPS database lookup."
+NRHP_NOTE = ("Part of Montpelier Historic District (NRHP 1978, amended 1989/2017). Individual "
+             "resource # resolved from the 2017 amendment inventory PDF by nrhp/parse_nrhp.py + "
+             "nrhp/match_buildings.py (validation: nrhp/validation_report.json).")
 
 # Common values shared by all 5 buildings
 COMMON = {
@@ -386,6 +394,17 @@ BUILDINGS = {
         "archetype":                 "14", # F14: Office building (best match for bank/commercial office use; no multi-story masonry commercial archetype in Nofal 2020)
         "occupany_u":                "business",
         "year_built_u":              "un — requires further research; commercial block likely late 19th–early 20th c.",
+        # NRHP finding (nrhp/nrhp_cross_validation.json, high severity): resource #487 is a
+        # 1994 replacement building — "brick clad ... constructed in 1994 ... non-contributing
+        # due to age". The brick is veneer over a modern (steel/concrete) frame, NOT load-
+        # bearing URM. COMMON's historic-masonry defaults are wrong for this one building.
+        "construction_type_u":       "un",     # frame type (steel vs concrete) not determinable from imagery/documents
+        "construction_type_u_unc":   "1",
+        "structural_wall_system_u":  "un",
+        "wall_thickness":            "un",     # 0.46 m URM assumption does not apply to 1994 veneer-on-frame
+        "mwfrs_u_wall":              "un",
+        "mwfrs_u_moment_frame":      "un",    # a 1994 five-story office may well have one — COMMON's URM-based "no" doesn't hold
+        "masonry_leaves":            "not_applicable",
         "wall_fenesteration_front_lowerlevel_per": "55",  # Romanesque arched ground-floor glazing — heavily glazed arcade bays between brick piers
         # Before/after photos clearly show a steeply pitched metal mansard roof with dormers —
         # COMMON's "flat"/"0" defaults are wrong for this building. Slope is visually steep
@@ -679,9 +698,14 @@ NOTES_OVERRIDE = {
     },
     "wall_thickness": {
         "100 Main St, Montpelier, VT 05602": "0.15 m assumed (~6 inches) for light wood-frame construction — this building is wood frame with clapboard siding, not masonry. See construction_type_u.",
+        "112 State St, Montpelier, VT 05602": "un — NRHP resource #487 is a 1994 replacement building (brick veneer over modern frame); the 0.46 m load-bearing-masonry assumption does not apply and no veneer/frame drawings are available.",
+    },
+    "construction_type_u": {
+        "112 State St, Montpelier, VT 05602": "NRHP 2017 inventory: present building constructed 1994, 'brick clad', non-contributing due to age — brick is veneer over a modern steel/concrete frame, not URM. Frame type not determinable from available sources, so 'un'. (Raw LLM vision output 'URM' in visual_attributes.json is superseded by the document — see nrhp/nrhp_cross_validation.json.)",
     },
     "construction_type_u_unc": {
         "100 Main St, Montpelier, VT 05602": "Certainty 3 (>75%) — wood clapboard siding clearly visible in two independent Street View passes; not brick/masonry like the other 4 buildings.",
+        "112 State St, Montpelier, VT 05602": "Certainty 1 — only the NOT-URM determination is high confidence (1994 build year); the actual frame system is unknown.",
     },
     "wall_cladding_u_unc": {
         "100 Main St, Montpelier, VT 05602": "Certainty 3 (>75%) — wood clapboard siding clearly visible, confirmed via Street View.",
@@ -843,6 +867,37 @@ def resolve_building_data(address: str, data: dict) -> dict:
     back_lower_per = va.get("wall_fenesteration_back_lowerlevel_per")
     if back_lower_per is not None:
         data["wall_fenesteration_back_lowerlevel_per"] = str(back_lower_per)
+
+    # Inject NRHP inventory values live from nrhp/nrhp_matches.json — resource number,
+    # listing name, and year built come from the 2017 amendment inventory (deterministic
+    # parse of the PDF), replacing the "un — requires NPS lookup" placeholders.
+    nm = NRHP_MATCHES.get(address, {})
+    if nm.get("matched"):
+        res = nm["resource_number"]
+        block_caveat = (
+            " Block-level attribution — the matched resource spans multiple storefronts; "
+            "storefront-specific values may differ." if nm["method"].startswith("range") else ""
+        )
+        data["NRHP_ref_number"] = (
+            f"Montpelier Historic District resource #{res} "
+            f"(match: {nm['method']}, {nm['confidence']} confidence).{block_caveat}"
+        )
+        data["national_register_listing_year"] = (
+            "1978 (district listing; amended 1989, 2017 — resource documented in the "
+            "2017 amendment inventory)"
+        )
+        name = nm.get("historic_name")
+        status = nm.get("status") or "status not stated"
+        data["building_name_listing"] = (
+            f"{name} (NRHP resource #{res}, {status})" if name
+            else f"no individual name in NRHP inventory (resource #{res}, {status})"
+        )
+        if nm.get("year_built"):
+            circa = "c. " if nm.get("year_built_circa") else ""
+            data["year_built_u"] = (
+                f"{circa}{nm['year_built']} (NRHP 2017 amendment inventory, resource "
+                f"#{res}).{block_caveat}"
+            )
 
     # Override orientation from OSM-derived compute_urban_attrs.py output.
     # Must happen before the wall_length / cardinal-fenestration computation below so

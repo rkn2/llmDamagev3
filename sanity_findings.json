@@ -1,0 +1,18 @@
+[
+ {
+  "rule": "urm_after_1978",
+  "severity": "info",
+  "address": "112 State St, Montpelier, VT 05602",
+  "detail": "pipeline says URM but NRHP resource #487 is a 1994 building \u2014 post-1978 brick is veneer over frame, not load-bearing URM; wall_thickness/archetype assumptions do not apply",
+  "adjudicated": true,
+  "adjudication": "Resolved 2026-07-02: generate_detail_pages.py overrides construction_type_u/wall_thickness/structural_wall_system_u/mwfrs_u_wall to 'un' with a veneer-over-frame note for this building (NRHP resource #487, 1994 replacement). visual_attributes.json intentionally keeps the raw LLM output ('URM') \u2014 producer files record what the model said; adjudications live in the page generator. See nrhp/nrhp_cross_validation.json."
+ },
+ {
+  "rule": "stories_disagreement",
+  "severity": "info",
+  "address": "112 State St, Montpelier, VT 05602",
+  "detail": "sources disagree: {'nrhp': 5.0, 'llm': 5, 'cv': 3} \u2014 adjudicate and record the ruling",
+  "adjudicated": true,
+  "adjudication": "Resolved 2026-07-02: ruling = 5 stories (NRHP document + critic-corrected LLM agree; CV H1.3 predicts 3 \u2014 its one known failure, documented in facade_cv/FINAL_REPORT.md: sigma=20px smoothing attenuates this building's 93px floor pitch). Detail pages render the corrected visual_attributes value (5)."
+ }
+]
