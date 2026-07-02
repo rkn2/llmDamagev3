@@ -1,0 +1,91 @@
+{
+ "structural": {
+  "entries_found": 670,
+  "distinct_numbers": 563,
+  "expected_numbers": 563,
+  "missing": [],
+  "duplicates": [],
+  "pass": true
+ },
+ "spot_check": {
+  "checked": 73,
+  "failed": 0,
+  "failures": [],
+  "pass": true
+ },
+ "coverage": {
+  "fields": {
+   "status": {
+    "rate": 0.973,
+    "target": 0.95,
+    "pass": true
+   },
+   "year_built": {
+    "rate": 0.993,
+    "target": 0.9,
+    "pass": true
+   },
+   "stories": {
+    "rate": 0.93,
+    "target": 0.8,
+    "pass": true
+   },
+   "construction": {
+    "rate": 0.834,
+    "target": 0.75,
+    "pass": true
+   }
+  },
+  "pass": true
+ },
+ "plausibility": {
+  "violations": [],
+  "pass": true
+ },
+ "target_recovery": {
+  "targets": {
+   "100 Main St, Montpelier, VT 05602": {
+    "expected": "184",
+    "got": "184",
+    "pass": true
+   },
+   "112 State St, Montpelier, VT 05602": {
+    "expected": "487",
+    "got": "487",
+    "pass": true
+   },
+   "27 Langdon St, Montpelier, VT 05602": {
+    "expected": "188",
+    "got": "188",
+    "pass": true
+   },
+   "40 Main St, Montpelier, VT 05602": {
+    "expected": "72",
+    "got": "72",
+    "pass": true
+   },
+   "54 Elm St, Montpelier, VT 05602": {
+    "expected": "207",
+    "got": "207",
+    "pass": true
+   }
+  },
+  "pass": true,
+  "note": null
+ },
+ "doc_totals": {
+  "parsed_contributing": 566,
+  "parsed_non_contributing": 78,
+  "parsed_status_none": 0,
+  "doc_stated": {
+   "contributing": 571,
+   "non_contributing": 82
+  },
+  "abs_diff": {
+   "contributing": 5,
+   "non_contributing": 4
+  },
+  "pass": true
+ },
+ "ALL_PASS": true
+}

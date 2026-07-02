@@ -1,3 +1,5 @@
 __pycache__/
 *.pyc
 .DS_Store
+# regenerable pypdf text-extraction cache (nrhp/parse_nrhp.py extracts live from the PDF)
+nrhp/pdf_text_raw.json

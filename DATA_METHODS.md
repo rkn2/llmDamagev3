@@ -152,18 +152,33 @@ are likely:
 - **112 State St** — State St commercial, likely in the 300–400 range
 - **54 Elm St** — Elm St entries, likely in the 250–320 range
 
-### How to find individual resource numbers
+### How to find individual resource numbers — SOLVED (2026-07-02): `nrhp/` parser
 
-**Option A — Continue reading the PDF:** resume at page 81. The inventory continues
-sequentially. Even-numbered Main St addresses appear after the odd addresses.
+The full 246-page inventory is now parsed deterministically by `nrhp/parse_nrhp.py`
+(pypdf text layer → sequence-state-machine segmentation → field regexes; no LLM calls).
+All 563 numbered resources + 108 lettered secondary buildings extracted and validated
+(`nrhp/evaluate_parser.py`: structural 563/563, 13-entry hand-verified spot check,
+coverage/plausibility/doc-totals checks — ALL PASS). See `nrhp/PROTOCOL.md` for the
+method, `nrhp/PROCESS_NOTES.md` for format quirks and findings, `nrhp/rounds/` for the
+hypothesis-loop history.
 
-**Option B — NPS database:** go to
-`https://www.nps.gov/subjects/nationalregister/database-research.htm` and search by
-address. Each individual resource in a district has its own record.
+Resolved resource numbers (`nrhp/match_buildings.py` → `nrhp/nrhp_matches.json`):
 
-**Option C — VCGI / Vermont Division for Historic Preservation:** Vermont publishes the
-NRHP data as a GIS layer at vcgi.vermont.gov (search "National Register Historic Places").
-This layer has resource numbers and addresses as attributes — faster than reading the PDF.
+| Building | Resource # | Historic name | Year built | Status |
+|---|---|---|---|---|
+| 100 Main St | **184** | Theriault Building | c. 1870 | contributing |
+| 112 State St | **487** | Chittenden Trust Co | 1994 (replacement) | non-contributing |
+| 27 Langdon St | **188** | Langdon Block #1 (90 Main St primary addr) | 1900 | contributing |
+| 40 Main St | **72** (medium conf.) | French Block, via former range 32-50 Main | 1875 | contributing |
+| 54 Elm St | **207** | ("Columbian" date stone) | 1893 | contributing |
+
+This also fills `year_built_u` (previously `un` — see §8) for all 5 buildings, and
+`nrhp/cross_validate.py` flags one high-severity discrepancy: **112 State St is 1994
+brick-veneer construction, not URM** — the masonry `wall_thickness=0.46 m` assumption
+(§5b) does not apply to it.
+
+Legacy alternatives (no longer needed for this district): NPS database search
+(`nps.gov/subjects/nationalregister/database-research.htm`); VCGI NRHP GIS layer.
 
 ---
 

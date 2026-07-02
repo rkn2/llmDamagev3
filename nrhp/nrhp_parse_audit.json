@@ -1,0 +1,121 @@
+{
+ "rejected_candidates": [],
+ "sequence_jumps": [],
+ "headers_without_address": [
+  {
+   "num": "465",
+   "header": "465. Railroad Bridge over the Winooski, c. 1910. Contributing"
+  },
+  {
+   "num": "465a",
+   "header": "465a. Pedestrian bridge over the Winooski River, c. 2002. Non-contributing"
+  },
+  {
+   "num": "468",
+   "header": "468. North Branch Railroad Bridge, CVRR tracks and North Branch, 1905. Contributing"
+  }
+ ],
+ "no_stories": [
+  {
+   "num": "16a",
+   "first_sentence": "The sandstone gate has two crenellated towers joined by a recessed, crenellated arch bearing the name \"Redstone.\" This gate is at the end of"
+  },
+  {
+   "num": "33a",
+   "first_sentence": "Wood frame, shingled, gable front two car garage with double wide overhead door and a six- over-one light sash widow in the gable"
+  },
+  {
+   "num": "45a",
+   "first_sentence": "Wood frame, gable roof sheathed in corrugated metal"
+  },
+  {
+   "num": "54",
+   "first_sentence": "Random ashlar, gabled roof sheathed in slate"
+  },
+  {
+   "num": "106a",
+   "first_sentence": "This structure is the former railroad turntable that had been within the original roundhouse building #106"
+  },
+  {
+   "num": "192",
+   "first_sentence": "Steel frame, vinyl clapboard siding, flat roof"
+  },
+  {
+   "num": "258a",
+   "first_sentence": "Wood frame, clapboard and shingle siding, gable roof sheathed in asphalt shingles, modern skylight"
+  },
+  {
+   "num": "297b",
+   "first_sentence": "This modern apartment house is similar to # 297a (5 Spring Street) but with brickface siding on the first floor and two cantilevered second "
+  },
+  {
+   "num": "299a",
+   "first_sentence": "Wood frame, clapboarded, mansard roof clad in slate"
+  },
+  {
+   "num": "459",
+   "first_sentence": "Wood frame, laminate siding, large plate glass windows, flat roof"
+  },
+  {
+   "num": "461",
+   "first_sentence": "Brick, gabled roof surmounted by a cupola, three-bay service station"
+  },
+  {
+   "num": "464",
+   "first_sentence": "Steel and concrete span on four concrete abutments with recent rehabilitation adding a steel guard railing and historic styled street lights"
+  },
+  {
+   "num": "465",
+   "first_sentence": "This iron bridge has a pair of end to end Pratt through trusses and was built by the American Bridge Company of New York"
+  },
+  {
+   "num": "465a",
+   "first_sentence": "A new small scale pony truss steel pedestrian bridge has been constructed recently to the east of the railroad bridge (#465) and is part of "
+  },
+  {
+   "num": "466",
+   "first_sentence": "This is a camelback through truss steel bridge built by the Berlin Construction Company in 1929"
+  },
+  {
+   "num": "468",
+   "first_sentence": "A half-hipped through Pratt truss steel bridge"
+  },
+  {
+   "num": "469",
+   "first_sentence": "Concrete and steel bridge with concrete urn-shaped balusters on railing"
+  },
+  {
+   "num": "471",
+   "first_sentence": "Built 1928, by the American Bridge Company of New York, pony truss, similar to #470"
+  },
+  {
+   "num": "473",
+   "first_sentence": "Built c"
+  },
+  {
+   "num": "474",
+   "first_sentence": "According to the records of Vermont\"s Dam Safety office, this is a timber crib dam with a concrete spillway and was constructed in 1920"
+  },
+  {
+   "num": "492a",
+   "first_sentence": "Wood frame, small gable roofed gate house with a glazed door on the front gable and a small window on the side"
+  },
+  {
+   "num": "515",
+   "first_sentence": "According to Vermont\"s Dam Safety office, this concrete dam was constructed as part of the City of Montpelier\"s flood control project after "
+  },
+  {
+   "num": "516",
+   "first_sentence": "Slate, marble, and granite headstones"
+  },
+  {
+   "num": "530",
+   "first_sentence": "Located west of the #529a (formerly #13a) garage, this five-bay garage also faces East State Street and is significant in that it matches th"
+  },
+  {
+   "num": "562",
+   "first_sentence": "This stone observation tower was built between the years of 1915-1930 and is located at the summit of Montpelier Hubbard Park"
+  }
+ ],
+ "warnings": []
+}

@@ -1,0 +1,92 @@
+{
+  "goal": "Deterministic parser for NRHP Montpelier Historic District 2017 amendment PDF -> per-resource structured records, validated against hand-verified ground truth",
+  "vocabulary": ["strict-line-regex", "sequence-state-machine", "number-suffix-grammar", "replaced-with-semantics"],
+  "tree": {
+    "id": "root",
+    "children": [
+      {
+        "id": "P1",
+        "family": "strict-line-regex",
+        "description": "Single regex: line-start number + address containing street-type word. No sequence logic.",
+        "status": "dead",
+        "attempts": [
+          {
+            "round": 1,
+            "action": "^\\s{0,4}(\\d{1,3})\\.\\s{1,3}<street-typed address> over raw joined text",
+            "entries_found": "380/563",
+            "verdict": "baseline",
+            "evidence": "rounds/round_01.md",
+            "failure_modes": [
+              "variable whitespace after the number (up to 8 spaces)",
+              "'(formerly ...)' between house number and street name breaks the address pattern",
+              "headers without street-typed addresses (named buildings, structures)",
+              "no defense against numbered list items inside descriptions"
+            ]
+          }
+        ],
+        "posterior": {"gain": "low", "confidence": "high", "cost_to_probe": "N/A"},
+        "children": [
+          {
+            "id": "P2",
+            "family": "sequence-state-machine",
+            "description": "Strip per-page NPS boilerplate, normalize unicode, accept candidate N only if it advances the running inventory number (N==expected or small logged jump), require header evidence (street word | year | status | demolished).",
+            "status": "promising",
+            "attempts": [
+              {
+                "round": 2,
+                "action": "boilerplate strip + unicode map + state machine (max jump +3) + evidence gate",
+                "entries_found": "515/563",
+                "verdict": "improved",
+                "evidence": "rounds/round_02.md",
+                "failure_modes": [
+                  "#517-530 use '517 (formerly 1).' renumber syntax -> never candidates -> machine stalls at 517 and rejects 531-563 (cascade)",
+                  "#297 exists only as '297a.'/'297b.' (lettered split) -> logged as jump"
+                ]
+              }
+            ],
+            "posterior": {"gain": "high", "confidence": "high", "cost_to_probe": "free"},
+            "children": [
+              {
+                "id": "P2.1",
+                "family": "number-suffix-grammar",
+                "description": "Extend candidate grammar: optional letter suffix (secondary buildings: garages/barns/carriage houses) + optional '(formerly N)' renumber clause. State machine accepts same-number suffix succession (297a->297b).",
+                "status": "promising",
+                "attempts": [
+                  {
+                    "round": 3,
+                    "action": "(\\d{1,3})([a-z])?\\s*(?:\\(formerly #?\\d+\\))?\\. + suffix succession rule",
+                    "entries_found": "670 records / 563 distinct numbers, 0 missing, 0 dupes, 0 rejects",
+                    "verdict": "structural-goal",
+                    "evidence": "rounds/round_03.md",
+                    "notes": "108 lettered records = secondary buildings; reconciles with the document's stated 653 total (563 primary + ~90 counted secondary). Spot check exposed field bugs: status classifier ('on' in 'Con'[:3] -> everything non-contributing), #487 '(demolished) replaced with' parsed as 1960/1-story predecessor, duplicated name segments."
+                  }
+                ],
+                "posterior": {"gain": "high", "confidence": "high", "cost_to_probe": "free"},
+                "children": [
+                  {
+                    "id": "P3",
+                    "family": "replaced-with-semantics",
+                    "description": "status startswith('non'); '(demolished) replaced with' records describe the REPLACEMENT (year/stories from post-'replaced with' text, last stories mention in body); dedupe name segments.",
+                    "status": "exhausted",
+                    "attempts": [
+                      {
+                        "round": 4,
+                        "action": "status fix + replaced-with header split + last-stories-match for replaced records + name dedupe",
+                        "validation": "ALL PASS: structural 563/563, spot-check 13 entries/all fields, coverage (status .97 year .99 stories .93 constr .83), plausibility 0 violations, target recovery 5/5, doc totals within tolerance (566/571 C, 86/82 NC)",
+                        "verdict": "goal",
+                        "evidence": "rounds/round_04.md"
+                      }
+                    ],
+                    "posterior": {"gain": "achieved-target", "confidence": "high", "cost_to_probe": "N/A"},
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "frontier": []
+}

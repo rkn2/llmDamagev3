@@ -1,0 +1,157 @@
+{
+ "buildings": {
+  "100 Main St, Montpelier, VT 05602": {
+   "nrhp_resource": "184",
+   "nrhp_match_confidence": "high",
+   "historic_name": "Theriault Building",
+   "nrhp_status": "contributing",
+   "year_built_nrhp": 1870,
+   "stories": {
+    "nrhp_document": 3.0,
+    "llm_vision": 3,
+    "classical_cv": 3,
+    "critic_gt": 3
+   },
+   "construction": {
+    "nrhp_document": "wood frame",
+    "nrhp_mapped": "wood frame",
+    "pipeline": "wood frame"
+   },
+   "cladding": {
+    "nrhp_document": "clapboarde",
+    "pipeline": "wood clapboard siding"
+   },
+   "roof_shape": {
+    "nrhp_document": "flat",
+    "pipeline": "flat"
+   }
+  },
+  "112 State St, Montpelier, VT 05602": {
+   "nrhp_resource": "487",
+   "nrhp_match_confidence": "high",
+   "historic_name": "Chittenden Trust Co",
+   "nrhp_status": "non-contributing",
+   "year_built_nrhp": 1994,
+   "stories": {
+    "nrhp_document": 5.0,
+    "llm_vision": 5,
+    "classical_cv": 3,
+    "critic_gt": 5
+   },
+   "construction": {
+    "nrhp_document": null,
+    "nrhp_mapped": null,
+    "pipeline": "URM"
+   },
+   "cladding": {
+    "nrhp_document": null,
+    "pipeline": "brick"
+   },
+   "roof_shape": {
+    "nrhp_document": null,
+    "pipeline": "mansard"
+   }
+  },
+  "27 Langdon St, Montpelier, VT 05602": {
+   "nrhp_resource": "188",
+   "nrhp_match_confidence": "high",
+   "historic_name": "Langdon Block #1",
+   "nrhp_status": "contributing",
+   "year_built_nrhp": 1900,
+   "stories": {
+    "nrhp_document": 3.0,
+    "llm_vision": 3,
+    "classical_cv": 3,
+    "critic_gt": 3
+   },
+   "construction": {
+    "nrhp_document": "brick",
+    "nrhp_mapped": "URM",
+    "pipeline": "URM"
+   },
+   "cladding": {
+    "nrhp_document": null,
+    "pipeline": "brick"
+   },
+   "roof_shape": {
+    "nrhp_document": "flat",
+    "pipeline": "flat"
+   }
+  },
+  "40 Main St, Montpelier, VT 05602": {
+   "nrhp_resource": "72",
+   "nrhp_match_confidence": "medium",
+   "historic_name": "French Block",
+   "nrhp_status": "contributing",
+   "year_built_nrhp": 1875,
+   "stories": {
+    "nrhp_document": 3.0,
+    "llm_vision": 3,
+    "classical_cv": 3,
+    "critic_gt": 3
+   },
+   "construction": {
+    "nrhp_document": "brick",
+    "nrhp_mapped": "URM",
+    "pipeline": "URM"
+   },
+   "cladding": {
+    "nrhp_document": null,
+    "pipeline": "brick"
+   },
+   "roof_shape": {
+    "nrhp_document": "flat",
+    "pipeline": "flat"
+   }
+  },
+  "54 Elm St, Montpelier, VT 05602": {
+   "nrhp_resource": "207",
+   "nrhp_match_confidence": "high",
+   "historic_name": null,
+   "nrhp_status": "contributing",
+   "year_built_nrhp": 1893,
+   "stories": {
+    "nrhp_document": 3.0,
+    "llm_vision": 3,
+    "classical_cv": 3,
+    "critic_gt": 3
+   },
+   "construction": {
+    "nrhp_document": "brick",
+    "nrhp_mapped": "URM",
+    "pipeline": "URM"
+   },
+   "cladding": {
+    "nrhp_document": null,
+    "pipeline": "brick"
+   },
+   "roof_shape": {
+    "nrhp_document": "flat",
+    "pipeline": "flat"
+   }
+  }
+ },
+ "findings": [
+  {
+   "severity": "medium",
+   "address": "112 State St, Montpelier, VT 05602",
+   "issue": "stories disagreement",
+   "detail": {
+    "nrhp_document": 5.0,
+    "llm_vision": 5,
+    "classical_cv": 3,
+    "critic_gt": 5
+   }
+  },
+  {
+   "severity": "high",
+   "address": "112 State St, Montpelier, VT 05602",
+   "issue": "URM assumption contradicted by NRHP build year",
+   "detail": {
+    "year_built_nrhp": 1994,
+    "nrhp_text": "brick clad ... constructed in 1994 (non-contributing due to age)",
+    "implication": "wall system is almost certainly brick veneer over a modern frame, not load-bearing URM; wall_thickness=0.46 m masonry assumption and URM fragility archetype do not apply"
+   }
+  }
+ ]
+}

@@ -1,2 +1,3 @@
 anthropic[vertex]
 openpyxl
+pypdf  # nrhp/ document parser (needs a working cffi for pypdf's crypto import: pip install cffi)

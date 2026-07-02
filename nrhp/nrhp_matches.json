@@ -1,0 +1,94 @@
+{
+ "100 Main St, Montpelier, VT 05602": {
+  "matched": true,
+  "resource_number": "184",
+  "method": "exact_current",
+  "confidence": "high",
+  "matched_on": "100 Main Street",
+  "historic_name": "Theriault Building",
+  "header_raw": "184. 100 (formerly 100-110) Main Street, Theriault Building, c. 1870. Contributing",
+  "status": "contributing",
+  "year_built": 1870,
+  "stories": 3.0,
+  "construction": "wood frame",
+  "cladding": "clapboarde",
+  "roof_shape": "flat",
+  "roof_material": null,
+  "styles": [
+   "Italianate"
+  ]
+ },
+ "112 State St, Montpelier, VT 05602": {
+  "matched": true,
+  "resource_number": "487",
+  "method": "exact_current",
+  "confidence": "high",
+  "matched_on": "112 State Street",
+  "historic_name": "Chittenden Trust Co",
+  "header_raw": "487. 112 State Street, Chittenden Trust Co., c. 1960 (demolished in 1994) replaced with 112 State Street, Chittenden Trust Co, 1994. Non-contributing",
+  "status": "non-contributing",
+  "year_built": 1994,
+  "stories": 5.0,
+  "construction": null,
+  "cladding": null,
+  "roof_shape": null,
+  "roof_material": null,
+  "styles": [
+   "Second Empire",
+   "Romanesque"
+  ]
+ },
+ "27 Langdon St, Montpelier, VT 05602": {
+  "matched": true,
+  "resource_number": "188",
+  "method": "exact_current",
+  "confidence": "high",
+  "matched_on": "27 Langdon Street",
+  "historic_name": "Langdon Block #1",
+  "header_raw": "188. 90 Main Street & 27 Langdon Street (formerly 90-98 Main Street), Langdon Block #1, 1900. Contributing",
+  "status": "contributing",
+  "year_built": 1900,
+  "stories": 3.0,
+  "construction": "brick",
+  "cladding": null,
+  "roof_shape": "flat",
+  "roof_material": null,
+  "styles": []
+ },
+ "40 Main St, Montpelier, VT 05602": {
+  "matched": true,
+  "resource_number": "72",
+  "method": "range_former",
+  "confidence": "medium",
+  "matched_on": "32-50 Main Street",
+  "historic_name": "French Block",
+  "header_raw": "72. 32 (formerly 32-50) Main Street, French Block, 1875. Contributing",
+  "status": "contributing",
+  "year_built": 1875,
+  "stories": 3.0,
+  "construction": "brick",
+  "cladding": null,
+  "roof_shape": "flat",
+  "roof_material": null,
+  "styles": [
+   "Italianate"
+  ]
+ },
+ "54 Elm St, Montpelier, VT 05602": {
+  "matched": true,
+  "resource_number": "207",
+  "method": "exact_current",
+  "confidence": "high",
+  "matched_on": "54 Elm Street",
+  "historic_name": null,
+  "header_raw": "207. 54 (formerly 52-54) Elm Street, 1893. Contributing",
+  "status": "contributing",
+  "year_built": 1893,
+  "stories": 3.0,
+  "construction": "brick",
+  "cladding": null,
+  "roof_shape": "flat",
+  "roof_material": null,
+  "styles": []
+ }
+}
